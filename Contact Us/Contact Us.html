@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us - Bookstore</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Niconne' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+
+  <script src="./jquery-3.7.1.slim.js"></script>
+  <link rel="stylesheet" href="./bootstrap.min.css">
+  <link rel="stylesheet" href="./Contact Us.css" />
+  <link rel="stylesheet" href="nav.css">
+  <script src="./Contact Us.js"></script>
+
+</head>
+
+
+
+<body>
+  <!-- Start Navbar -->
+  <div id="mainNavigation">
+    <!-- StartHeader -->
+    <nav role="navigation">
+      <div class="border-bottom d-flex align-items-center bg-primary justify-content-evenly">
+        <a href="#" class="navbar-brand main-barnd"><img style="width: 120px; height: 60px;" src="./logo.png"
+            alt="Logo"></a>
+        <div class="p-1 mx-3 bg-light rounded rounded-pill shadow-sm w-75 d-none d-lg-block d-md-block">
+          <div class="input-group">
+            <input type="search" placeholder="Search for a book" class="form-control border-0 bg-light">
+            <div class="input-group-append">
+              <button id="button-addon1" type="submit" class="btn btn-link text-primary"> <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex">
+          <!-- User Dropdown -->
+          <div class="dropdown">
+            <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle" id="userDropdown"
+              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user fa-lg"></i>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="#">Sign in</a></li>
+              <li><a class="dropdown-item" href="../profile-page/profile.html">You Account</a></li>
+            </ul>
+          </div>
+          <!-- Heart Dropdown -->
+          <div class="dropdown">
+            <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle" id="heartDropdown"
+              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-heart fa-lg"></i>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="heartDropdown">
+              <li><a class="dropdown-item" href="#">Favorites</a></li>
+            </ul>
+          </div>
+          <!-- Shopping Cart Dropdown -->
+          <div class="dropdown">
+            <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle" id="cartDropdown"
+              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-shopping-cart fa-lg"></i>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="cartDropdown">
+              <li><a class="dropdown-item" href="#">Cart</a></li>
+              <li><a class="dropdown-item" href="#">Checkout</a></li>
+            </ul>
+          </div>
+          <!-- Bell Dropdown -->
+          <div class="dropdown">
+            <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle" id="bellDropdown"
+              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-bell fa-lg"></i>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="bellDropdown">
+              <li><a class="dropdown-item" href="#">Notifications</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- EndHeader -->
+    <div class="navbar-expand-md ">
+      <div class="navbar-dark text-center bg-primary ">
+        <button class="navbar-toggler w-75 text-black" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <div class="text-center mt-3 collapse navbar-collapse " id="navbarNavDropdown">
+        <ul class="navbar-nav mx-auto col-2 col-md-5 col-lg-5 col-sm-0">
+          <li class="nav-item ">
+            <a class="nav-link" href="../Main-page/HomePage.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../About Us/About Us.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="../Contact Us/Contact Us.html">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./service-page.html">Service</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- End Navbar -->
+
+
+  <!-- body -->
+  <div class="container my-5">
+
+    <div class="contactus"><!-- contact title -->
+      <h1>Contact Us</h1>
+    </div>
+
+    <div class="row"><!-- location and contact -->
+      <div class="col-md-12 mb-4"> <!-- location frame -->
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3456.5767594415614!2d30.998460915012104!3d30.80190347942016!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f7c99d5ba18c4f%3A0x7ffb41d24ac7b9a0!2sEdraaK%20BooKStore!5e0!3m2!1sen!2seg!4v1680584451703!5m2!1sen!2seg"
+          width="100%" height="300" allowfullscreen="">
+        </iframe>
+      </div><!-- end location frame -->
+
+      <div class="col-md-6" id="contact"><!-- contact -->
+        <h5><strong>Contact Details</strong></h5>
+        <p>
+          <i class="fas fa-location me-2 text-light bg-secondary p-2"></i><strong>Location: </strong>New York, NY 10012,
+          US
+        </p>
+        <p>
+          <i class="fas fa-envelope me-2 text-light bg-secondary p-2"></i><strong>Email: </strong>info@example.com
+        </p>
+        <p>
+          <i class="fas fa-phone me-2 text-light bg-secondary p-2"></i><strong>Call: </strong>+01 234 567 88
+        </p>
+      </div><!--end contact -->
+    </div>
+    <!-- end location and contact -->
+
+    <!-- form -->
+    <div class="mt-4">
+      <form id="formcontact">
+        <div class="row "><!-- name and email -->
+          <div class="col-md-6 mb-3"><!-- name -->
+            <input type="text" id="name" class="form-control" placeholder="Your Name" />
+            <small class="text-secondary d-none" id="errorname">*Name must contain only and at least three
+              letters.*</small>
+          </div><!-- end name-->
+
+          <div class="col-md-6 mb-3"><!-- email -->
+            <input type="email" id="email" class="form-control" placeholder="Your Email" />
+            <small class="text-secondary d-none" id="erroremail">*Please enter a valid email address.*</small>
+          </div><!-- end email -->
+        </div><!-- end name and email -->
+
+        <div class="mb-3"><!-- subject -->
+          <input type="text" id="subject" class="form-control" placeholder="Subject" required />
+        </div><!-- end subject -->
+
+        <div class="mb-3"><!-- textarea -->
+          <textarea class="form-control" id="message" rows="5" placeholder="Write Your Message Here..."
+            required></textarea>
+        </div><!-- end textarea -->
+        <div class="text-center">
+          <button type="submit" id="sendbutton" class="btn btn-primary btn-sub w-25">Send</button>
+        </div>
+      </form>
+    </div><!-- end form -->
+  </div>
+  <!-- body -->
+
+
+  <!--footer-->
+  <footer class="text-center text-lg-start text-white" style="background-color: #e4cfb6">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-between p-4" style="background-color: #810b0b    ">
+      <!-- Left -->
+      <div class="me-5">
+        <span>Get connected with us on social networks:</span>
+      </div>
+      <!-- Left -->
+
+      <!-- Right -->
+      <div>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold">Books</h6>
+            <hr class="mb-4 mt-0 d-inline-block mx-auto">
+            <p>
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+              has been the industry's standard dummy text ever.Since the 1500s, when an unknown
+              printer.
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">Products</h6>
+            <hr class="mb-4 mt-0 d-inline-block mx-auto" />
+            <p>
+              <a href="#!" class="text-white">Who is lionel Messi</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Songlight</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Dave Pigeon </a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Bad Panda</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">My Account</h6>
+            <hr class="mb-4 mt-0 d-inline-block mx-auto" />
+            <p>
+              <a href="#!" class="text-white">About us</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">information </a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Privacy Policy</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Terms & Conditions</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">Contact</h6>
+            <hr class="mb-4 mt-0 d-inline-block mx-auto" />
+            <p><i class="fas fa-home mr-3"></i> New York, NY 10012, US</p>
+            <p><i class="fas fa-envelope mr-3"></i> info@example.com</p>
+            <p><i class="fas fa-phone mr-3"></i> + 01 234 567 88</p>
+            <p><i class="fas fa-print mr-3"></i> + 01 234 567 89</p>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      © 2020 Copyright:
+      <a class="text-white" href="https://Books.com/">Books.com</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+  <!-- End of .container -->
+
+
+  <!--end footer-->
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

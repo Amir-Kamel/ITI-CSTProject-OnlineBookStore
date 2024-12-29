@@ -1,0 +1,102 @@
+.bg-primary {
+  background-color: #e4cfb6 !important;
+}
+.bg-secondary {
+  background-color: #810b0b !important;
+}
+.text-primary {
+  color: #be9900 !important;
+}
+.text-secondary {
+  color: #223263 !important;
+}
+.text-secondary-emphasis {
+  color: #810b0b !important;
+}
+.btn-primary {
+  background-color: #810b0b;
+  color: #fff;
+}
+.btn-secondary {
+  background-color: #be9900;
+  color: #fff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+/* Start Navigation */
+#mainNavigation {
+  width: 100%;
+}
+.nav-item {
+  text-transform: uppercase;
+}
+/* Search bar */
+.form-control::placeholder {
+  font-size: 0.95rem;
+  color: #aaa;
+  font-style: italic;
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+/* end of search bar */
+#mainNavigation .navbar-nav .active {
+  color: #be9900;
+}
+.nav-item a:hover {
+  color: #be9900;
+}
+#mainNavigation .navbar-nav .nav-item {
+  padding-bottom: 1px;
+  width: 30%;
+}
+#mainNavigation .header > i {
+  padding-bottom: 15px;
+}
+#mainNavigation .main-barnd {
+  font-family: "Niconne";
+  font-size: 48px;
+  text-transform: none;
+}
+
+.carousel-item img {
+  height: 400px;
+  transition: opacity 0.3s ease;
+}
+.icons {
+  background-color: white; /* border: 1px black solid; */
+  padding: 5px;
+  border-radius: 30px;
+}
+.icons:hover {
+  background-color: #810b0b6d;
+  color: white;
+}
+/* End Navigation */
+
+.contactus {
+  text-align: left;
+  margin: 40px 0;
+}
+.contactus h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+#contact p {
+  margin: 30px 0;
+}
+
+.btn-sub:hover,
+.btn-sub:active {
+  background-color: #be9900;
+}
