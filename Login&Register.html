@@ -1,157 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sign in || Sign up form</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-        <link rel="stylesheet" href="Login&Register.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    </head>
-    <body>
-        <div class="container" id="container">
-            <!-- Sign Up Form -->
-            <div class="form-container sign-up-container">
-                <form action="#">
-                    <h1>Create Account</h1>
-                    <div class="infield">
-                        <i class="fa-solid fa-user"></i>
-                        <input
-                            type="text"
-                            id="username"
-                            placeholder="UserName"
-                            name="username"
-                            required
-                        >
-                        <label></label>
-                        <small id="usernameError" style="color: red; display: none">
-                            This Username has been taken before
-                        </small
-            >
-                    </div>
-                    <div class="infield">
-                        <i class="fa-sharp fa-solid fa-at"></i>
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="Your Gmail"
-                            name="email"
-                            required
-                        >
-                        <label></label>
-                        <small id="emailError" style="color: red; display: none">
-                            Invalid email address
-                        </small
-            >
-                    </div>
-                    <div class="infield">
-                        <i class="fa-solid fa-phone"></i>
-                        <input
-                            type="tel"
-                            id="phone"
-                            placeholder="Phone Number"
-                            name="phone"
-                            required
-                        >
-                        <label></label>
-                        <small id="phoneError" style="color: red; display: none">
-                            Invalid phone number
-                        </small
-            >
-                    </div>
-                    <div class="infield">
-                        <i class="fa-solid fa-lock"></i>
-                        <input
-                            type="password"
-                            id="password"
-                            placeholder="Password"
-                            name="password"
-                            required
-                        >
-                        <label></label>
-                        <small id="passwordLengthError" style="color: red; display: none">
-                            Password must be at least 8 characters
-                        </small
-            >
-                        <small id="passwordStrengthError" style="color: red; display: none">
-                            Password must include letters, numbers, and special
-              characters
-                        </small
-            >
-                    </div>
-                    <div class="infield">
-                        <i class="fa-solid fa-lock"></i>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            placeholder="Confirm Password"
-                            name="confirmPassword"
-                            required
-                        >
-                        <label></label>
-                        <small id="confirmPasswordError" style="color: red; display: none">
-                            Passwords do not match
-                        </small
-            >
-                    </div>
-                    <button type="submit">Sign Up</button>
-                </form>
-            </div>
-            <!-- Sign In Form -->
-            <div class="form-container sign-in-container">
-                <form action="#" autocomplete="off">
-                    <h1>Sign in</h1>
-                    <div class="infield">
-                        <i class="fa-sharp fa-solid fa-at"></i>
-                        <input
-                            type="email"
-                            placeholder="Your Gmail"
-                            name="email"
-                            required
-                        >
-                        <label></label>
-                    </div>
-                    <!-- note for us 
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in || Sign up form</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="Login&Register.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  </head>
+  <body>
+    <div class="container" id="container">
+      <!-- Sign Up Form -->
+      <div class="form-container sign-up-container">
+        <form action="#">
+          <h1>Create Account</h1>
+          <div class="infield">
+            <i class="fa-solid fa-user"></i>
+            <input
+              type="text"
+              id="username"
+              placeholder="UserName"
+              name="username"
+              required
+            />
+            <label></label>
+            <small id="usernameError" style="color: red; display: none">
+              This Username has been taken before
+            </small>
+          </div>
+          <div class="infield">
+            <i class="fa-sharp fa-solid fa-at"></i>
+            <input
+              type="email"
+              id="email"
+              placeholder="Your Gmail"
+              name="email"
+              required
+            />
+            <label></label>
+            <small id="emailError" style="color: red; display: none">
+              Invalid email address
+            </small>
+          </div>
+          <div class="infield">
+            <i class="fa-solid fa-phone"></i>
+            <input
+              type="tel"
+              id="phone"
+              placeholder="Phone Number"
+              name="phone"
+              required
+            />
+            <label></label>
+            <small id="phoneError" style="color: red; display: none">
+              Invalid phone number
+            </small>
+          </div>
+          <div class="infield">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              name="password"
+              required
+            />
+            <label></label>
+            <small id="passwordLengthError" style="color: red; display: none">
+              Password must be at least 8 characters
+            </small>
+            <small id="passwordStrengthError" style="color: red; display: none">
+              Password must include letters, numbers, and special characters
+            </small>
+          </div>
+          <div class="infield">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm Password"
+              name="confirmPassword"
+              required
+            />
+            <label></label>
+            <small id="confirmPasswordError" style="color: red; display: none">
+              Passwords do not match
+            </small>
+          </div>
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
+      <!-- Sign In Form -->
+      <div class="form-container sign-in-container">
+        <form action="#" autocomplete="off" method="post">
+          <h1>Sign in</h1>
+          <div class="infield">
+            <i class="fa-sharp fa-solid fa-at"></i>
+            <input
+              type="email"
+              placeholder="Your Gmail"
+              name="email"
+              required
+            />
+            <label></label>
+          </div>
+          <!-- note for us 
 autocomplete="new-password" tell the browser that the password field is a new password field and that it should not offer to store or auto-fill the password for the user.-->
-                    <div class="infield">
-                        <i class="fa-solid fa-lock"></i>
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            required
-                            autocomplete="new-password"
-                        >
-                        <label></label>
-                    </div>
-                    <!-- Error message container -->
-                    <div id="signInError" style="color: red; display: none">
-                        Email or Password is incorrect. Please try again.
-                    </div>
-                    <a href="#" class="forgot">Forgot your password?</a>
-                    <button type="submit">Sign In</button>
-                </form>
-            </div>
-            <!-- Overlay Container -->
-            <div class="overlay-container" id="overlayCon">
-                <div class="overlay">
-                    <div class="overlay-panel overlay-left">
-                        <h1>Welcome Back!</h1>
-                        <p>
-                            To keep connected with us please login with your personal info
-                        </p>
-                        <button>Sign In</button>
-                    </div>
-                    <div class="overlay-panel overlay-right">
-                        <h1>Hello, Friend!</h1>
-                        <p>Enter your personal details and start journey with us</p>
-                        <button>Sign Up</button>
-                    </div>
-                </div>
-                <button id="overlayBtn"></button>
-            </div>
+          <div class="infield">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              placeholder="Password"
+              required
+              autocomplete="new-password"
+            />
+            <label></label>
+          </div>
+          <!-- Error message container -->
+          <div id="signInError" style="color: red; display: none">
+            Email or Password is incorrect. Please try again.
+          </div>
+          <a href="#" class="forgot">Forgot your password?</a>
+          <button type="submit">Sign In</button>
+        </form>
+      </div>
+      <!-- Overlay Container -->
+      <div class="overlay-container" id="overlayCon">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Welcome Back!</h1>
+            <p>
+              To keep connected with us please login with your personal info
+            </p>
+            <button>Sign In</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Hello, Friend!</h1>
+            <p>Enter your personal details and start journey with us</p>
+            <button>Sign Up</button>
+          </div>
         </div>
-        <script>
+        <button id="overlayBtn"></button>
+      </div>
+    </div>
+    <script>
       let typingTimer;
       const doneTypingInterval = 500;
 
@@ -316,31 +312,31 @@ autocomplete="new-password" tell the browser that the password field is a new pa
       const signUpButton = document.querySelector(".sign-up-container button");
       const signUpError = document.getElementById("signUpError");
 
-   signUpButton.addEventListener("submit", function (event) {
-        event.preventDefault();
+      signUpButton.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default behavior (page reload)
 
+        // Collect values
         const username = usernameField.value.trim();
         const email = emailField.value.trim();
         const phone = phoneField.value.trim();
         const password = passwordField.value.trim();
         const confirmPassword = confirmPasswordField.value.trim();
 
-        signUpError.style.display = "none";
-
+        // Validation checks (already done in your functions)
         if (!username || !email || !phone || !password || !confirmPassword) {
           signUpError.innerHTML = "Please fill in all fields.";
           signUpError.style.display = "block";
           return;
         }
 
-        // Check if the username is already taken
+        // Check if username already exists
         if (localStorage.getItem(username)) {
           usernameError.innerHTML = "This Username Has Been Taken Before";
           usernameError.style.display = "block";
           return;
         }
 
-        // Check if the email is already registered
+        // Check if email already exists
         if (localStorage.getItem(email)) {
           emailError.innerHTML = "This Email Is Already Registered";
           emailError.style.display = "block";
@@ -354,19 +350,21 @@ autocomplete="new-password" tell the browser that the password field is a new pa
           return;
         }
 
+        // Hash password
         const hashedPassword = hashPassword(password);
 
+        // Store user data in localStorage
         const userData = {
           username,
           email,
           phone,
           password: hashedPassword,
         };
-
-        // Save user data using the username as the key
         localStorage.setItem(username, JSON.stringify(userData));
 
         alert("Account created successfully!");
+
+        // Reset form fields
         usernameField.value = "";
         emailField.value = "";
         phoneField.value = "";
@@ -374,22 +372,21 @@ autocomplete="new-password" tell the browser that the password field is a new pa
         confirmPasswordField.value = "";
       });
 
-      // Sign-In Form Validation
+      const signInButton = document.querySelector(".sign-in-container button");
+      const signInError = document.getElementById("signInError");
       const signinEmailField = document.querySelector(
         '.sign-in-container input[type="email"]'
       );
       const signinPasswordField = document.querySelector(
         '.sign-in-container input[type="password"]'
       );
-      const signInButton = document.querySelector(".sign-in-container button");
-      const signInError = document.getElementById("signInError");
-      signInButton.addEventListener("submit", function (event) {
-        event.preventDefault();
+
+      signInButton.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default behavior (page reload)
 
         const email = signinEmailField.value.trim();
         const password = signinPasswordField.value.trim();
 
-        // Clear any previous error messages
         signInError.style.display = "none";
 
         if (!email || !password) {
@@ -398,15 +395,12 @@ autocomplete="new-password" tell the browser that the password field is a new pa
           return;
         }
 
-        // Validate the email format using a regular expression
-        const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/; // Ensure email ends with @gmail.com exactly
+        const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
         if (!emailRegex.test(email)) {
-          signInError.innerHTML = "Please enter a valid email address ";
+          signInError.innerHTML = "Please enter a valid email address.";
           signInError.style.display = "block";
           return;
         }
-
-        // Check for invalid characters (similar to sign-up validation)
         const invalidCharsRegex = /[^a-zA-Z0-9@._-]/;
         if (invalidCharsRegex.test(email)) {
           signInError.innerHTML = "Your email contains invalid characters.";
@@ -414,7 +408,7 @@ autocomplete="new-password" tell the browser that the password field is a new pa
           return;
         }
 
-        // Loop through all users in localStorage to find the one with the matching email
+        // Loop through all users in localStorage
         let foundUser = null;
         for (let i = 0; i < localStorage.length; i++) {
           const key = localStorage.key(i);
@@ -426,27 +420,28 @@ autocomplete="new-password" tell the browser that the password field is a new pa
           }
         }
 
-        // If no user found with that email, show an error message
+        // Check if user is found and passwords match
+     
         if (!foundUser) {
-          signInError.innerHTML =
-            "This email is not registered. Please sign up first.";
-          signInError.style.display = "block";
-          return;
-        }
-
-        // Check if the password matches
-        if (foundUser.password !== CryptoJS.SHA256(password).toString()) {
-          signInError.innerHTML =
-            "Email or Password is incorrect. Please try again.";
-          signInError.style.display = "block";
-          return;
-        }
-
+            signInError.innerHTML =
+              "This email is not registered. Please sign up first.";
+            signInError.style.display = "block";
+            return;
+          }
+  
+          // Check if the password matches
+          if (foundUser.password !== CryptoJS.SHA256(password).toString()) {
+            signInError.innerHTML =
+              "Email or Password is incorrect. Please try again.";
+            signInError.style.display = "block";
+            return;
+          }
         alert("Login successful!");
-
         signinEmailField.value = "";
         signinPasswordField.value = "";
       });
+
+   
 
       // Overlay Button for Switching Forms
       const container = document.getElementById("container");
@@ -458,6 +453,6 @@ autocomplete="new-password" tell the browser that the password field is a new pa
           overlayBtn.classList.add("btnScaled");
         });
       });
-        </script>
-    </body>
+    </script>
+  </body>
 </html>
