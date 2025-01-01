@@ -22,8 +22,33 @@
     <!-- end icons -->
 
     <script src="jquery-3.7.1.slim.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-
+        $(document).ready(function () {
+            // Load books
+            $.getJSON('books.json', function (data) {
+                $.each(data, function (i, item) {
+                    var openDiv = $('<div class="col-lg-3 col-md-6 col-sm-12 p-4 ">');
+                    var cardDiv = $('<div class="card h-100 w-100" data-id="' + item.id + '">');
+                    var imageContainer = $('<div class="img-container"><img src="" alt="" class="card-img-top imgmain" /><div class="overlay"><button class="btn btn-outline-secondary btn-sm add-to-cart"><i class="fas fa-cart-plus mr-2"></i></button><button class="btn btn-outline-secondary btn-sm"><i class="far fa-heart"></i></button></div></div>');
+                    var cardBody = $('<div class="card-body">');
+                    var cardTitleText = $('<h5 class="card-title"></h5>');
+                    var cardText = $('<p class="card-text"></p>');
+                    var link = $('<p class="card-text"></p>');
+                    cardTitleText.text(item.title);
+                    cardText.text(item.country);
+                    imageContainer.find('img').prop('src', item.imageLink);
+                    link.text(item.link);
+                    cardBody.append(cardTitleText);
+                    cardBody.append(cardText);
+                    link.appendTo(cardBody);
+                    imageContainer.appendTo(cardDiv);
+                    cardDiv.append(cardBody);
+                    openDiv.append(cardDiv);
+                    openDiv.appendTo('#books-Container');
+                });
+            });
+        });
     </script>
 
 </head>
@@ -213,281 +238,8 @@
 
     <!-- Start Main Product -->
     <div class="row main-product w-100">
-        <div class="row p-0 m-0 ">
-            <div class="col-lg-3 col-md-6 col-sm-12 p-0 ">
-                <div class="card ">
-                    <div class="img-container">
-                        <img src="./Products/9780571380213-450x690.jpg" alt="Image 1" class="card-img-top" />
-                        <div class="overlay">
-                            <button class="btn btn-outline-secondary btn-sm"><i
-                                    class="fas fa-cart-plus mr-2"></i></button>
-                            <button class="btn btn-outline-secondary btn-sm"><i class="far fa-heart"></i></button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Dave Pigeon (Zombies!).Bad</h5>
-                        <p class="card-text">Swapna Haddow<br>
-                            £7.99</p>
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 p-0">
-                <div class="card">
-                    <div class="img-container">
-                        <img src="./Products/9780571391288-203x305.jpg" alt="Image 2" class="card-img-top" />
-                        <div class="overlay">
-                            <button class="btn btn-outline-secondary btn-sm"><i
-                                    class="fas fa-cart-plus mr-2"></i></button>
-                            <button class="btn btn-outline-secondary btn-sm"><i class="far fa-heart"></i></button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Don’t Go to Sleep in the Dark</h5>
-                        <p class="card-text">Celia Fremlin <br>£9.99.</p>
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 p-0">
-                <div class="card">
-                    <div class="img-container">
-                        <img src="./Products/9780571385669-songlight-the-torch-trilogy-450x690.jpeg" alt="Image 3"
-                            class="card-img-top" />
-                        <div class="overlay">
-                            <button class="btn btn-outline-secondary btn-sm"><i
-                                    class="fas fa-cart-plus mr-2"></i></button>
-                            <button class="btn btn-outline-secondary btn-sm"><i class="far fa-heart"></i></button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Songlight: The Torch Trilogy</h5>
-                        <p class="card-text">Moira Buffini <br>£7.99
-                        </p>
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 p-0">
-                <div class="card">
-                    <div class="img-container">
-                        <img src="./Products/Hunted-450x690.jpg" alt="Image 4" class="card-img-top" />
-                        <div class="overlay">
-                            <button class="btn btn-outline-secondary btn-sm"><i
-                                    class="fas fa-cart-plus mr-2"></i></button>
-                            <button class="btn btn-outline-secondary btn-sm"><i class="far fa-heart"></i></button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">The Hunted</h5>
-                        <p class="card-text">Gabriel Bergmoser
-                            <br> £8.99
-                        </p>
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="books-Container" class="row p-0 m-0 ">
 
-        <div class="row p-0 m-0  ">
-            <div class="col-lg-3 col-md-6 col-sm-3 p-0">
-                <div class="card">
-                    <div class="img-container">
-                        <img src="./Products/Bad-Panda-For-Sale-489x690.jpg" alt="Image 5" class="card-img-top" />
-                        <div class="overlay">
-                            <button class="btn btn-outline-secondary btn-sm"><i
-                                    class="fas fa-cart-plus mr-2"></i></button>
-                            <button class="btn btn-outline-secondary btn-sm"><i class="far fa-heart"></i></button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Bad Panda: For Sale</h5>
-                        <p class="card-text">Swapna Haddow <br> £7.99</p>
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-3 p-0">
-                <div class="card">
-                    <div class="img-container">
-                        <img src="Products/9780593754825.jpg" alt="Image 6" class="card-img-top" />
-                        <div class="overlay">
-                            <button class="btn btn-outline-secondary btn-sm"><i
-                                    class="fas fa-cart-plus mr-2"></i></button>
-                            <button class="btn btn-outline-secondary btn-sm"><i class="far fa-heart"></i></button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Who is lionel Messi</h5>
-                        <p class="card-text">
-                            Buckley James Jr.<br>£9.99 </p>
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-3 p-0">
-                <div class="card">
-                    <div class="img-container">
-                        <img src="./Products/Bad-Panda-For-Sale-489x690.jpg" alt="Image 5" class="card-img-top" />
-                        <div class="overlay">
-                            <button class="btn btn-outline-secondary btn-sm"><i
-                                    class="fas fa-cart-plus mr-2"></i></button>
-                            <button class="btn btn-outline-secondary btn-sm"><i class="far fa-heart"></i></button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Bad Panda: For Sale</h5>
-                        <p class="card-text">Swapna Haddow <br> £7.99</p>
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-3 p-0">
-                <div class="card">
-                    <div class="img-container">
-                        <img src="Products/9780593754825.jpg" alt="Image 6" class="card-img-top" />
-                        <div class="overlay">
-                            <button class="btn btn-outline-secondary btn-sm"><i
-                                    class="fas fa-cart-plus mr-2"></i></button>
-                            <button class="btn btn-outline-secondary btn-sm"><i class="far fa-heart"></i></button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Who is lionel Messi</h5>
-                        <p class="card-text">
-                            Buckley James Jr.<br>£9.99 </p>
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa-solid fa-star" style="color: #FFC600;"></i>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     <!-- End of the main product -->
