@@ -83,25 +83,32 @@
                         </ul>
                     </div>
                     <!-- Heart Dropdown -->
+                    <!-- Heart Dropdown -->
                     <div class="dropdown">
                         <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle"
                             id="heartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-heart fa-lg"></i>
+                            <span
+                                class="badge bg-danger position-absolute top-0 start-100 translate-middle p-2 rounded-circle"
+                                id="heartBadge">0</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="heartDropdown">
                             <li><a class="dropdown-item" href="../wishlist/wishlist.html">Favorites</a></li>
                         </ul>
                     </div>
                     <!-- Shopping Cart Dropdown -->
-                    <div class="dropdown">
-                        <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle"
-                            id="cartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-shopping-cart fa-lg"></i>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="cartDropdown">
-                            <li><a class="dropdown-item" href="#">Cart</a></li>
-                            <li><a class="dropdown-item" href="#">Checkout</a></li>
-                        </ul>
+                    <div class="container">
+                        <div class="dropdown"> <a href="#"
+                                class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle position-relative"
+                                id="cartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i
+                                    class="fas fa-shopping-cart fa-lg"></i> <span id="cartBadge"
+                                    class="badge bg-danger position-absolute top-0 start-100 translate-middle p-2 rounded-circle">0</span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="cartDropdown">
+                                <li><a class="dropdown-item cartbtn" href="cart.html">Cart</a></li>
+                                <li><a class="dropdown-item" href="#">Checkout</a></li>
+                            </ul>
+                        </div>
                     </div>
                     <!-- Bell Dropdown -->
                     <div class="dropdown">
