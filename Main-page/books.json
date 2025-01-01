@@ -1,6 +1,5 @@
 [
   {
-    "id": 1,
     "author": "Chinua Achebe",
     "country": "Nigeria",
     "imageLink": "images/things-fall-apart.jpg",
@@ -8,11 +7,9 @@
     "link": "https://en.wikipedia.org/wiki/Things_Fall_Apart\n",
     "pages": 209,
     "title": "Things Fall Apart",
-    "year": 1958,
-    "bookCover": "./products/Bad-Panda-For-Sale-489x690.jpg"
+    "year": 1958
   },
   {
-    "id": 2,
     "author": "Hans Christian Andersen",
     "country": "Denmark",
     "imageLink": "images/fairy-tales.jpg",
@@ -23,7 +20,6 @@
     "year": 1836
   },
   {
-    "id": 3,
     "author": "Dante Alighieri",
     "country": "Italy",
     "imageLink": "images/the-divine-comedy.jpg",

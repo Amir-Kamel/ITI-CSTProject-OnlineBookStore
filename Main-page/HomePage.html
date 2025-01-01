@@ -29,7 +29,7 @@
             $.getJSON('books.json', function (data) {
                 $.each(data, function (i, item) {
                     var openDiv = $('<div class="col-lg-3 col-md-6 col-sm-12 p-4 ">');
-                    var cardDiv = $('<div class="card h-100 w-100" data-id="' + item.id + '">');
+                    var cardDiv = $('<div class="card h-100 w-100" data-id="">');
                     var imageContainer = $('<div class="img-container"><img src="" alt="" class="card-img-top imgmain" /><div class="overlay"><button class="btn btn-outline-secondary btn-sm add-to-cart"><i class="fas fa-cart-plus mr-2"></i></button><button class="btn btn-outline-secondary btn-sm"><i class="far fa-heart"></i></button></div></div>');
                     var cardBody = $('<div class="card-body">');
                     var cardTitleText = $('<h5 class="card-title"></h5>');
