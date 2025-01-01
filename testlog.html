@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in || Sign up form</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="Login&Register.css" />
+    <!-- Include CryptoJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <!-- Include jQuery -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-K+ctZQp9bS+gfZx1mRhGmKFjO0DXhV3Fxg24V3KnYBw="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container" id="container">
+      <!-- Sign Up Form -->
+      <div class="form-container sign-up-container">
+        <form id="signUpForm" action="#">
+          <h1>Create Account</h1>
+          <div class="infield">
+            <i class="fa-solid fa-user"></i>
+            <input
+              type="text"
+              id="username"
+              placeholder="UserName"
+              name="username"
+              required
+            />
+            <label></label>
+            <small id="usernameError" style="color: red; display: none">
+              This Username has been taken before
+            </small>
+          </div>
+          <div class="infield">
+            <i class="fa-sharp fa-solid fa-at"></i>
+            <input
+              type="email"
+              id="email"
+              placeholder="Your Gmail"
+              name="email"
+              required
+            />
+            <label></label>
+            <small id="emailError" style="color: red; display: none">
+              Invalid email address
+            </small>
+          </div>
+          <div class="infield">
+            <i class="fa-solid fa-phone"></i>
+            <input
+              type="tel"
+              id="phone"
+              placeholder="Phone Number"
+              name="phone"
+              required
+            />
+            <label></label>
+            <small id="phoneError" style="color: red; display: none">
+              Invalid phone number
+            </small>
+          </div>
+          <div class="infield">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              name="password"
+              required
+            />
+            <label></label>
+            <small id="passwordLengthError" style="color: red; display: none">
+              Password must be at least 8 characters
+            </small>
+            <small id="passwordStrengthError" style="color: red; display: none">
+              Password must include letters, numbers, and special characters
+            </small>
+          </div>
+          <div class="infield">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm Password"
+              name="confirmPassword"
+              required
+            />
+            <label></label>
+            <small id="confirmPasswordError" style="color: red; display: none">
+              Passwords do not match
+            </small>
+          </div>
+          <small id="signUpError" style="color: red; display: none"></small>
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
+      <!-- Sign In Form -->
+      <div class="form-container sign-in-container">
+        <form id="signInForm" action="#" autocomplete="off" method="post">
+          <h1>Sign in</h1>
+          <div class="infield">
+            <i class="fa-sharp fa-solid fa-at"></i>
+            <input
+              type="email"
+              id="signinEmail"
+              placeholder="Your Gmail"
+              name="email"
+              required
+            />
+            <label></label>
+          </div>
+          <!-- note for us 
+autocomplete="new-password" tell the browser that the password field is a new password field and that it should not offer to store or auto-fill the password for the user.-->
+          <div class="infield">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              id="signinPassword"
+              placeholder="Password"
+              required
+              autocomplete="new-password"
+            />
+            <label></label>
+          </div>
+          <!-- Error message container -->
+          <div id="signInError" style="color: red; display: none">
+            Email or Password is incorrect. Please try again.
+          </div>
+          <a href="#" class="forgot">Forgot your password?</a>
+          <button type="submit">Sign In</button>
+        </form>
+      </div>
+      <!-- Overlay Container -->
+      <div class="overlay-container" id="overlayCon">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Welcome Back!</h1>
+            <p>
+              To keep connected with us please login with your personal info
+            </p>
+            <button class="ghost" id="signInOverlay">Sign In</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Hello, Friend!</h1>
+            <p>Enter your personal details and start journey with us</p>
+            <button class="ghost" id="signUpOverlay">Sign Up</button>
+          </div>
+        </div>
+        <button id="overlayBtn"></button>
+      </div>
+    </div>
+    <!-- jQuery Script -->
+    <script>
+      $(document).ready(function () {
+        let typingTimer;
+        const doneTypingInterval = 500;
+
+        // Utility Functions
+        function hashPassword(password) {
+          return CryptoJS.SHA256(password).toString();
+        }
+
+        // Overlay Button for Switching Forms
+        $("#overlayBtn, #signInOverlay, #signUpOverlay").on("click", function () {
+          $("#container").toggleClass("right-panel-active");
+          $("#overlayBtn").removeClass("btnScaled");
+          window.requestAnimationFrame(() => {
+            $("#overlayBtn").addClass("btnScaled");
+          });
+        });
+
+        // Username Validation
+        const $username = $("#username");
+        const $usernameError = $("#usernameError");
+
+        function validateUsername() {
+          const usernameValue = $username.val().trim();
+          const usernameRegex = /^[a-zA-Z\s_-]+$/;
+          const invalidRegex = /^(?![^\w\s_-]|.*[^\w\s_-]$).*$/;
+
+          if (!usernameRegex.test(usernameValue)) {
+            $usernameError.text(
+              "Username can only contain letters, spaces, underscores, or dashes."
+            ).show();
+            $username.css("border-bottom-color", "red");
+          } else if (!invalidRegex.test(usernameValue)) {
+            $usernameError.text(
+              "Special characters are not allowed at the start, middle, or end."
+            ).show();
+            $username.css("border-bottom-color", "red");
+          } else if (localStorage.getItem(usernameValue)) {
+            $usernameError.text("This Username Has Been Taken Before").show();
+            $username.css("border-bottom-color", "red");
+          } else {
+            $usernameError.hide();
+            $username.css("border-bottom-color", "green");
+          }
+        }
+
+        $username.on("input", function () {
+          clearTimeout(typingTimer);
+          typingTimer = setTimeout(validateUsername, doneTypingInterval);
+          // Auto-generate email
+          const sanitizedUsername = $(this)
+            .val()
+            .trim()
+            .replace(/[ \-_]/g, "")
+            .toLowerCase();
+          const email = sanitizedUsername ? sanitizedUsername + "@gmail.com" : "";
+          $("#email").val(email);
+        });
+
+        // Email Validation
+        const $email = $("#email");
+        const $emailError = $("#emailError");
+
+        function validateEmail() {
+          const emailValue = $email.val().trim();
+          const emailRegex = /^[a-zA-Z0-9._%+-]+(?<!\.)@gmail\.com$/;
+          const invalidCharsRegex = /[!#$%^&*(),?":{}|<>]$/;
+
+          if (!emailRegex.test(emailValue)) {
+            $emailError.text("Invalid Email (e.g., user@gmail.com)").show();
+            $email.css("border-bottom-color", "red");
+          } else if (invalidCharsRegex.test(emailValue.split("@")[0])) {
+            $emailError.text(
+              "Email cannot end with special characters before '@gmail.com'"
+            ).show();
+            $email.css("border-bottom-color", "red");
+          } else {
+            $emailError.hide();
+            $email.css("border-bottom-color", "green");
+          }
+        }
+
+        $email.on("input", function () {
+          clearTimeout(typingTimer);
+          typingTimer = setTimeout(validateEmail, doneTypingInterval);
+        });
+
+        // Phone Validation
+        const $phone = $("#phone");
+        const $phoneError = $("#phoneError");
+
+        function validatePhone() {
+          const phoneValue = $phone.val();
+          const phoneRegex = /^(011|012|010|015)\d{8}$/;
+
+          if (!phoneRegex.test(phoneValue)) {
+            $phoneError.text("Invalid Phone Number").show();
+            $phone.css("border-bottom-color", "red");
+          } else {
+            $phoneError.hide();
+            $phone.css("border-bottom-color", "green");
+          }
+        }
+
+        $phone.on("input", function () {
+          clearTimeout(typingTimer);
+          typingTimer = setTimeout(validatePhone, doneTypingInterval);
+        });
+
+        // Password Validation
+        const $password = $("#password");
+        const $passwordLengthError = $("#passwordLengthError");
+        const $passwordStrengthError = $("#passwordStrengthError");
+
+        function validatePassword() {
+          const passwordValue = $password.val();
+          const lengthRegex = /.{8,}/;
+          const strengthRegex =
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+          if (!lengthRegex.test(passwordValue)) {
+            $passwordLengthError.show();
+            $passwordStrengthError.hide();
+            $password.css("border-bottom-color", "red");
+          } else if (!strengthRegex.test(passwordValue)) {
+            $passwordStrengthError.show();
+            $passwordLengthError.hide();
+            $password.css("border-bottom-color", "red");
+          } else {
+            $passwordLengthError.hide();
+            $passwordStrengthError.hide();
+            $password.css("border-bottom-color", "green");
+          }
+        }
+
+        $password.on("input", function () {
+          clearTimeout(typingTimer);
+          typingTimer = setTimeout(validatePassword, doneTypingInterval);
+        });
+
+        // Confirm Password Validation
+        const $confirmPassword = $("#confirmPassword");
+        const $confirmPasswordError = $("#confirmPasswordError");
+
+        function validateConfirmPassword() {
+          const confirmPasswordValue = $confirmPassword.val();
+          const passwordValue = $password.val();
+
+          if (confirmPasswordValue !== passwordValue) {
+            $confirmPasswordError.show();
+            $confirmPassword.css("border-bottom-color", "red");
+          } else {
+            $confirmPasswordError.hide();
+            $confirmPassword.css("border-bottom-color", "green");
+          }
+        }
+
+        $confirmPassword.on("input", function () {
+          clearTimeout(typingTimer);
+          typingTimer = setTimeout(validateConfirmPassword, doneTypingInterval);
+        });
+
+        // Sign Up Form Submission
+        $("#signUpForm").on("submit", function (e) {
+          e.preventDefault();
+
+          // Trigger validations
+          validateUsername();
+          validateEmail();
+          validatePhone();
+          validatePassword();
+          validateConfirmPassword();
+
+          const username = $username.val().trim();
+          const email = $email.val().trim();
+          const phone = $phone.val().trim();
+          const password = $password.val().trim();
+          const confirmPassword = $confirmPassword.val().trim();
+          const $signUpError = $("#signUpError");
+
+          // Check for any visible error messages
+          if (
+            $usernameError.is(":visible") ||
+            $emailError.is(":visible") ||
+            $phoneError.is(":visible") ||
+            $passwordLengthError.is(":visible") ||
+            $passwordStrengthError.is(":visible") ||
+            $confirmPasswordError.is(":visible")
+          ) {
+            $signUpError.text("Please fix the errors above.").show();
+            return;
+          }
+
+          // Additional checks
+          if (!username || !email || !phone || !password || !confirmPassword) {
+            $signUpError.text("Please fill in all fields.").show();
+            return;
+          }
+
+          // Check if email already exists
+          let emailExists = false;
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const storedUser = JSON.parse(localStorage.getItem(key));
+            if (storedUser.email === email) {
+              emailExists = true;
+              break;
+            }
+          }
+
+          if (emailExists) {
+            $emailError.text("This Email Is Already Registered").show();
+            $email.css("border-bottom-color", "red");
+            $signUpError.text(" ").hide();
+            return;
+          }
+
+          // Check if passwords match
+          if (password !== confirmPassword) {
+            $confirmPasswordError.show();
+            $confirmPassword.css("border-bottom-color", "red");
+            $signUpError.text("Passwords do not match.").show();
+            return;
+          }
+
+          // Hash password
+          const hashedPassword = hashPassword(password);
+
+          // Store user data in localStorage
+          const userData = {
+            username,
+            email,
+            phone,
+            password: hashedPassword,
+          };
+          localStorage.setItem(username, JSON.stringify(userData));
+
+          alert("Account created successfully!");
+
+          // Reset form fields and styles
+          $(this)[0].reset();
+          $(".infield input").css("border-bottom-color", "");
+          $("small").hide();
+          $signUpError.hide();
+        });
+
+        // Sign In Form Submission
+        $("#signInForm").on("submit", function (e) {
+          e.preventDefault();
+
+          const email = $("#signinEmail").val().trim();
+          const password = $("#signinPassword").val().trim();
+          const $signInError = $("#signInError");
+
+          $signInError.hide();
+
+          // Basic validations
+          if (!email || !password) {
+            $signInError.text("Please fill in both email and password.").show();
+            return;
+          }
+
+          const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+          if (!emailRegex.test(email)) {
+            $signInError.text("Please enter a valid email address.").show();
+            return;
+          }
+
+          const invalidCharsRegex = /[^a-zA-Z0-9@._-]/;
+          if (invalidCharsRegex.test(email)) {
+            $signInError.text("Your email contains invalid characters.").show();
+            return;
+          }
+
+          // Find user by email
+          let foundUser = null;
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const storedUser = JSON.parse(localStorage.getItem(key));
+            if (storedUser.email === email) {
+              foundUser = storedUser;
+              break;
+            }
+          }
+
+          if (!foundUser) {
+            $signInError
+              .text("This email is not registered. Please sign up first.")
+              .show();
+            return;
+          }
+
+          // Check password
+          if (foundUser.password !== hashPassword(password)) {
+            $signInError
+              .text("Email or Password is incorrect. Please try again.")
+              .show();
+            return;
+          }
+
+          alert("Login successful!");
+          // Reset form fields
+          $(this)[0].reset();
+        });
+      });
+    </script>
+  </body>
+</html>
