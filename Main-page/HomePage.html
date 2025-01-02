@@ -20,37 +20,9 @@
     <!-- icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- end icons -->
+    <style>
 
-    <script src="jquery-3.7.1.slim.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Load books
-            $.getJSON('books.json', function (data) {
-                $.each(data, function (i, item) {
-                    var openDiv = $('<div class="col-lg-3 col-md-6 col-sm-12 p-4 ">');
-                    var cardDiv = $('<div class="card h-100 w-100" data-id="">');
-                    var imageContainer = $('<div class="img-container"><img src="" alt="" class="card-img-top imgmain" /><div class="overlay"><button class="btn btn-outline-secondary btn-sm add-to-cart"><i class="fas fa-cart-plus mr-2"></i></button><button class="btn btn-outline-secondary btn-sm"><i class="far fa-heart"></i></button></div></div>');
-                    var cardBody = $('<div class="card-body">');
-                    var cardTitleText = $('<h5 class="card-title"></h5>');
-                    var cardText = $('<p class="card-text"></p>');
-                    var link = $('<p class="card-text"></p>');
-                    cardTitleText.text(item.title);
-                    cardText.text(item.country);
-                    imageContainer.find('img').prop('src', item.imageLink);
-                    link.text(item.link);
-                    cardBody.append(cardTitleText);
-                    cardBody.append(cardText);
-                    link.appendTo(cardBody);
-                    imageContainer.appendTo(cardDiv);
-                    cardDiv.append(cardBody);
-                    openDiv.append(cardDiv);
-                    openDiv.appendTo('#books-Container');
-                });
-            });
-        });
-    </script>
-
+    </style>
 </head>
 
 <body>
@@ -82,7 +54,6 @@
                             <li><a class="dropdown-item" href="../profile-page/profile.html">You Account</a></li>
                         </ul>
                     </div>
-                    <!-- Heart Dropdown -->
                     <!-- Heart Dropdown -->
                     <div class="dropdown">
                         <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle"
@@ -228,18 +199,27 @@
     <h4 style=" text-transform: uppercase; text-align: center; font-weight: bold;"> Best Seller</h4>
     <ul class="nav justify-content-center" id="tabs">
         <li class="nav-item">
-            <a class="nav-link active text-primary" aria-current="page" href="#">All</a>
+            <a class="nav-link active text-primary" aria-current="page" href="#" data-category="All">All</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Fantasy</a>
+            <a class="nav-link" href="#" data-category="fantasy">Fantasy</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Horror</a>
+            <a class="nav-link" href="#" data-category="horror">Horror</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Drama</a>
+            <a class="nav-link" href="#" data-category="drama">Drama</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" data-category="comedy">Comedy</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" data-category="kids">Kids</a>
         </li>
     </ul>
+
+
+
     <!-- end of tabs -->
 
 
@@ -401,6 +381,39 @@
 
 
 
+    <!-- JQuery -->
+    <script src="jquery-3.7.1.slim.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- JQuery -->
+
+    <script>
+        // $(document).ready(function () {
+        //     // Load books
+        //     $.getJSON('books.json', function (data) {
+        //         $.each(data, function (i, item) {
+        //         var openDiv = $('<div class="col-lg-3 col-md-6 col-sm-12 p-4 ">');
+        //         var cardDiv = $('<div class="card h-100 w-100" data-id="">');
+        //         var imageContainer = $('<div class="img-container"><img src="" alt="" class="card-img-top imgmain" /><div class="overlay"><button class="btn btn-outline-secondary btn-sm add-to-cart"><i class="fas fa-cart-plus mr-2"></i></button><button class="btn btn-outline-secondary btn-sm"><i class="far fa-heart"></i></button></div></div>');
+        //         var cardBody = $('<div class="card-body">');
+        //         var cardTitleText = $('<h5 class="card-title"></h5>');
+        //         var cardText = $('<p class="card-text"></p>');
+        //         var link = $('<p class="card-text"></p>');
+        //         cardTitleText.text(item.title);
+        //         cardText.text(item.country);
+        //         imageContainer.find('img').prop('src', item.imageLink);
+        //         link.text(item.link);
+        //         cardBody.append(cardTitleText);
+        //         cardBody.append(cardText);
+        //         link.appendTo(cardBody);
+        //         imageContainer.appendTo(cardDiv);
+        //         cardDiv.append(cardBody);
+        //         openDiv.append(cardDiv);
+        //         openDiv.appendTo('#books-Container');
+        //     });
+        // });
+        // });
+    </script>
+    <script type="module" src="Homepage.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
