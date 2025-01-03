@@ -108,8 +108,6 @@
             />
             <label></label>
           </div>
-          <!-- note for us 
-autocomplete="new-password" tell the browser that the password field is a new password field and that it should not offer to store or auto-fill the password for the user.-->
           <div class="infield">
             <i class="fa-solid fa-lock"></i>
             <input
@@ -124,7 +122,7 @@ autocomplete="new-password" tell the browser that the password field is a new pa
           <div id="signInError" style="color: red; display: none">
             Email or Password is incorrect. Please try again.
           </div>
-          <a href="#" class="forgot">Forgot your password?</a>
+          <a href="forgetpassword.html" class="forgot">Forgot your password?</a>
           <button type="submit">Sign In</button>
         </form>
       </div>
@@ -147,7 +145,122 @@ autocomplete="new-password" tell the browser that the password field is a new pa
         <button id="overlayBtn"></button>
       </div>
     </div>
-    <script>
+    <script type="module">
+      import { usersData } from "./Accounts.js";
+
+      // Initialize `localStorage` with `usersData` if not already set
+      const signUpObject =
+        JSON.parse(localStorage.getItem("signUpData")) ?? usersData;
+
+      if (!localStorage.getItem("signUpData")) {
+        localStorage.setItem("signUpData", JSON.stringify(signUpObject));
+      }
+
+      // Function to handle form submission
+      document.addEventListener("DOMContentLoaded", function () {
+        const signUpForm = document.getElementById("signupForm");
+
+        if (signUpForm) {
+          signUpForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent page reload on form submit
+
+            // Get form data
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            // Validate input fields
+            if (!username || !email || !phone || !password) {
+              alert("Please fill in all fields.");
+              return;
+            }
+
+            // Function to check if a username or email exists anywhere in all localStorage objects
+            function checkDuplicateInLocalStorage(value, type) {
+              let found = false;
+
+              // Loop through all localStorage keys
+              for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const data = JSON.parse(localStorage.getItem(key));
+
+                // Ensure the data is an object and check for username/email
+                if (data && typeof data === "object") {
+                  // Check for the username or email in any object stored in localStorage
+                  if (
+                    type === "username" &&
+                    Object.values(data).some((user) => user.username === value)
+                  ) {
+                    found = true;
+                    break;
+                  }
+                  if (
+                    type === "email" &&
+                    Object.values(data).some((user) => user.email === value)
+                  ) {
+                    found = true;
+                    break;
+                  }
+                }
+              }
+
+              return found;
+            }
+
+            // Check if the username or email already exists in any object in localStorage
+            const isUsernameTaken = checkDuplicateInLocalStorage(
+              username,
+              "username"
+            );
+            const isEmailTaken = checkDuplicateInLocalStorage(email, "email");
+
+            if (isUsernameTaken) {
+              alert("This username has already been taken.");
+              return;
+            }
+
+            if (isEmailTaken) {
+              alert("This email is already registered.");
+              return;
+            }
+
+            // Create a new user object with default role as 'customer'
+            const newUser = {
+              username,
+              email,
+              phone,
+              password, 
+              role: "customer",
+              address: "",
+              imgsrc: "",
+              cart: [],
+              wishlist: [],
+              orders_history: [],
+              inbox: [],
+            };
+
+            // Add the new user to the customers object
+            const currentData = JSON.parse(
+              localStorage.getItem("signUpData")
+            ) ?? { customers: {} };
+            currentData.customers = currentData.customers || {};
+            currentData.customers[email] = newUser;
+
+            // Save the updated structure back to `localStorage`
+            localStorage.setItem("signUpData", JSON.stringify(currentData));
+
+            alert("Account created successfully!");
+
+            // Reset form fields
+            signUpForm.reset();
+
+            // Log the updated data to confirm
+            console.log(currentData);
+          });
+        }
+      });
+
       let typingTimer;
       const doneTypingInterval = 500;
 
@@ -310,7 +423,6 @@ autocomplete="new-password" tell the browser that the password field is a new pa
 
       // Sign Up Button Event
       const signUpButton = document.querySelector(".sign-up-container button");
-      const signUpError = document.getElementById("signUpError");
 
       signUpButton.addEventListener("click", function (event) {
         event.preventDefault(); // Prevent default behavior (page reload)
@@ -322,45 +434,57 @@ autocomplete="new-password" tell the browser that the password field is a new pa
         const password = passwordField.value.trim();
         const confirmPassword = confirmPasswordField.value.trim();
 
-        // Validation checks (already done in your functions)
         if (!username || !email || !phone || !password || !confirmPassword) {
-          signUpError.innerHTML = "Please fill in all fields.";
-          signUpError.style.display = "block";
-          return;
+          alert("Please fill in all fields.");
+          return; // Stop further execution
         }
 
-        // Check if username already exists
-        if (localStorage.getItem(username)) {
+        // Retrieve the current signUpObject from localStorage
+        const signUpObject = JSON.parse(localStorage.getItem("signUpData")) ?? {
+          customers: [],
+        };
+
+        // Check if username or email already exists in the customers object
+        const isUsernameTaken = Object.values(signUpObject.customers).some(
+          (user) => user.username === username
+        );
+        const isEmailTaken = Object.values(signUpObject.customers).some(
+          (user) => user.email === email
+        );
+
+        if (isUsernameTaken) {
           usernameError.innerHTML = "This Username Has Been Taken Before";
           usernameError.style.display = "block";
           return;
         }
 
-        // Check if email already exists
-        if (localStorage.getItem(email)) {
+        if (isEmailTaken) {
           emailError.innerHTML = "This Email Is Already Registered";
           emailError.style.display = "block";
-          return;
-        }
-
-        // Check if passwords match
-        if (password !== confirmPassword) {
-          confirmPasswordError.innerHTML = "Passwords do not match";
-          confirmPasswordError.style.display = "block";
           return;
         }
 
         // Hash password
         const hashedPassword = hashPassword(password);
 
-        // Store user data in localStorage
-        const userData = {
+        // Create a new user object
+        const newUser = {
           username,
           email,
           phone,
           password: hashedPassword,
+          role: "customer",
+          address: "",
+          imgsrc: "",
+          cart: [],
+          wishlist: [],
         };
-        localStorage.setItem(username, JSON.stringify(userData));
+
+        // Add the new user to the customers object
+        signUpObject.customers[email] = newUser;
+
+        // Save the updated object back to localStorage
+        localStorage.setItem("signUpData", JSON.stringify(signUpObject));
 
         alert("Account created successfully!");
 
@@ -371,7 +495,6 @@ autocomplete="new-password" tell the browser that the password field is a new pa
         passwordField.value = "";
         confirmPasswordField.value = "";
       });
-
       const signInButton = document.querySelector(".sign-in-container button");
       const signInError = document.getElementById("signInError");
       const signinEmailField = document.querySelector(
@@ -389,59 +512,81 @@ autocomplete="new-password" tell the browser that the password field is a new pa
 
         signInError.style.display = "none";
 
+        // Validation checks
         if (!email || !password) {
           signInError.innerHTML = "Please fill in both email and password.";
           signInError.style.display = "block";
           return;
         }
 
-        const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+        const emailRegex = /^[a-zA-Z0-9._-]{2,}@gmail\.com$/;
         if (!emailRegex.test(email)) {
-          signInError.innerHTML = "Please enter a valid email address.";
-          signInError.style.display = "block";
-          return;
-        }
-        const invalidCharsRegex = /[^a-zA-Z0-9@._-]/;
-        if (invalidCharsRegex.test(email)) {
-          signInError.innerHTML = "Your email contains invalid characters.";
+          signInError.innerHTML =
+            "Please enter a valid email address with at least 2 characters before '@gmail.com'.";
           signInError.style.display = "block";
           return;
         }
 
-        // Loop through all users in localStorage
+        // Fetch data from localStorage
+        const signUpData = JSON.parse(localStorage.getItem("signUpData")) || {};
+        const { admin, customers, sellers } = signUpData;
+
         let foundUser = null;
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          const storedUser = JSON.parse(localStorage.getItem(key));
+        let role = "";
 
-          if (storedUser.email === email) {
-            foundUser = storedUser;
-            break;
-          }
+        // Check for user in each role
+        if (admin && admin[email]) {
+          foundUser = admin[email];
+          role = "admin";
+        } else if (customers && customers[email]) {
+          foundUser = customers[email];
+          role = "customer";
+        } else if (sellers && sellers[email]) {
+          foundUser = sellers[email];
+          role = "seller";
         }
 
-        // Check if user is found and passwords match
-     
+        // User not found
         if (!foundUser) {
-            signInError.innerHTML =
-              "This email is not registered. Please sign up first.";
-            signInError.style.display = "block";
-            return;
-          }
-  
-          // Check if the password matches
-          if (foundUser.password !== CryptoJS.SHA256(password).toString()) {
-            signInError.innerHTML =
-              "Email or Password is incorrect. Please try again.";
-            signInError.style.display = "block";
-            return;
-          }
-        alert("Login successful!");
+          signInError.innerHTML =
+            "This email is not registered. Please sign up first.";
+          signInError.style.display = "block";
+          return;
+        }
+
+        // Compare entered password with the stored password
+        if (foundUser.pass !== password) {
+          signInError.innerHTML =
+            "Email or Password is incorrect. Please try again.";
+          signInError.style.display = "block";
+          return;
+        }
+
+        // Store session data with loginObject using sessionStorage
+        const loginObject = {
+          session: {
+            email: email,
+            password: password, 
+          },
+        };
+        sessionStorage.setItem("currentSession", JSON.stringify(loginObject));
+
+        // Redirect based on role
+        if (role === "admin") {
+          window.location.href = "admindashboard.html";
+        } else if (role === "customer") {
+          window.location.href = "homepage.html";
+        } else if (role === "seller") {
+          window.location.href = "ProductsSearch.html";
+        } else {
+          signInError.innerHTML = "User role not recognized.";
+          signInError.style.display = "block";
+        }
+
+        // Clear form inputs
         signinEmailField.value = "";
         signinPasswordField.value = "";
       });
-
-   
 
       // Overlay Button for Switching Forms
       const container = document.getElementById("container");
