@@ -21,32 +21,7 @@
   <link rel="stylesheet" href="./Assests/stylesheet/Product Page.css" />
   <script src="./Assests/javascribt/productpage.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script>
-    // The JavaScript provided above
-    $(document).ready(function () {
-      function getProductData() {
-        const storedProduct = localStorage.getItem("selectedProduct");
-        return storedProduct ? JSON.parse(storedProduct) : null;
-      }
-
-      const product = getProductData();
-
-      if (product) {
-        $("#main-image").attr("src", product.img_src);
-        $("#product-title").text(product.title);
-        $("#product-category").text(product.category);
-        $("#product-availability").text("In stock");
-        $("#product-price").text("Price: " + product.price);
-        $("#product-description").text(product.description);
-      } else {
-        // Handle case where no product data is found
-        alert("No product data found. Please go back and select a product.");
-      }
-
-    });
-
-
-  </script>
+  <script src="./Assests/javascribt/productpage.js"></script>
 </head>
 
 <body>
