@@ -78,7 +78,7 @@ $(document).ready(function () {
           `);
         BookCard.on("click", function () {
           localStorage.setItem("selectedProduct", JSON.stringify(product));
-          window.location.href = "product-page.html";
+          window.location.href = "product Page.html";
         });
         container.append(BookCard);
       });

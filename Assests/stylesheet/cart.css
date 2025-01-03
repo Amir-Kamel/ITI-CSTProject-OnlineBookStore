@@ -92,50 +92,80 @@ body {
   font-size: 48px;
   text-transform: none;
 }
-/* slider */
-.carousel-item img {
-  height: 300px;
-  transition: 0.3s ease;
+/* breadcrumb */
+#breadcrumb,
+#filter-search {
+  background-color: #f6f7f8;
 }
-.icons {
-  background-color: white;
-  padding: 5px;
-  border-radius: 30px;
+#breadcrumb nav ol li:hover {
+  cursor: pointer;
+  color: #be9900;
 }
-.icons:hover {
-  background-color: #810b0b6d;
-  color: white;
-}
-/* slider */
+/* end of breadcrumb */
 
-.aboutus {
-  text-align: center;
-  margin: 20px 0;
+/* Cart */
+
+.fa-xmark {
+  color: #ff4252;
+  /* border-radius: 50%;  */
 }
-.aboutus h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
-  box-shadow: 0px 0px 10px #e4cfb6 inset;
+.card {
+  max-width: 20rem;
+  /* margin-left: 1rem; */
+}
+.productimg {
+  /* height: 150px; */
+  box-shadow: 2px 5px 3px gray;
 }
 
-/* start body */
-.team-slider img {
-  border-radius: 50%;
-  margin: auto;
+div.counter {
+  width: 3rem;
 }
-.team-slider h5 {
-  margin-top: 15px;
-  font-weight: bold;
+
+.input-group {
+  background-color: #dfdede;
 }
-.team-slider p {
-  margin-bottom: 5px;
+input[type="checkbox"]:hover,
+.card:hover,
+.input-group:hover {
+  cursor: pointer;
 }
-.icons-section .icon-box {
-  text-align: center;
-  margin: 20px 0;
+.input-group > *:hover {
+  background-color: #7d7b7b;
 }
-.icons-section .icon-box i {
-  font-size: 40px;
-  color: #d9534f;
-  margin-bottom: 10px;
+div.counter:hover {
+  cursor: text;
+  background-color: #dfdede;
 }
+/* End of cart */
+
+/* start of Modal */
+.close-button {
+  transition: all 0.5s;
+}
+.close-button:hover {
+  transform: scale(1.1);
+  background-color: #fb9898;
+  color: #490707;
+}
+.close-button:active {
+  transform: scale(0.9);
+  background-color: #fb9898 !important;
+  color: #490707 !important;
+}
+.headerFont {
+  font-family: Raleway;
+}
+
+.fa-paypal {
+  color: #283593;
+}
+input[type="text"],
+textarea {
+  background-color: #dfdede !important;
+}
+.modal-footer > button {
+  font-family: Nunito;
+}
+
+/* end of Modal */
