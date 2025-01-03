@@ -99,7 +99,7 @@
           <div class="text-center mt-3 collapse navbar-collapse " id="navbarNavDropdown">
               <ul class="navbar-nav mx-auto col-2 col-md-5 col-lg-5 col-sm-0">
                   <li class="nav-item ">
-                      <a class="nav-link active" aria-current="page" href="#">Home</a>
+                      <a class="nav-link" aria-current="page" href="#">Home</a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link" href="./about-page.html">About</a>
@@ -132,40 +132,42 @@
           </div>
         </div>
         <!-- Start Buttons and Product Info-->
-        <div class="col-md-6 mb-5">
-          <h2>Harry Potter</h2>
-          <p class="mb-4">Category: Science Fiction</p>
-          <p><strong>Availability:</strong> In stock</p>
-          <p><strong>Free Shipping</strong></p>
+        <div class="col-md-6">
+          <h1 class="fw-bolder mb-4">Harry Potter</h1>
+          <h5 class="mb-4"><strong>Category:</strong> Science Fiction</h5>
+          <h5 class="mb-4"><strong>Availability:</strong> In stock</h5>
+          <h5 class="mb-5"><strong>Free Shipping</strong></h5>
 
-          <div class="d-flex my-5">
-            <button class="btn face me-2 text-light">
-              <i class="fab fa-facebook-f"></i> Share
-            </button>
-            <button class="btn insta text-light">
-              <i class="fab fa-instagram fw-"></i> Share
-            </button>
-          </div>
-
-          <button class="btn btn-danger ms-2 mb-5">
+          <button class="btn btn-primary mb-5 ">
             <i class="fas fa-heart"></i> Add to Favourite
           </button>
-
-          <div class="d-flex align-items-center">
-            <input
-              type="number"
-              class="form-control w-25 me-2 text-center"
+          
+         
+          <div class="d-flex align-items-center gap-3">
+              <input type="number" 
+              placeholder="Quantity"
+          class="form-control rounded-pill w-50 text-center shadow border-success-subtle bg-warning-subtle"
               value="1 "
               min="1"
               step="1"
               oninput="this.value = Math.floor(this.value)"
             />
-            <button class="btn btn-danger me-2">
+            <button class="btn btn-primary placeholder-wave flex-shrink-0">
               <i class="fas fa-shopping-cart"></i> Add to Cart
             </button>
           </div>
+
+          <div class="d-flex gap-3 my-5">
+            <button class="btn face text-light w-50">
+              <i class="fab fa-facebook-f"></i> Share
+            </button>
+            <button class="btn btn-danger insta text-light w-50">
+              <i class="fab fa-instagram"></i> Share
+            </button>
+          </div>
         </div>
-        <!-- Start Buttons and Product Info-->
+        <!-- End Buttons and Product Info-->
+
         <!-- Thumbnail Product Images-->
         <h4>Product</h4>
         <div class="row d-flex product-images">
