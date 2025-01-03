@@ -94,7 +94,7 @@ body {
 }
 
 .carousel-item img {
-  max-height: 360px;
+  height: 500px;
 
   transition: opacity 0.3s ease;
 }

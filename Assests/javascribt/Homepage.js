@@ -76,7 +76,10 @@ $(document).ready(function () {
               </div>
             </div>
           `);
-
+        BookCard.on("click", function () {
+          localStorage.setItem("selectedProduct", JSON.stringify(product));
+          window.location.href = "product-page.html";
+        });
         container.append(BookCard);
       });
 
