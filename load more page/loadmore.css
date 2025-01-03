@@ -231,6 +231,9 @@ body {
 .pagination-lg {
   --bs-pagination-border-radius: 0px !important;
 }
+.pagination {
+  background-color: #f6f7f8;
+}
 .page-item > .page-link {
   background-color: #f6f7f8;
   color: black;
