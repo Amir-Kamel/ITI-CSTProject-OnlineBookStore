@@ -25,107 +25,14 @@
 <body>
     <!-- Start Navbar -->
     <div id="mainNavigation">
-        <!-- StartHeader -->
-        <nav role="navigation">
-            <div class="border-bottom d-flex align-items-center bg-primary justify-content-evenly">
-                <a href="./HomePage.html" class="navbar-brand main-barnd"><img style="width: 120px; height: 60px;"
-                        src="./Assests/images/logo.png" alt="Logo"></a>
-                <div class="p-1 mx-3 bg-light rounded rounded-pill shadow-sm w-75 d-none d-lg-block d-md-block">
-                    <div class="input-group">
-                        <input type="search" placeholder="Search for a book" class="form-control border-0 bg-light">
-                        <div class="input-group-append">
-                            <button id="button-addon1" type="submit" class="btn btn-link text-primary"> <i
-                                    class="fa fa-search"></i> </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex">
-                    <!-- User Dropdown -->
-                    <div class="dropdown">
-                        <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle"
-                            id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user fa-lg"></i>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="./Login&Register.html">Sign in</a></li>
-                            <li><a class="dropdown-item" href="./profile.html">You Account</a></li>
-                        </ul>
-                    </div>
-                    <!-- Heart Dropdown -->
-                    <div class="dropdown">
-                        <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle"
-                            id="heartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-heart fa-lg"></i>
-                            <span
-                                class="badge bg-danger position-absolute top-0 start-100 translate-middle p-2 rounded-circle"
-                                id="heartBadge">0</span>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="heartDropdown">
-                            <li><a class="dropdown-item" href="./wishlist.html">Favorites</a></li>
-                        </ul>
-                    </div>
-                    <!-- Shopping Cart Dropdown -->
-                    <div class="container">
-                        <div class="dropdown"> <a href="#"
-                                class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle position-relative"
-                                id="cartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i
-                                    class="fas fa-shopping-cart fa-lg"></i> <span id="cartBadge"
-                                    class="badge bg-danger position-absolute top-0 start-100 translate-middle p-2 rounded-circle">0</span>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="cartDropdown">
-                                <li><a class="dropdown-item cartbtn" href="cart.html">Cart</a></li>
-                                <li><a class="dropdown-item" href="#">Checkout</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- Bell Dropdown -->
-                    <div class="dropdown">
-                        <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle"
-                            id="bellDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-bell fa-lg"></i>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="bellDropdown">
-                            <li><a class="dropdown-item" href="#">Notifications</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </nav>
-
-        <!-- EndHeader -->
-        <div class="navbar-expand-md ">
-            <div class="navbar-dark text-center bg-primary ">
-                <button class="navbar-toggler w-75 text-black" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-            <div class="text-center mt-3 collapse navbar-collapse " id="navbarNavDropdown">
-                <ul class="navbar-nav mx-auto col-2 col-md-5 col-lg-5 col-sm-0">
-                    <li class="nav-item ">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./About Us.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./Contact Us.html">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./service-page.html">Service</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
-    <!-- End Navbar -->
+    <!-- end Navbar -->
 
 
 
 
     <!-- Start the form -->
-    <div class="container light-style flex-grow-1 container-p-y">
+    <div class="container light-style flex-grow-1 container-p-y mb-5">
         <h4 class="font-weight-bold py-3 mb-4">
             Account settings
         </h4>
@@ -204,88 +111,35 @@
     <!-- End the form -->
 
 
+    <!-- Footer -->
+    <footer id="footer" class="text-center text-lg-start text-white" style="background-color: #e4cfb6">
+    </footer>
+    <!-- Footer -->
 
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script src="./Assests/javascribt/jquery-3.7.1.slim.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $.validator.addMethod("pattern", function (value, element, param) {
-                return this.optional(element) || param.test(value);
-            }, "Invalid format.");
+        document.addEventListener("DOMContentLoaded", function () {
+            function loadContent(url, elementId) {
+                fetch(url)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById(elementId).innerHTML = data;
+                    })
+                    .catch(error => console.error('Error loading content:', error));
+            }
 
-            $("#account-form").validate({
-                rules: {
-                    username: {
-                        required: true,
-                        pattern: /^[a-zA-Z]+$/
-                    },
-                    email: {
-                        required: true,
-                        email: true
-
-                    },
-                    "current-password": {
-                        required: true,
-                        minlength: 8
-                    },
-                    "new-password": {
-                        required: true,
-                        minlength: 8
-                    },
-                    "repeat-password": {
-                        equalTo: "[name='new-password']",
-                        minlength: 8
-                    }
-                },
-                messages: {
-                    username: {
-                        required: "Please enter your username",
-                        pattern: "Username can only contain letters"
-                    },
-                    email: {
-                        required: "Please enter your email address",
-                        email: "Please enter a valid email address"
-                    },
-                    "current-password": {
-                        required: "Please enter your current password",
-                        minlength: "Password must be at least 8 characters long"
-                    },
-                    "new-password": {
-                        required: "Please enter a new password",
-                        minlength: "Password must be at least 8 characters long"
-                    },
-                    "repeat-password": {
-                        equalTo: "Passwords do not match",
-                        minlength: "Password must be at least 8 characters long"
-                    }
-                }
-            });
-
-            $("#save-button").click(function () {
-                if ($("#account-form").valid()) {
-                    var currentPasswordInput = $("input[name='current-password']").val();
-                    var storedPassword = localStorage.getItem("currentPassword");
-
-                    if (storedPassword === null || currentPasswordInput === storedPassword) {
-                        localStorage.setItem("username", $("input[name='username']").val());
-                        localStorage.setItem("name", $("input[name='name']").val());
-                        localStorage.setItem("email", $("input[name='email']").val());
-                        localStorage.setItem("company", $("input[name='company']").val());
-
-                        // Update the current password in local storage
-                        localStorage.setItem("currentPassword", $("input[name='new-password']").val());
-
-                        alert("Data saved to local storage!");
-                    } else {
-                        alert("Current password is incorrect.");
-                    }
-                } else {
-                    alert("Please fill out the form correctly.");
-                }
-            });
+            // Load navigation and footer
+            loadContent("nav.html", "mainNavigation");
+            loadContent("footer.html", "footer");
         });
+
+
     </script>
+    <script src="./Assests/javascribt/profile.js"> </script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"

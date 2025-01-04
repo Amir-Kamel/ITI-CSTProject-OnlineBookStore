@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
   $("#formcontact").on("submit", function (event) {
     event.preventDefault(); // prevent the default not to refresh the page to show the message toast after submit
@@ -33,8 +32,14 @@ $(document).ready(function () {
       // Save data to local storage
       localStorage.setItem("Contact Name Data", JSON.stringify(nameinput));
       localStorage.setItem("Contact Email Data", JSON.stringify(emailinput));
-      localStorage.setItem("Contact Subject Data", JSON.stringify(subjectinput));
-      localStorage.setItem("Contact Message Data", JSON.stringify(messageinput));
+      localStorage.setItem(
+        "Contact Subject Data",
+        JSON.stringify(subjectinput)
+      );
+      localStorage.setItem(
+        "Contact Message Data",
+        JSON.stringify(messageinput)
+      );
       // show message toast
       $(".toast").toast("show");
 

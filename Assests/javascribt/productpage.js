@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  $("#mainNavigation").load("nav.html");
+
   function getProductData() {
     const storedProduct = localStorage.getItem("selectedProduct");
     return storedProduct ? JSON.parse(storedProduct) : null;
