@@ -43,9 +43,7 @@ $(document).ready(function () {
           ? products // if the tab is all show the all products
           : Object.fromEntries(
               //else convert object to array then filter
-              Object.entries(products).filter(
-                ([key, product]) => product.category === category
-              )
+              Object.entries(products).filter(([key, product]) => product.category === category),
             );
 
       //   console.log("Filtered products:", filteredProducts);

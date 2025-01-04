@@ -1,8 +1,7 @@
 import { usersData } from "./accounts.js";
 
 // Initialize `localStorage` with `usersData` if not already set
-const signUpObject =
-  JSON.parse(localStorage.getItem("signUpData")) ?? usersData;
+const signUpObject = JSON.parse(localStorage.getItem("signUpData")) ?? usersData;
 
 if (!localStorage.getItem("signUpData")) {
   localStorage.setItem("signUpData", JSON.stringify(signUpObject));
@@ -40,17 +39,11 @@ document.addEventListener("DOMContentLoaded", function () {
           // Ensure the data is an object and check for username/email
           if (data && typeof data === "object") {
             // Check for the username or email in any object stored in localStorage
-            if (
-              type === "username" &&
-              Object.values(data).some((user) => user.username === value)
-            ) {
+            if (type === "username" && Object.values(data).some((user) => user.username === value)) {
               found = true;
               break;
             }
-            if (
-              type === "email" &&
-              Object.values(data).some((user) => user.email === value)
-            ) {
+            if (type === "email" && Object.values(data).some((user) => user.email === value)) {
               found = true;
               break;
             }
@@ -61,10 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Check if the username or email already exists in any object in localStorage
-      const isUsernameTaken = checkDuplicateInLocalStorage(
-        username,
-        "username"
-      );
+      const isUsernameTaken = checkDuplicateInLocalStorage(username, "username");
       const isEmailTaken = checkDuplicateInLocalStorage(email, "email");
 
       if (isUsernameTaken) {
@@ -129,8 +119,7 @@ function validateEmail() {
     emailField.style.borderBottomColor = "red";
     emailError.style.display = "block";
   } else if (invalidCharsRegex.test(emailValue.split("@")[0])) {
-    emailError.innerHTML =
-      "Email cannot end with special characters before '@gmail.com'";
+    emailError.innerHTML = "Email cannot end with special characters before '@gmail.com'";
     emailField.style.borderBottomColor = "red";
     emailError.style.display = "block";
   } else {
@@ -173,8 +162,7 @@ const confirmPasswordError = document.getElementById("confirmPasswordError");
 function validatePassword() {
   const passwordValue = passwordField.value;
   const passwordLengthRegex = /.{8,}/;
-  const passwordStrengthRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+  const passwordStrengthRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
 
   if (!passwordValue.match(passwordLengthRegex)) {
     passwordLengthError.style.display = "block";
@@ -220,13 +208,11 @@ function validateUsername() {
   const invalidStartEndMiddleRegex = /^(?![^\w\s_-]|.*[^\w\s_-]$).*$/; // Disallow special characters at start, middle, or end
 
   if (!usernameValue.match(usernameRegex)) {
-    usernameError.innerHTML =
-      "Username can only contain letters, spaces, underscores, or dashes.";
+    usernameError.innerHTML = "Username can only contain letters, spaces, underscores, or dashes.";
     usernameField.style.borderBottomColor = "red";
     usernameError.style.display = "block";
   } else if (!invalidStartEndMiddleRegex.test(usernameValue)) {
-    usernameError.innerHTML =
-      "Special characters are not allowed at the start, middle, or end.";
+    usernameError.innerHTML = "Special characters are not allowed at the start, middle, or end.";
     usernameField.style.borderBottomColor = "red";
     usernameError.style.display = "block";
   } else if (localStorage.getItem(usernameValue)) {
@@ -291,12 +277,8 @@ signUpButton.addEventListener("click", function (event) {
   };
 
   // Check if username or email already exists in the customers object
-  const isUsernameTaken = Object.values(signUpObject.customers).some(
-    (user) => user.username === username
-  );
-  const isEmailTaken = Object.values(signUpObject.customers).some(
-    (user) => user.email === email
-  );
+  const isUsernameTaken = Object.values(signUpObject.customers).some((user) => user.username === username);
+  const isEmailTaken = Object.values(signUpObject.customers).some((user) => user.email === email);
 
   if (isUsernameTaken) {
     usernameError.innerHTML = "This Username Has Been Taken Before";
@@ -343,12 +325,8 @@ signUpButton.addEventListener("click", function (event) {
 });
 const signInButton = document.querySelector(".sign-in-container button");
 const signInError = document.getElementById("signInError");
-const signinEmailField = document.querySelector(
-  '.sign-in-container input[type="email"]'
-);
-const signinPasswordField = document.querySelector(
-  '.sign-in-container input[type="password"]'
-);
+const signinEmailField = document.querySelector('.sign-in-container input[type="email"]');
+const signinPasswordField = document.querySelector('.sign-in-container input[type="password"]');
 
 signInButton.addEventListener("click", function (event) {
   event.preventDefault(); // Prevent default behavior (page reload)
@@ -367,8 +345,7 @@ signInButton.addEventListener("click", function (event) {
 
   const emailRegex = /^[a-zA-Z0-9._-]{2,}@gmail\.com$/;
   if (!emailRegex.test(email)) {
-    signInError.innerHTML =
-      "Please enter a valid email address with at least 2 characters before '@gmail.com'.";
+    signInError.innerHTML = "Please enter a valid email address with at least 2 characters before '@gmail.com'.";
     signInError.style.display = "block";
     return;
   }
@@ -394,8 +371,7 @@ signInButton.addEventListener("click", function (event) {
 
   // User not found
   if (!foundUser) {
-    signInError.innerHTML =
-      "This email is not registered. Please sign up first.";
+    signInError.innerHTML = "This email is not registered. Please sign up first.";
     signInError.style.display = "block";
     return;
   }
@@ -420,7 +396,7 @@ signInButton.addEventListener("click", function (event) {
   if (role === "admin") {
     window.location.href = "admindashboard.html";
   } else if (role === "customer") {
-    window.location.href = "homepage.html";
+    window.location.href = "HomePage.html";
   } else if (role === "seller") {
     window.location.href = "ProductsSearch.html";
   } else {
