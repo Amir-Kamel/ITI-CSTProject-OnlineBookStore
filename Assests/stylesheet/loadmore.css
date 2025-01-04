@@ -17,17 +17,18 @@
 /* end of banner */
 /* slider-range */
 #slider-range {
-  height: 10px !important;
+  height: 7px !important;
   background-color: #ddd;
   position: relative;
   margin-top: 20px;
+  border-radius: 2px;
 }
 
 #slider-range .ui-slider-handle {
   background-color: #810b0b;
-  border-radius: 25%; /* Make it circular */
-  width: 20px; /* Set width */
-  height: 20px; /* Set height */
+  border-radius: 50%; /* Make it circular */
+  width: 15px; /* Set width */
+  height: 15px; /* Set height */
   border: 2px solid #ffffff; /* Border color */
   position: absolute; /* Absolute to position within the slider */
   top: 3px; /* Adjust to center the handle within the slider */
