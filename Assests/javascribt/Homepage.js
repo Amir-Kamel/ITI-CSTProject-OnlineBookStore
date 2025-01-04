@@ -1,37 +1,69 @@
+document.addEventListener("DOMContentLoaded", function () {
+  function loadContent(url, elementId) {
+    fetch(url)
+      .then((response) => response.text())
+      .then((data) => {
+        document.getElementById(elementId).innerHTML = data;
+        // Ensure the badge is updated after the navigation is loaded
+        if (elementId === "mainNavigation") {
+          // Call the updateCartBadge function defined in nav.js
+          updateCartBadge();
+        }
+      })
+      .catch((error) => console.error("Error loading content:", error));
+  }
+
+  // Load navigation and footer
+  loadContent("nav.html", "mainNavigation");
+  loadContent("footer.html", "footer");
+});
+
 // Importing Products Data
 import { products } from "./productsdata.js";
 
 // Using jQuery to set data and interact with DOM
 $(document).ready(function () {
   function setData() {
-    // console.log("Setting products data to localStorage:", products);
     localStorage.setItem("products", JSON.stringify(products));
   }
 
   function getData() {
     const storedData = localStorage.getItem("products");
-    // console.log("Retrieved data from localStorage:", storedData);
     return JSON.parse(storedData);
   }
-  //if the product null
+
+  // If the products data is null
   if (!localStorage.getItem("products")) {
     setData();
   }
 
   let allProducts = getData();
-  //   console.log("All products after retrieval:", allProducts);
 
-  //   if (!allProducts || typeof allProducts !== "object") {
-  //     allProducts = {}; // Handle the case when there is no valid data
-  //   }
+  // Function to add product to cart and save in local storage
+  function addToCart(product) {
+    const loggedInUserEmail = getLoggedInUserEmail();
+    if (loggedInUserEmail) {
+      const cartKey = `${loggedInUserEmail}_cart`;
+
+      let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+      cart.push(product);
+      localStorage.setItem(cartKey, JSON.stringify(cart));
+      updateCartBadge(); // Update the cart badge after adding the product
+
+      // Show toast notification for adding product to cart
+      Toast.fire({
+        icon: "success",
+        title: "Item added to cart successfully.",
+      });
+    } else {
+      Toast.fire({
+        icon: "info",
+        title: "You need to be logged in to add products to cart.",
+      });
+    }
+  }
 
   function displayProducts(products, category = "All") {
-    // if (!products || typeof products !== "object") {
-    //   return;
-    // }
-
-    // console.log("Displaying products for category:", category);
-
     const container = $("#books-Container");
 
     // Add fadeOut animation
@@ -43,15 +75,14 @@ $(document).ready(function () {
           ? products // if the tab is all show the all products
           : Object.fromEntries(
               //else convert object to array then filter
-              Object.entries(products).filter(([key, product]) => product.category === category),
+              Object.entries(products).filter(
+                ([key, product]) => product.category === category
+              )
             );
 
-      //   console.log("Filtered products:", filteredProducts);
       let obj = Object.keys(filteredProducts);
-      //   console.log(obj);
       obj.forEach((key) => {
         const product = filteredProducts[key];
-        // console.log(product);
         const BookCard = $(`
             <div class="col-lg-3 col-md-6 col-sm-12 p-4">
               <div class="card h-100 w-100" data-id="${product.title}">
@@ -74,6 +105,13 @@ $(document).ready(function () {
               </div>
             </div>
           `);
+
+        // Handle "add to cart" button click
+        BookCard.find(".add-to-cart").on("click", function (e) {
+          e.stopPropagation(); // Prevent event bubbling
+          addToCart(product);
+        });
+
         BookCard.on("click", function () {
           localStorage.setItem("selectedProduct", JSON.stringify(product));
           window.location.href = "product Page.html";
@@ -94,7 +132,6 @@ $(document).ready(function () {
     $(this).addClass("active text-primary");
     const category = $(this).data("category");
 
-    // console.log("Tab clicked, category:", category);
     displayProducts(allProducts, category);
   });
 });

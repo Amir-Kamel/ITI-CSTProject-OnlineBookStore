@@ -1,6 +1,24 @@
-$(document).ready(function () {
-  $("#mainNavigation").load("nav.html");
+document.addEventListener("DOMContentLoaded", function () {
+  function loadContent(url, elementId) {
+    fetch(url)
+      .then((response) => response.text())
+      .then((data) => {
+        document.getElementById(elementId).innerHTML = data;
+        // Ensure the badge is updated after the navigation is loaded
+        if (elementId === "mainNavigation") {
+          // Call the updateCartBadge function defined in nav.js
+          updateCartBadge();
+        }
+      })
+      .catch((error) => console.error("Error loading content:", error));
+  }
 
+  // Load navigation and footer
+  loadContent("nav.html", "mainNavigation");
+  loadContent("footer.html", "footer");
+});
+
+$(document).ready(function () {
   function getProductData() {
     const storedProduct = localStorage.getItem("selectedProduct");
     return storedProduct ? JSON.parse(storedProduct) : null;
@@ -19,4 +37,6 @@ $(document).ready(function () {
     // Handle case where no product data is found
     alert("No product data found. Please go back and select a product.");
   }
+  // Update the cart badge when the page loads
+  updateCartBadge();
 });

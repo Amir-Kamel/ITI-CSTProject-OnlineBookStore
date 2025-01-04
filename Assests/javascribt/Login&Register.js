@@ -1,7 +1,8 @@
 import { usersData } from "./accounts.js";
 
 // Initialize `localStorage` with `usersData` if not already set
-const signUpObject = JSON.parse(localStorage.getItem("signUpData")) ?? usersData;
+const signUpObject =
+  JSON.parse(localStorage.getItem("signUpData")) ?? usersData;
 
 if (!localStorage.getItem("signUpData")) {
   localStorage.setItem("signUpData", JSON.stringify(signUpObject));
@@ -23,7 +24,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Validate input fields
       if (!username || !email || !phone || !password) {
-        alert("Please fill in all fields.");
+        Toast.fire({
+          type: "error",
+          title: "Please fill in all fields.",
+        });
         return;
       }
 
@@ -39,11 +43,17 @@ document.addEventListener("DOMContentLoaded", function () {
           // Ensure the data is an object and check for username/email
           if (data && typeof data === "object") {
             // Check for the username or email in any object stored in localStorage
-            if (type === "username" && Object.values(data).some((user) => user.username === value)) {
+            if (
+              type === "username" &&
+              Object.values(data).some((user) => user.username === value)
+            ) {
               found = true;
               break;
             }
-            if (type === "email" && Object.values(data).some((user) => user.email === value)) {
+            if (
+              type === "email" &&
+              Object.values(data).some((user) => user.email === value)
+            ) {
               found = true;
               break;
             }
@@ -54,16 +64,25 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Check if the username or email already exists in any object in localStorage
-      const isUsernameTaken = checkDuplicateInLocalStorage(username, "username");
+      const isUsernameTaken = checkDuplicateInLocalStorage(
+        username,
+        "username"
+      );
       const isEmailTaken = checkDuplicateInLocalStorage(email, "email");
 
       if (isUsernameTaken) {
-        alert("This username has already been taken.");
+        Toast.fire({
+          type: "error",
+          title: "This username has already been taken.",
+        });
         return;
       }
 
       if (isEmailTaken) {
-        alert("This email is already registered.");
+        Toast.fire({
+          type: "error",
+          title: "This email is already registered.",
+        });
         return;
       }
 
@@ -92,7 +111,10 @@ document.addEventListener("DOMContentLoaded", function () {
       // Save the updated structure back to `localStorage`
       localStorage.setItem("signUpData", JSON.stringify(currentData));
 
-      alert("Account created successfully!");
+      Toast.fire({
+        type: "success",
+        title: "Account created successfully!",
+      });
 
       // Reset form fields
       signUpForm.reset();
@@ -119,7 +141,8 @@ function validateEmail() {
     emailField.style.borderBottomColor = "red";
     emailError.style.display = "block";
   } else if (invalidCharsRegex.test(emailValue.split("@")[0])) {
-    emailError.innerHTML = "Email cannot end with special characters before '@gmail.com'";
+    emailError.innerHTML =
+      "Email cannot end with special characters before '@gmail.com'";
     emailField.style.borderBottomColor = "red";
     emailError.style.display = "block";
   } else {
@@ -135,11 +158,24 @@ emailField.addEventListener("input", function () {
 // Phone Validation
 const phoneField = document.getElementById("phone");
 const phoneError = document.getElementById("phoneError");
+
 function validatePhone() {
-  const phoneValue = phoneField.value;
+  const phoneValue = phoneField.value.trim();
+
+  // Phone regex for Egyptian numbers (starting with 010, 011, 012, 015 and followed by 8 digits)
   const phoneRegex = /^(011|012|010|015)\d{8}$/;
 
-  if (!phoneValue.match(phoneRegex)) {
+  // Simple email regex to identify an email pattern
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  // Check if the input is an email address
+  if (emailRegex.test(phoneValue)) {
+    phoneError.innerHTML = "Phone number cannot be an email address.";
+    phoneField.style.borderBottomColor = "red";
+    phoneError.style.display = "block";
+  }
+  // Check if the input matches the phone number regex
+  else if (!phoneValue.match(phoneRegex)) {
     phoneError.innerHTML = "Invalid Phone Number";
     phoneField.style.borderBottomColor = "red";
     phoneError.style.display = "block";
@@ -148,6 +184,7 @@ function validatePhone() {
     phoneField.style.borderBottomColor = "green";
   }
 }
+
 phoneField.addEventListener("input", function () {
   clearTimeout(typingTimer);
   typingTimer = setTimeout(validatePhone, doneTypingInterval);
@@ -162,7 +199,8 @@ const confirmPasswordError = document.getElementById("confirmPasswordError");
 function validatePassword() {
   const passwordValue = passwordField.value;
   const passwordLengthRegex = /.{8,}/;
-  const passwordStrengthRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+  const passwordStrengthRegex =
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
 
   if (!passwordValue.match(passwordLengthRegex)) {
     passwordLengthError.style.display = "block";
@@ -202,57 +240,61 @@ confirmPasswordField.addEventListener("input", function () {
 // Username Validation
 const usernameField = document.getElementById("username");
 const usernameError = document.getElementById("usernameError");
+
 function validateUsername() {
   const usernameValue = usernameField.value.trim();
   const usernameRegex = /^[a-zA-Z\s_-]+$/; // Updated regex to allow space, dash, and underscore
   const invalidStartEndMiddleRegex = /^(?![^\w\s_-]|.*[^\w\s_-]$).*$/; // Disallow special characters at start, middle, or end
 
+  // Reset the error and border styles first
+  usernameError.style.display = "none";
+  usernameField.style.borderBottomColor = "green";
+
   if (!usernameValue.match(usernameRegex)) {
-    usernameError.innerHTML = "Username can only contain letters, spaces, underscores, or dashes.";
+    usernameError.innerHTML =
+      "Username can only contain letters, spaces, underscores, or dashes.";
     usernameField.style.borderBottomColor = "red";
     usernameError.style.display = "block";
   } else if (!invalidStartEndMiddleRegex.test(usernameValue)) {
-    usernameError.innerHTML = "Special characters are not allowed at the start, middle, or end.";
+    usernameError.innerHTML =
+      "Special characters are not allowed at the start, middle, or end.";
     usernameField.style.borderBottomColor = "red";
     usernameError.style.display = "block";
   } else if (localStorage.getItem(usernameValue)) {
     usernameError.innerHTML = "This Username Has Been Taken Before";
     usernameField.style.borderBottomColor = "red";
     usernameError.style.display = "block";
-  } else {
-    usernameError.style.display = "none";
-    usernameField.style.borderBottomColor = "green";
   }
 }
 
+// Auto Email Generation from Username
 usernameField.addEventListener("input", function () {
-  clearTimeout(typingTimer);
-  typingTimer = setTimeout(validateUsername, doneTypingInterval);
-});
+  let username = usernameField.value.trim();
 
-// Handle Auto Email Generation from Username
-usernameField.addEventListener("input", function () {
-  const username = usernameField.value.trim();
+  // Clear error message whenever the user types
+  usernameError.style.display = "none";
+  usernameField.style.borderBottomColor = "green";
 
-  // Remove spaces, dashes, and underscores from the username before generating the email
-  const sanitizedUsername = username.replace(/[ \-_]/g, "").toLowerCase();
+  // Remove invalid characters like '@', spaces, dashes, and underscores before generating the email
+  username = username.replace(/[^a-zA-Z]/g, "").toLowerCase(); // Only allow alphabets
 
   // Create the email by appending "@gmail.com"
-  const email = sanitizedUsername + "@gmail.com";
+  const email = username + "@gmail.com";
 
   // Update the email field with the generated email
-  if (sanitizedUsername) {
+  if (username) {
     emailField.value = email;
   } else {
     emailField.value = "";
   }
-});
 
+  // Revalidate the username to ensure any changes update the error message
+  validateUsername();
+});
 // Hash Password
 function hashPassword(password) {
   return CryptoJS.SHA256(password).toString();
 }
-
 // Sign Up Button Event
 const signUpButton = document.querySelector(".sign-up-container button");
 
@@ -267,7 +309,10 @@ signUpButton.addEventListener("click", function (event) {
   const confirmPassword = confirmPasswordField.value.trim();
 
   if (!username || !email || !phone || !password || !confirmPassword) {
-    alert("Please fill in all fields.");
+    Toast.fire({
+      icon: "info",
+      title: "All Fields Are Required",
+    });
     return; // Stop further execution
   }
 
@@ -277,8 +322,12 @@ signUpButton.addEventListener("click", function (event) {
   };
 
   // Check if username or email already exists in the customers object
-  const isUsernameTaken = Object.values(signUpObject.customers).some((user) => user.username === username);
-  const isEmailTaken = Object.values(signUpObject.customers).some((user) => user.email === email);
+  const isUsernameTaken = Object.values(signUpObject.customers).some(
+    (user) => user.username === username
+  );
+  const isEmailTaken = Object.values(signUpObject.customers).some(
+    (user) => user.email === email
+  );
 
   if (isUsernameTaken) {
     usernameError.innerHTML = "This Username Has Been Taken Before";
@@ -314,7 +363,10 @@ signUpButton.addEventListener("click", function (event) {
   // Save the updated object back to localStorage
   localStorage.setItem("signUpData", JSON.stringify(signUpObject));
 
-  alert("Account created successfully!");
+  Toast.fire({
+    icon: "success",
+    title: "Sign Up Successful! You can now sign in.",
+  });
 
   // Reset form fields
   usernameField.value = "";
@@ -325,8 +377,12 @@ signUpButton.addEventListener("click", function (event) {
 });
 const signInButton = document.querySelector(".sign-in-container button");
 const signInError = document.getElementById("signInError");
-const signinEmailField = document.querySelector('.sign-in-container input[type="email"]');
-const signinPasswordField = document.querySelector('.sign-in-container input[type="password"]');
+const signinEmailField = document.querySelector(
+  '.sign-in-container input[type="email"]'
+);
+const signinPasswordField = document.querySelector(
+  '.sign-in-container input[type="password"]'
+);
 
 signInButton.addEventListener("click", function (event) {
   event.preventDefault(); // Prevent default behavior (page reload)
@@ -338,15 +394,20 @@ signInButton.addEventListener("click", function (event) {
 
   // Validation checks
   if (!email || !password) {
-    signInError.innerHTML = "Please fill in both email and password.";
-    signInError.style.display = "block";
+    Toast.fire({
+      icon: "info",
+      title: "Please fill in both email and password.",
+    });
     return;
   }
 
   const emailRegex = /^[a-zA-Z0-9._-]{2,}@gmail\.com$/;
   if (!emailRegex.test(email)) {
-    signInError.innerHTML = "Please enter a valid email address with at least 2 characters before '@gmail.com'.";
-    signInError.style.display = "block";
+    Toast.fire({
+      icon: "info",
+      title:
+        "Please enter a valid email address with at least 2 characters before '@gmail.com'.",
+    });
     return;
   }
 
@@ -371,15 +432,19 @@ signInButton.addEventListener("click", function (event) {
 
   // User not found
   if (!foundUser) {
-    signInError.innerHTML = "This email is not registered. Please sign up first.";
-    signInError.style.display = "block";
+    Toast.fire({
+      icon: "warning",
+      title: "This email is not registered. Please sign up first.",
+    });
     return;
   }
 
   // Compare entered password with the stored password
-  if (foundUser.pass !== password) {
-    signInError.innerHTML = "Email or Password is incorrect. Please try again.";
-    signInError.style.display = "block";
+  if (foundUser.password !== password) {
+    Toast.fire({
+      icon: "error",
+      title: "Email or Password is incorrect. Please try again.",
+    });
     return;
   }
 

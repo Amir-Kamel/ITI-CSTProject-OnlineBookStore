@@ -1,3 +1,23 @@
+document.addEventListener("DOMContentLoaded", function () {
+  function loadContent(url, elementId) {
+    fetch(url)
+      .then((response) => response.text())
+      .then((data) => {
+        document.getElementById(elementId).innerHTML = data;
+        // Ensure the badge is updated after the navigation is loaded
+        if (elementId === "mainNavigation") {
+          // Call the updateCartBadge function defined in nav.js
+          updateCartBadge();
+        }
+      })
+      .catch((error) => console.error("Error loading content:", error));
+  }
+
+  // Load navigation and footer
+  loadContent("nav.html", "mainNavigation");
+  loadContent("footer.html", "footer");
+});
+
 $(function () {
   //create an array of objects that contains each category name and its quantity
   // get all products
@@ -45,7 +65,12 @@ $(function () {
       });
     },
   });
-  $("#amount").val("$" + $("#slider-range").slider("values", 0) + " - $" + $("#slider-range").slider("values", 1));
+  $("#amount").val(
+    "$" +
+      $("#slider-range").slider("values", 0) +
+      " - $" +
+      $("#slider-range").slider("values", 1)
+  );
 });
 function getUserFromSession() {
   const user = JSON.parse(sessionStorage.getItem("currentSession"));
@@ -84,7 +109,10 @@ function storeProductCategory(products) {
     productsCategories.all.push(productKey);
   });
   // Save to local storage
-  localStorage.setItem("productsCategories", JSON.stringify(productsCategories));
+  localStorage.setItem(
+    "productsCategories",
+    JSON.stringify(productsCategories)
+  );
 }
 function getProductCategory() {
   const storedData = localStorage.getItem("productsCategories");
