@@ -53,7 +53,7 @@ $(document).ready(function () {
       //   console.log(obj);
       obj.forEach((key) => {
         const product = filteredProducts[key];
-        console.log(product);
+        // console.log(product);
         const BookCard = $(`
             <div class="col-lg-3 col-md-6 col-sm-12 p-4">
               <div class="card h-100 w-100" data-id="${product.title}">
