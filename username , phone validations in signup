@@ -1,0 +1,170 @@
+
+      // Phone Validation
+      const phoneField = document.getElementById("phone");
+      const phoneError = document.getElementById("phoneError");
+
+      function validatePhone() {
+        const phoneValue = phoneField.value.trim();
+
+        // Phone regex for Egyptian numbers (starting with 010, 011, 012, 015 and followed by 8 digits)
+        const phoneRegex = /^(011|012|010|015)\d{8}$/;
+
+        // Simple email regex to identify an email pattern
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        // Check if the input is an email address
+        if (emailRegex.test(phoneValue)) {
+          phoneError.innerHTML = "Phone number cannot be an email address.";
+          phoneField.style.borderBottomColor = "red";
+          phoneError.style.display = "block";
+        }
+        // Check if the input matches the phone number regex
+        else if (!phoneValue.match(phoneRegex)) {
+          phoneError.innerHTML = "Invalid Phone Number";
+          phoneField.style.borderBottomColor = "red";
+          phoneError.style.display = "block";
+        } else {
+          phoneError.style.display = "none";
+          phoneField.style.borderBottomColor = "green";
+        }
+      }
+
+      phoneField.addEventListener("input", function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(validatePhone, doneTypingInterval);
+      });
+
+
+==================================================================================================================
+
+
+
+      // Username Validation
+      const usernameField = document.getElementById("username");
+      const usernameError = document.getElementById("usernameError");
+
+      function validateUsername() {
+        const usernameValue = usernameField.value.trim();
+        const usernameRegex = /^[a-zA-Z\s_-]+$/; // Updated regex to allow space, dash, and underscore
+        const invalidStartEndMiddleRegex = /^(?![^\w\s_-]|.*[^\w\s_-]$).*$/; // Disallow special characters at start, middle, or end
+
+        // Reset the error and border styles first
+        usernameError.style.display = "none";
+        usernameField.style.borderBottomColor = "green";
+
+        if (!usernameValue.match(usernameRegex)) {
+          usernameError.innerHTML =
+            "Username can only contain letters, spaces, underscores, or dashes.";
+          usernameField.style.borderBottomColor = "red";
+          usernameError.style.display = "block";
+        } else if (!invalidStartEndMiddleRegex.test(usernameValue)) {
+          usernameError.innerHTML =
+            "Special characters are not allowed at the start, middle, or end.";
+          usernameField.style.borderBottomColor = "red";
+          usernameError.style.display = "block";
+        } else if (localStorage.getItem(usernameValue)) {
+          usernameError.innerHTML = "This Username Has Been Taken Before";
+          usernameField.style.borderBottomColor = "red";
+          usernameError.style.display = "block";
+        }
+      }
+
+      // Auto Email Generation from Username
+      usernameField.addEventListener("input", function () {
+        let username = usernameField.value.trim();
+
+        // Clear error message whenever the user types
+        usernameError.style.display = "none";
+        usernameField.style.borderBottomColor = "green";
+
+        // Remove invalid characters like '@', spaces, dashes, and underscores before generating the email
+        username = username.replace(/[^a-zA-Z]/g, "").toLowerCase(); // Only allow alphabets
+
+        // Create the email by appending "@gmail.com"
+        const email = username + "@gmail.com";
+
+        // Update the email field with the generated email
+        if (username) {
+          emailField.value = email;
+        } else {
+          emailField.value = "";
+        }
+
+        // Revalidate the username to ensure any changes update the error message
+        validateUsername();
+      });
+
+      // Sign Up Button Event
+      const signUpButton = document.querySelector(".sign-up-container button");
+
+      signUpButton.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default behavior (page reload)
+
+        // Collect values
+        const username = usernameField.value.trim();
+        const email = emailField.value.trim();
+        const phone = phoneField.value.trim();
+        const password = passwordField.value.trim();
+        const confirmPassword = confirmPasswordField.value.trim();
+
+        if (!username || !email || !phone || !password || !confirmPassword) {
+          alert("Please fill in all fields.");
+          return; // Stop further execution
+        }
+
+        // Retrieve the current signUpObject from localStorage
+        const signUpObject = JSON.parse(localStorage.getItem("signUpData")) ?? {
+          customers: [],
+        };
+
+        // Check if username or email already exists in the customers object
+        const isUsernameTaken = Object.values(signUpObject.customers).some(
+          (user) => user.username === username
+        );
+        const isEmailTaken = Object.values(signUpObject.customers).some(
+          (user) => user.email === email
+        );
+
+        if (isUsernameTaken) {
+          usernameError.innerHTML = "This Username Has Been Taken Before";
+          usernameError.style.display = "block";
+          return;
+        }
+
+        if (isEmailTaken) {
+          emailError.innerHTML = "This Email Is Already Registered";
+          emailError.style.display = "block";
+          return;
+        }
+
+        // Hash password
+        const hashedPassword = hashPassword(password);
+
+        // Create a new user object
+        const newUser = {
+          username,
+          email,
+          phone,
+          password: hashedPassword,
+          role: "customer",
+          address: "",
+          imgsrc: "",
+          cart: [],
+          wishlist: [],
+        };
+
+        // Add the new user to the customers object
+        signUpObject.customers[email] = newUser;
+
+        // Save the updated object back to localStorage
+        localStorage.setItem("signUpData", JSON.stringify(signUpObject));
+
+        alert("Account created successfully!");
+
+        // Reset form fields
+        usernameField.value = "";
+        emailField.value = "";
+        phoneField.value = "";
+        passwordField.value = "";
+        confirmPasswordField.value = "";
+      });
