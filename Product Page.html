@@ -92,26 +92,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <script src="./Assests/javascribt/jquery-3.7.1.slim.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="Assests/javascribt/nav.js"></script>
   <script src="./Assests/javascribt/productpage.js"></script>
-  <script>
 
-    document.addEventListener("DOMContentLoaded", function () {
-      function loadContent(url, elementId) {
-        fetch(url)
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById(elementId).innerHTML = data;
-          })
-          .catch(error => console.error('Error loading content:', error));
-      }
-
-      // Load navigation and footer
-      loadContent("nav.html", "mainNavigation");
-      loadContent("footer.html", "footer");
-    });
-
-  </script>
-  <!-- jQuery -->
 
 
 </body>

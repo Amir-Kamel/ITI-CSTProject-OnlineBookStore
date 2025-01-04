@@ -61,7 +61,6 @@
             cursor: pointer;
         }
     </style>
-    <script src="jquery-3.7.1.slim.js"></script>
 
 </head>
 
@@ -245,21 +244,29 @@
 
     <script src="./Assests/javascribt/jquery-3.7.1.slim.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="Assests/javascribt/nav.js"></script>
     <script>
+
         document.addEventListener("DOMContentLoaded", function () {
             function loadContent(url, elementId) {
                 fetch(url)
-                    .then(response => response.text())
-                    .then(data => {
+                    .then((response) => response.text())
+                    .then((data) => {
                         document.getElementById(elementId).innerHTML = data;
+                        // Ensure the badge is updated after the navigation is loaded
+                        if (elementId === "mainNavigation") {
+                            // Call the updateCartBadge function defined in nav.js
+                            updateCartBadge();
+                        }
                     })
-                    .catch(error => console.error('Error loading content:', error));
+                    .catch((error) => console.error("Error loading content:", error));
             }
 
             // Load navigation and footer
             loadContent("nav.html", "mainNavigation");
             loadContent("footer.html", "footer");
         });
+
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

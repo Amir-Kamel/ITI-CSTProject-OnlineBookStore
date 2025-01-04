@@ -1,6 +1,26 @@
 lastChoosenCategory = null;
 minPrice = 1e6;
 maxPrice = 0;
+document.addEventListener("DOMContentLoaded", function () {
+  function loadContent(url, elementId) {
+    fetch(url)
+      .then((response) => response.text())
+      .then((data) => {
+        document.getElementById(elementId).innerHTML = data;
+        // Ensure the badge is updated after the navigation is loaded
+        if (elementId === "mainNavigation") {
+          // Call the updateCartBadge function defined in nav.js
+          updateCartBadge();
+        }
+      })
+      .catch((error) => console.error("Error loading content:", error));
+  }
+
+  // Load navigation and footer
+  loadContent("nav.html", "mainNavigation");
+  loadContent("footer.html", "footer");
+});
+
 $(function () {
   //create an array of objects that contains each category name and its quantity
   // get all products
