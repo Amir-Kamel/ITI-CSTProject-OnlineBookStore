@@ -440,7 +440,7 @@ signInButton.addEventListener("click", function (event) {
   }
 
   // Compare entered password with the stored password
-  if (foundUser.password !== password) {
+  if (foundUser.password !== hashPassword(password)) {
     Toast.fire({
       icon: "error",
       title: "Email or Password is incorrect. Please try again.",
