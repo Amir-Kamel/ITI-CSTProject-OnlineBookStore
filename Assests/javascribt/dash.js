@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   loadContent("footer.html", "footer");
   //to get products from localstorage
   const products = JSON.parse(localStorage.getItem("products")) || {};
-  // Populate products table
+  // products table
   $(".productsTable").html("");
   for (let product of Object.values(products)) {
     $(".productsTable").append(`
