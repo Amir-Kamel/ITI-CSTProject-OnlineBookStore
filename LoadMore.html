@@ -18,20 +18,17 @@
   <!-- icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <!-- end icons -->
-
 </head>
 
 <body>
   <!-- Start Navbar -->
-  <div id="mainNavigation">
-  </div>
+  <div id="mainNavigation"></div>
   <!-- end Navbar -->
   <!-- Start fo breadcrumb -->
   <div id="breadcrumb" class="container-fluid p-3 mb-5 d-flex justify-content-center">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb mb-0">
         <li class="breadcrumb-item"><a href="./HomePage.html">Home</a></li>
-
 
         <li class="breadcrumb-item active" aria-current="page">
           <a class="link-underline link-underline-opacity-0 text-primary" href="LoadMore.html ">Library</a>
@@ -49,26 +46,28 @@
           <div class="card bg-secondary-subtle mb-5 w-75">
             <div class="card-body">
               <h5 class="card-title fw-bold">Book Category</h5>
-              <ul class="list-unstyled d-flex justify-content-between text-primary fs-4">
-                <li>All</li>
-                <li>48</li>
-              </ul>
-              <ul class="list-unstyled d-flex justify-content-between">
-                <li>Drama</li>
-                <li>2</li>
-              </ul>
-              <ul class="list-unstyled d-flex justify-content-between">
-                <li>Comedy</li>
-                <li>14</li>
-              </ul>
-              <ul class="list-unstyled d-flex justify-content-between">
-                <li>Learning</li>
-                <li>15</li>
-              </ul>
-              <ul class="list-unstyled d-flex justify-content-between">
-                <li>Kids</li>
-                <li>23</li>
-              </ul>
+              <div id="categories-container">
+                <ul class="list-unstyled d-flex justify-content-between text-primary fs-4">
+                  <li>All</li>
+                  <li>48</li>
+                </ul>
+                <ul class="list-unstyled d-flex justify-content-between">
+                  <li>Drama</li>
+                  <li>2</li>
+                </ul>
+                <ul class="list-unstyled d-flex justify-content-between">
+                  <li>Comedy</li>
+                  <li>14</li>
+                </ul>
+                <ul class="list-unstyled d-flex justify-content-between">
+                  <li>Learning</li>
+                  <li>15</li>
+                </ul>
+                <ul class="list-unstyled d-flex justify-content-between">
+                  <li>Kids</li>
+                  <li>23</li>
+                </ul>
+              </div>
             </div>
           </div>
           <!-- books counter -->
@@ -82,7 +81,7 @@
                   class="border border-0 text-primary w-100 bg-secondary-subtle" disabled="disabled" />
               </p>
 
-              <div id="slider-range" class="bg-secondary rounded w-100"></div>
+              <div id="slider-range" class="bg-secondary w-100"></div>
             </div>
           </div>
           <!-- books filter -->
@@ -142,7 +141,7 @@
         <!-- Start Main Product -->
         <div class="row main-product mx-0 w-100">
           <div class="row justify-content-evenly p-0 m-0">
-            <div class="col-lg-3 col-md-5 col-sm-12 mx-lg-1 p-0">
+            <div class="col-lg-3 col-md-6 col-sm-12 p-0">
               <div class="card">
                 <div class="img-container">
                   <img src="./Assests/images/season-of-migration-to-the-north.jpg" alt="Image 1" class="card-img-top" />
@@ -181,7 +180,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-5 col-sm-12 mx-lg-1 p-0">
+            <div class="col-lg-3 col-md-6 col-sm-12 p-0">
               <div class="card">
                 <div class="img-container">
                   <img src="./Assests/images/season-of-migration-to-the-north.jpg" alt="Image 1" class="card-img-top" />
@@ -220,7 +219,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-5 col-sm-12 mx-lg-1 p-0">
+            <div class="col-lg-3 col-md-6 col-sm-12 p-0">
               <div class="card">
                 <div class="img-container">
                   <img src="./Assests/images/season-of-migration-to-the-north.jpg" alt="Image 1" class="card-img-top" />
@@ -259,7 +258,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-5 col-sm-12 mx-lg-1 p-0">
+            <div class="col-lg-3 col-md-6 col-sm-12 p-0">
               <div class="card">
                 <div class="img-container">
                   <img src="./Assests/images/season-of-migration-to-the-north.jpg" alt="Image 1" class="card-img-top" />
@@ -298,7 +297,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-5 col-sm-12 mx-lg-1 p-0">
+            <div class="col-lg-3 col-md-6 col-sm-12 p-0">
               <div class="card">
                 <div class="img-container">
                   <img src="./Assests/images/season-of-migration-to-the-north.jpg" alt="Image 1" class="card-img-top" />
@@ -337,7 +336,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-5 col-sm-12 mx-lg-1 p-0">
+            <div class="col-lg-3 col-md-6 col-sm-12 p-0">
               <div class="card">
                 <div class="img-container">
                   <img src="./Assests/images/season-of-migration-to-the-north.jpg" alt="Image 1" class="card-img-top" />
@@ -376,7 +375,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-5 col-sm-12 mx-lg-1 p-0">
+            <div class="col-lg-3 col-md-6 col-sm-12 p-0">
               <div class="card">
                 <div class="img-container">
                   <img src="./Assests/images/season-of-migration-to-the-north.jpg" alt="Image 1" class="card-img-top" />
@@ -415,7 +414,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-5 col-sm-12 mx-lg-1 p-0">
+            <div class="col-lg-3 col-md-6 col-sm-12 p-0">
               <div class="card">
                 <div class="img-container">
                   <img src="./Assests/images/season-of-migration-to-the-north.jpg" alt="Image 1" class="card-img-top" />
@@ -454,7 +453,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-5 col-sm-12 mx-lg-1 p-0">
+            <div class="col-lg-3 col-md-6 col-sm-12 p-0">
               <div class="card">
                 <div class="img-container">
                   <img src="./Assests/images/season-of-migration-to-the-north.jpg" alt="Image 1" class="card-img-top" />
@@ -520,34 +519,14 @@
     </div>
   </div>
 
-
   <!-- Footer -->
-  <footer id="footer" class="text-center text-lg-start text-white" style="background-color: #e4cfb6">
-  </footer>
+  <footer id="footer" class="text-center text-lg-start text-white" style="background-color: #e4cfb6"></footer>
   <!-- Footer -->
   <script src="./Assests/javascribt/jquery-3.7.1.slim.js"></script>
-
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="./Assests/javascribt/jquery-ui.js"></script>
-  <script>
+  <script src="Assests/javascribt/nav.js"></script>
 
-    document.addEventListener("DOMContentLoaded", function () {
-      function loadContent(url, elementId) {
-        fetch(url)
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById(elementId).innerHTML = data;
-          })
-          .catch(error => console.error('Error loading content:', error));
-      }
-
-      // Load navigation and footer
-      loadContent("nav.html", "mainNavigation");
-      loadContent("footer.html", "footer");
-    });
-
-
-  </script>
   <script src="./Assests/javascribt/Loadmore.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
