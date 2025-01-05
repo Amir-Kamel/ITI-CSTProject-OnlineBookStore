@@ -1,0 +1,174 @@
+.bg-primary {
+  background-color: #e4cfb6 !important;
+}
+.bg-secondary {
+  background-color: #810b0b !important;
+}
+.text-primary {
+  color: #be9900 !important;
+}
+.text-secondary {
+  color: #223263 !important;
+}
+.text-secondary-emphasis {
+  color: #810b0b !important;
+}
+.btn-primary {
+  background-color: #810b0b;
+  color: #fff;
+}
+.btn-secondary {
+  background-color: #be9900;
+  color: #fff;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box !important;
+}
+body {
+  font-family: "Poppins", sans-serif;
+}
+.btn {
+  border: none;
+}
+
+.nav-item {
+  text-transform: uppercase;
+}
+/* Search bar */
+.form-control::placeholder {
+  font-size: 0.95rem;
+  color: #aaa;
+  font-style: italic;
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+.icons {
+  background-color: rgba(255, 255, 255, 0.448); /* border: 1px black solid; */
+  padding: 5px;
+  border-radius: 30px;
+  width: 35px;
+  height: 35px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icons:hover {
+  background-color: #f7f7f7;
+  color: white;
+}
+/* Hide dropdown arrow */
+.dropdown-toggle::after {
+  display: none;
+}
+
+/* in active */
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:active {
+  background-color: #810b0b;
+  color: white;
+  /* Optionally change the text color */
+}
+
+#mainNavigation .navbar-nav .active {
+  color: #be9900;
+}
+.nav-item a:hover {
+  color: #be9900;
+}
+#mainNavigation .navbar-nav .nav-item {
+  padding-bottom: 1px;
+  width: 30%;
+}
+#mainNavigation .header > i {
+  padding-bottom: 15px;
+}
+#mainNavigation .main-barnd {
+  font-family: "Niconne";
+  font-size: 48px;
+  text-transform: none;
+}
+.product-images img {
+  cursor: pointer;
+  width: 11rem;
+  margin: 0 50px;
+}
+.product-images .active {
+  border: 2px solid #be9900;
+  box-shadow: 0px 0px 50px #e4cfb6 inset;
+}
+.related-products .card {
+  transition: transform 0.2s;
+}
+.related-products .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 0px 50px #e4cfb6 inset;
+}
+
+.quantity-input,
+.add-to-cart-btn,
+.add-to-favourite-btn,
+.face-share,
+.insta-share {
+  height: 45px;
+  font-size: 16px;
+}
+
+.quantity-input {
+  border: 2px solid #28a745;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f7f8fa;
+  color: #333;
+  text-align: center;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.quantity-input::placeholder {
+  color: #6c757d;
+}
+
+.quantity-input:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+.add-to-favourite-btn,
+.add-to-cart-btn {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.face-share {
+  background-color: #3b5998;
+  border-color: #3b5998;
+}
+
+.face-share:hover {
+  background-color: #2d4373;
+  border-color: #2d4373;
+}
+
+.insta-share {
+  background-color: #c13584;
+  border-color: #c13584;
+}
+
+.insta-share:hover {
+  background-color: #a62c70;
+  border-color: #a62c70;
+}
+
+.add-to-favourite-btn i,
+.add-to-cart-btn i,
+.face-share i,
+.insta-share i {
+  margin-right: 8px;
+}
+.btn-primary:hover {
+  background-color: #be9900;
+  color: white;
+}

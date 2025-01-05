@@ -1,157 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sign in || Sign up form</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-        <link rel="stylesheet" href="Login&Register.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    </head>
-    <body>
-        <div class="container" id="container">
-            <!-- Sign Up Form -->
-            <div class="form-container sign-up-container">
-                <form action="#">
-                    <h1>Create Account</h1>
-                    <div class="infield">
-                        <i class="fa-solid fa-user"></i>
-                        <input
-                            type="text"
-                            id="username"
-                            placeholder="UserName"
-                            name="username"
-                            required
-                        >
-                        <label></label>
-                        <small id="usernameError" style="color: red; display: none">
-                            This Username has been taken before
-                        </small
-            >
-                    </div>
-                    <div class="infield">
-                        <i class="fa-sharp fa-solid fa-at"></i>
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="Your Gmail"
-                            name="email"
-                            required
-                        >
-                        <label></label>
-                        <small id="emailError" style="color: red; display: none">
-                            Invalid email address
-                        </small
-            >
-                    </div>
-                    <div class="infield">
-                        <i class="fa-solid fa-phone"></i>
-                        <input
-                            type="tel"
-                            id="phone"
-                            placeholder="Phone Number"
-                            name="phone"
-                            required
-                        >
-                        <label></label>
-                        <small id="phoneError" style="color: red; display: none">
-                            Invalid phone number
-                        </small
-            >
-                    </div>
-                    <div class="infield">
-                        <i class="fa-solid fa-lock"></i>
-                        <input
-                            type="password"
-                            id="password"
-                            placeholder="Password"
-                            name="password"
-                            required
-                        >
-                        <label></label>
-                        <small id="passwordLengthError" style="color: red; display: none">
-                            Password must be at least 8 characters
-                        </small
-            >
-                        <small id="passwordStrengthError" style="color: red; display: none">
-                            Password must include letters, numbers, and special
-              characters
-                        </small
-            >
-                    </div>
-                    <div class="infield">
-                        <i class="fa-solid fa-lock"></i>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            placeholder="Confirm Password"
-                            name="confirmPassword"
-                            required
-                        >
-                        <label></label>
-                        <small id="confirmPasswordError" style="color: red; display: none">
-                            Passwords do not match
-                        </small
-            >
-                    </div>
-                    <button type="submit">Sign Up</button>
-                </form>
-            </div>
-            <!-- Sign In Form -->
-            <div class="form-container sign-in-container">
-                <form action="#" autocomplete="off">
-                    <h1>Sign in</h1>
-                    <div class="infield">
-                        <i class="fa-sharp fa-solid fa-at"></i>
-                        <input
-                            type="email"
-                            placeholder="Your Gmail"
-                            name="email"
-                            required
-                        >
-                        <label></label>
-                    </div>
-                    <!-- note for us 
-autocomplete="new-password" tell the browser that the password field is a new password field and that it should not offer to store or auto-fill the password for the user.-->
-                    <div class="infield">
-                        <i class="fa-solid fa-lock"></i>
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            required
-                            autocomplete="new-password"
-                        >
-                        <label></label>
-                    </div>
-                    <!-- Error message container -->
-                    <div id="signInError" style="color: red; display: none">
-                        Email or Password is incorrect. Please try again.
-                    </div>
-                    <a href="#" class="forgot">Forgot your password?</a>
-                    <button type="submit">Sign In</button>
-                </form>
-            </div>
-            <!-- Overlay Container -->
-            <div class="overlay-container" id="overlayCon">
-                <div class="overlay">
-                    <div class="overlay-panel overlay-left">
-                        <h1>Welcome Back!</h1>
-                        <p>
-                            To keep connected with us please login with your personal info
-                        </p>
-                        <button>Sign In</button>
-                    </div>
-                    <div class="overlay-panel overlay-right">
-                        <h1>Hello, Friend!</h1>
-                        <p>Enter your personal details and start journey with us</p>
-                        <button>Sign Up</button>
-                    </div>
-                </div>
-                <button id="overlayBtn"></button>
-            </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in || Sign up form</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="Login&Register.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  </head>
+  <body>
+    <div class="container" id="container">
+      <!-- Sign Up Form -->
+      <div class="form-container sign-up-container">
+        <form action="#">
+          <h1>Create Account</h1>
+          <div class="infield">
+            <i class="fa-solid fa-user"></i>
+            <input
+              type="text"
+              id="username"
+              placeholder="UserName"
+              name="username"
+              required
+            />
+            <label></label>
+            <small id="usernameError" style="color: red; display: none">
+              This Username has been taken before
+            </small>
+          </div>
+          <div class="infield">
+            <i class="fa-sharp fa-solid fa-at"></i>
+            <input
+              type="email"
+              id="email"
+              placeholder="Your Gmail"
+              name="email"
+              required
+            />
+            <label></label>
+            <small id="emailError" style="color: red; display: none">
+              Invalid email address
+            </small>
+          </div>
+          <div class="infield">
+            <i class="fa-solid fa-phone"></i>
+            <input
+              type="tel"
+              id="phone"
+              placeholder="Phone Number"
+              name="phone"
+              required
+            />
+            <label></label>
+            <small id="phoneError" style="color: red; display: none">
+              Invalid phone number
+            </small>
+          </div>
+          <div class="infield">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              name="password"
+              required
+            />
+            <label></label>
+            <small id="passwordLengthError" style="color: red; display: none">
+              Password must be at least 8 characters
+            </small>
+            <small id="passwordStrengthError" style="color: red; display: none">
+              Password must include letters, numbers, and special characters
+            </small>
+          </div>
+          <div class="infield">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm Password"
+              name="confirmPassword"
+              required
+            />
+            <label></label>
+            <small id="confirmPasswordError" style="color: red; display: none">
+              Passwords do not match
+            </small>
+          </div>
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
+      <!-- Sign In Form -->
+      <div class="form-container sign-in-container">
+        <form action="#" autocomplete="off" method="post">
+          <h1>Sign in</h1>
+          <div class="infield">
+            <i class="fa-sharp fa-solid fa-at"></i>
+            <input
+              type="email"
+              placeholder="Your Gmail"
+              name="email"
+              required
+            />
+            <label></label>
+          </div>
+          <div class="infield">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              placeholder="Password"
+              required
+              autocomplete="new-password"
+            />
+            <label></label>
+          </div>
+          <!-- Error message container -->
+          <div id="signInError" style="color: red; display: none">
+            Email or Password is incorrect. Please try again.
+          </div>
+          <a href="forgetpassword.html" class="forgot">Forgot your password?</a>
+          <button type="submit">Sign In</button>
+        </form>
+      </div>
+      <!-- Overlay Container -->
+      <div class="overlay-container" id="overlayCon">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Welcome Back!</h1>
+            <p>
+              To keep connected with us please login with your personal info
+            </p>
+            <button>Sign In</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Hello, Friend!</h1>
+            <p>Enter your personal details and start journey with us</p>
+            <button>Sign Up</button>
+          </div>
         </div>
-        <script>
+        <button id="overlayBtn"></button>
+      </div>
+    </div>
+    <script type="module">
+      import { usersData } from "./Accounts.js";
+
+      // Initialize `localStorage` with `usersData` if not already set
+      const signUpObject =
+        JSON.parse(localStorage.getItem("signUpData")) ?? usersData;
+
+      if (!localStorage.getItem("signUpData")) {
+        localStorage.setItem("signUpData", JSON.stringify(signUpObject));
+      }
+
+      // Function to handle form submission
+      document.addEventListener("DOMContentLoaded", function () {
+        const signUpForm = document.getElementById("signupForm");
+
+        if (signUpForm) {
+          signUpForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent page reload on form submit
+
+            // Get form data
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            // Validate input fields
+            if (!username || !email || !phone || !password) {
+              alert("Please fill in all fields.");
+              return;
+            }
+
+            // Function to check if a username or email exists anywhere in all localStorage objects
+            function checkDuplicateInLocalStorage(value, type) {
+              let found = false;
+
+              // Loop through all localStorage keys
+              for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const data = JSON.parse(localStorage.getItem(key));
+
+                // Ensure the data is an object and check for username/email
+                if (data && typeof data === "object") {
+                  // Check for the username or email in any object stored in localStorage
+                  if (
+                    type === "username" &&
+                    Object.values(data).some((user) => user.username === value)
+                  ) {
+                    found = true;
+                    break;
+                  }
+                  if (
+                    type === "email" &&
+                    Object.values(data).some((user) => user.email === value)
+                  ) {
+                    found = true;
+                    break;
+                  }
+                }
+              }
+
+              return found;
+            }
+
+            // Check if the username or email already exists in any object in localStorage
+            const isUsernameTaken = checkDuplicateInLocalStorage(
+              username,
+              "username"
+            );
+            const isEmailTaken = checkDuplicateInLocalStorage(email, "email");
+
+            if (isUsernameTaken) {
+              alert("This username has already been taken.");
+              return;
+            }
+
+            if (isEmailTaken) {
+              alert("This email is already registered.");
+              return;
+            }
+
+            // Create a new user object with default role as 'customer'
+            const newUser = {
+              username,
+              email,
+              phone,
+              password, 
+              role: "customer",
+              address: "",
+              imgsrc: "",
+              cart: [],
+              wishlist: [],
+              orders_history: [],
+              inbox: [],
+            };
+
+            // Add the new user to the customers object
+            const currentData = JSON.parse(
+              localStorage.getItem("signUpData")
+            ) ?? { customers: {} };
+            currentData.customers = currentData.customers || {};
+            currentData.customers[email] = newUser;
+
+            // Save the updated structure back to `localStorage`
+            localStorage.setItem("signUpData", JSON.stringify(currentData));
+
+            alert("Account created successfully!");
+
+            // Reset form fields
+            signUpForm.reset();
+
+            // Log the updated data to confirm
+            console.log(currentData);
+          });
+        }
+      });
+
       let typingTimer;
       const doneTypingInterval = 500;
 
@@ -314,119 +423,130 @@ autocomplete="new-password" tell the browser that the password field is a new pa
 
       // Sign Up Button Event
       const signUpButton = document.querySelector(".sign-up-container button");
-      const signUpError = document.getElementById("signUpError");
 
-   signUpButton.addEventListener("submit", function (event) {
-        event.preventDefault();
+      signUpButton.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default behavior (page reload)
 
+        // Collect values
         const username = usernameField.value.trim();
         const email = emailField.value.trim();
         const phone = phoneField.value.trim();
         const password = passwordField.value.trim();
         const confirmPassword = confirmPasswordField.value.trim();
 
-        signUpError.style.display = "none";
-
         if (!username || !email || !phone || !password || !confirmPassword) {
-          signUpError.innerHTML = "Please fill in all fields.";
-          signUpError.style.display = "block";
-          return;
+          alert("Please fill in all fields.");
+          return; // Stop further execution
         }
 
-        // Check if the username is already taken
-        if (localStorage.getItem(username)) {
+        // Retrieve the current signUpObject from localStorage
+        const signUpObject = JSON.parse(localStorage.getItem("signUpData")) ?? {
+          customers: [],
+        };
+
+        // Check if username or email already exists in the customers object
+        const isUsernameTaken = Object.values(signUpObject.customers).some(
+          (user) => user.username === username
+        );
+        const isEmailTaken = Object.values(signUpObject.customers).some(
+          (user) => user.email === email
+        );
+
+        if (isUsernameTaken) {
           usernameError.innerHTML = "This Username Has Been Taken Before";
           usernameError.style.display = "block";
           return;
         }
 
-        // Check if the email is already registered
-        if (localStorage.getItem(email)) {
+        if (isEmailTaken) {
           emailError.innerHTML = "This Email Is Already Registered";
           emailError.style.display = "block";
           return;
         }
 
-        // Check if passwords match
-        if (password !== confirmPassword) {
-          confirmPasswordError.innerHTML = "Passwords do not match";
-          confirmPasswordError.style.display = "block";
-          return;
-        }
-
+        // Hash password
         const hashedPassword = hashPassword(password);
 
-        const userData = {
+        // Create a new user object
+        const newUser = {
           username,
           email,
           phone,
           password: hashedPassword,
+          role: "customer",
+          address: "",
+          imgsrc: "",
+          cart: [],
+          wishlist: [],
         };
 
-        // Save user data using the username as the key
-        localStorage.setItem(username, JSON.stringify(userData));
+        // Add the new user to the customers object
+        signUpObject.customers[email] = newUser;
+
+        // Save the updated object back to localStorage
+        localStorage.setItem("signUpData", JSON.stringify(signUpObject));
 
         alert("Account created successfully!");
+
+        // Reset form fields
         usernameField.value = "";
         emailField.value = "";
         phoneField.value = "";
         passwordField.value = "";
         confirmPasswordField.value = "";
       });
-
-      // Sign-In Form Validation
+      const signInButton = document.querySelector(".sign-in-container button");
+      const signInError = document.getElementById("signInError");
       const signinEmailField = document.querySelector(
         '.sign-in-container input[type="email"]'
       );
       const signinPasswordField = document.querySelector(
         '.sign-in-container input[type="password"]'
       );
-      const signInButton = document.querySelector(".sign-in-container button");
-      const signInError = document.getElementById("signInError");
-      signInButton.addEventListener("submit", function (event) {
-        event.preventDefault();
+
+      signInButton.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default behavior (page reload)
 
         const email = signinEmailField.value.trim();
         const password = signinPasswordField.value.trim();
 
-        // Clear any previous error messages
         signInError.style.display = "none";
 
+        // Validation checks
         if (!email || !password) {
           signInError.innerHTML = "Please fill in both email and password.";
           signInError.style.display = "block";
           return;
         }
 
-        // Validate the email format using a regular expression
-        const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/; // Ensure email ends with @gmail.com exactly
+        const emailRegex = /^[a-zA-Z0-9._-]{2,}@gmail\.com$/;
         if (!emailRegex.test(email)) {
-          signInError.innerHTML = "Please enter a valid email address ";
+          signInError.innerHTML =
+            "Please enter a valid email address with at least 2 characters before '@gmail.com'.";
           signInError.style.display = "block";
           return;
         }
 
-        // Check for invalid characters (similar to sign-up validation)
-        const invalidCharsRegex = /[^a-zA-Z0-9@._-]/;
-        if (invalidCharsRegex.test(email)) {
-          signInError.innerHTML = "Your email contains invalid characters.";
-          signInError.style.display = "block";
-          return;
-        }
+        // Fetch data from localStorage
+        const signUpData = JSON.parse(localStorage.getItem("signUpData")) || {};
+        const { admin, customers, sellers } = signUpData;
 
-        // Loop through all users in localStorage to find the one with the matching email
         let foundUser = null;
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          const storedUser = JSON.parse(localStorage.getItem(key));
+        let role = "";
 
-          if (storedUser.email === email) {
-            foundUser = storedUser;
-            break;
-          }
+        // Check for user in each role
+        if (admin && admin[email]) {
+          foundUser = admin[email];
+          role = "admin";
+        } else if (customers && customers[email]) {
+          foundUser = customers[email];
+          role = "customer";
+        } else if (sellers && sellers[email]) {
+          foundUser = sellers[email];
+          role = "seller";
         }
 
-        // If no user found with that email, show an error message
+        // User not found
         if (!foundUser) {
           signInError.innerHTML =
             "This email is not registered. Please sign up first.";
@@ -434,16 +554,36 @@ autocomplete="new-password" tell the browser that the password field is a new pa
           return;
         }
 
-        // Check if the password matches
-        if (foundUser.password !== CryptoJS.SHA256(password).toString()) {
+        // Compare entered password with the stored password
+        if (foundUser.pass !== password) {
           signInError.innerHTML =
             "Email or Password is incorrect. Please try again.";
           signInError.style.display = "block";
           return;
         }
 
-        alert("Login successful!");
+        // Store session data with loginObject using sessionStorage
+        const loginObject = {
+          session: {
+            email: email,
+            password: password, 
+          },
+        };
+        sessionStorage.setItem("currentSession", JSON.stringify(loginObject));
 
+        // Redirect based on role
+        if (role === "admin") {
+          window.location.href = "admindashboard.html";
+        } else if (role === "customer") {
+          window.location.href = "homepage.html";
+        } else if (role === "seller") {
+          window.location.href = "ProductsSearch.html";
+        } else {
+          signInError.innerHTML = "User role not recognized.";
+          signInError.style.display = "block";
+        }
+
+        // Clear form inputs
         signinEmailField.value = "";
         signinPasswordField.value = "";
       });
@@ -458,6 +598,6 @@ autocomplete="new-password" tell the browser that the password field is a new pa
           overlayBtn.classList.add("btnScaled");
         });
       });
-        </script>
-    </body>
+    </script>
+  </body>
 </html>
