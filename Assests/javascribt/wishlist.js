@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 $(document).ready(function () {
   // Function to get favorites for the logged-in user
   function getUserFavorites() {
-    const loggedInUserEmail = getLoggedInUserEmail();// Example: "amirk@gmail.com"
+    const loggedInUserEmail = getLoggedInUserEmail(); // Example: "amirk@gmail.com"
     if (!loggedInUserEmail) {
       console.warn("No user is logged in.");
       return [];
@@ -55,7 +55,7 @@ $(document).ready(function () {
 
       if (favorites.length === 0) {
         favContainer.html(
-          "<h3 class='text-center text-muted'>Oops! Seems that your favorites list is empty.<br> Why not head back to the store and discover some amazing products to add?</h3>"
+          "<h3 class='text-center text-muted my-5'>Oops! Seems that your favorites list is empty.<br> Why not head back to the store and discover some amazing products to add?</h3>"
         );
         favContainer.fadeIn(300);
         return;
