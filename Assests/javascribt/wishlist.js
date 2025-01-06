@@ -4,101 +4,111 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((response) => response.text())
       .then((data) => {
         document.getElementById(elementId).innerHTML = data;
-        // Ensure the badge is updated after the navigation is loaded
         if (elementId === "mainNavigation") {
-          // Call the updateCartBadge function defined in nav.js
           updateCartBadge();
-          updateFavoritesBadge()
+          updateFavoritesBadge();
         }
       })
       .catch((error) => console.error("Error loading content:", error));
   }
 
-  // Load navigation and footer
   loadContent("nav.html", "mainNavigation");
   loadContent("footer.html", "footer");
 });
 
 $(document).ready(function () {
-  // Function to get favorites from localStorage
-  function getData() {
-    const favdata = localStorage.getItem("favorites");
-    return JSON.parse(favdata) || [];
+  // Function to get favorites for the logged-in user
+  function getUserFavorites() {
+    const loggedInUserEmail = getLoggedInUserEmail();// Example: "amirk@gmail.com"
+    if (!loggedInUserEmail) {
+      console.warn("No user is logged in.");
+      return [];
+    }
+
+    const favKey = `${loggedInUserEmail}_fav`;
+    const favData = localStorage.getItem(favKey);
+    return JSON.parse(favData) || [];
+  }
+
+  // Save favorites for the logged-in user
+  function saveUserFavorites(favorites) {
+    const loggedInUserEmail = getLoggedInUserEmail();
+    if (!loggedInUserEmail) {
+      console.warn("No user is logged in.");
+      return;
+    }
+
+    const favKey = `${loggedInUserEmail}_fav`;
+    localStorage.setItem(favKey, JSON.stringify(favorites));
   }
 
   // Initial load of favorites
-  const allfavorite = getData();
+  const allFavorites = getUserFavorites();
 
   // Function to display favorites
-  function displayfav(favorites) {
-    const favcontainer = $("#fav-conatainer");
+  function displayFavorites(favorites) {
+    const favContainer = $("#fav-conatainer");
 
     // Add fadeOut animation
-    favcontainer.fadeOut(300, function () {
-      favcontainer.empty(); // Clear the container
-
-      // Function to update the favorites badge count
-      function updateFavoritesBadge() {
-        const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-        const badge = $("#heartBadge"); // Make sure the ID matches your HTML
-        badge.text(favorites.length); // Update the badge count
-      }
-
-      updateFavoritesBadge(); // Initialize the badge count on page load
+    favContainer.fadeOut(300, function () {
+      favContainer.empty(); // Clear the container
 
       if (favorites.length === 0) {
-        // If favorites are empty, display the empty message
-        favcontainer.html(
+        favContainer.html(
           "<h3 class='text-center text-muted'>Oops! Seems that your favorites list is empty.<br> Why not head back to the store and discover some amazing products to add?</h3>"
         );
-        favcontainer.fadeIn(300);
-        return; // Stop further execution
+        favContainer.fadeIn(300);
+        return;
       }
 
-      // Otherwise, display the book cards
-      favorites.forEach((favproduct) => {
-        const BookCard = $(`
-            <div class="col-lg-3 col-md-6 col-sm-12 p-4">
-              <div class="card h-100 w-100" data-id="${favproduct.title}">
+      // Display the book cards
+      favorites.forEach((favProduct) => {
+        const bookCard = $(`
+          <div class="col-lg-3 col-md-6 col-sm-12 p-4">
+            <div class="card h-100 w-100" data-id="${favProduct.title}">
               <div class="img-container">
-                <img src="${favproduct.img_src}" alt="${favproduct.title}" class="card-img-top imgmain"/>
+                <img src="${favProduct.img_src}" alt="${favProduct.title}" class="card-img-top imgmain"/>
                 <div class="overlay"></div>
               </div>
               <div class="card-body">
-                <h5 class="card-title">${favproduct.title}</h5>
-                <p class="card-text">${favproduct.description}</p>
-                <p class="card-text price" style="color: green; font-weight: bold;">Price: ${favproduct.price}</p>
-                <button class="btn btn-success placeholder-wave btn-sm mb-2 add-to-cart">
-                    <i class="fas fa-cart-plus me-2"></i> Add To Cart
+                <h5 class="card-title">${favProduct.title}</h5>
+                <p class="card-text">${favProduct.description}</p>
+                <p class="card-text price" style="color: green; font-weight: bold;">Price: ${favProduct.price}</p>
+                <button class="btn btn-success btn-sm mb-2 add-to-cart">
+                  <i class="fas fa-cart-plus me-2"></i> Add To Cart
                 </button>
                 <button class="btn btn-danger btn-sm remove-fav">
-                    <i class="fas fa-trash-alt me-2"></i> Remove From Favorites
+                  <i class="fas fa-trash-alt me-2"></i> Remove From Favorites
                 </button>
               </div>
             </div>
           </div>
-          `);
+        `);
 
         // Handle the "Remove from Favorites" button click
-        BookCard.find(".remove-fav").on("click", function () {
-          // Remove product from favorites
+        bookCard.find(".remove-fav").on("click", function () {
           const updatedFavorites = favorites.filter(
-            (item) => item.title !== favproduct.title
+            (item) => item.title !== favProduct.title
           );
-
-          // Save updated favorites to localStorage
-          localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-
-          // Refresh the display
-          displayfav(updatedFavorites); // Update the display
+          saveUserFavorites(updatedFavorites); // Save updated favorites
+          displayFavorites(updatedFavorites); // Refresh the display
+          updateFavoritesBadge();
         });
 
-        favcontainer.append(BookCard); // Add the book card to the container
+        favContainer.append(bookCard); // Add the book card to the container
       });
 
-      favcontainer.fadeIn(300); // Add fadeIn animation
+      favContainer.fadeIn(300); // Add fadeIn animation
     });
   }
 
-  displayfav(allfavorite);
+  // Listen for storage events to update favorites dynamically
+  window.addEventListener("storage", function (event) {
+    if (event.key && event.key.endsWith("_fav")) {
+      const updatedFavorites = getUserFavorites();
+      displayFavorites(updatedFavorites);
+    }
+  });
+
+  displayFavorites(allFavorites);
 });
