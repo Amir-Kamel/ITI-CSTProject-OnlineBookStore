@@ -101,14 +101,6 @@ $(document).ready(function () {
       favContainer.fadeIn(300); // Add fadeIn animation
     });
   }
-
-  // Listen for storage events to update favorites dynamically
-  window.addEventListener("storage", function (event) {
-    if (event.key && event.key.endsWith("_fav")) {
-      const updatedFavorites = getUserFavorites();
-      displayFavorites(updatedFavorites);
-    }
-  });
-
+  
   displayFavorites(allFavorites);
 });
