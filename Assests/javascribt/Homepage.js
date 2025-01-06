@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (elementId === "mainNavigation") {
           // Call the updateCartBadge function defined in nav.js
           updateCartBadge();
+          updateFavoritesBadge();
         }
       })
       .catch((error) => console.error("Error loading content:", error));
@@ -38,6 +39,58 @@ $(document).ready(function () {
   }
 
   let allProducts = getData();
+
+  // Function to add product to favorite and save in local storage
+  function addToFavorite(product, buttonfav) {
+    const loggedInUserEmail = getLoggedInUserEmail();
+    if (loggedInUserEmail) {
+      const favKey = `${loggedInUserEmail}_fav`;
+      let wishlist = JSON.parse(localStorage.getItem(favKey)) || [];
+      const index = wishlist.findIndex((item) => item.title === product.title);
+  
+      if (index === -1) {
+        // Add product to favorites
+        wishlist.push(product);
+        localStorage.setItem(favKey, JSON.stringify(wishlist));
+        buttonfav.addClass("btn-danger").removeClass("btn-outline-secondary");
+        updateFavoritesBadge();
+        Toast.fire({
+          icon: "success",
+          title: "Item added to wishlist successfully.",
+        });
+      } else {
+        // Remove product from favorites
+        wishlist.splice(index, 1); // Remove item from the array
+        localStorage.setItem(favKey, JSON.stringify(wishlist)); // Update localStorage
+        buttonfav.addClass("btn-outline-secondary").removeClass("btn-danger");
+        updateFavoritesBadge();
+        Toast.fire({
+          icon: "warning", // Change to warning for yellow color",
+          title: "Item removed from wishlist successfully.",
+        });
+      }
+    } else {
+      Toast.fire({
+        icon: "info",
+        title: "You need to be logged in to add products to wishlist.",
+      });
+    }
+  }
+  
+    //check love button
+    function checkheartbutton(product, BookCard) {
+      const loggedInUserEmail = getLoggedInUserEmail();
+      if (loggedInUserEmail) {
+        const favKey = `${loggedInUserEmail}_fav`;
+        let wishlist = JSON.parse(localStorage.getItem(favKey)) || [];
+      const isFavorite = wishlist.some((item) => item.title === product.title);
+      if (isFavorite) {
+        BookCard.find(".btn-fav")
+          .addClass("btn-danger")
+          .removeClass("btn-outline-secondary");
+      }
+    }
+  }
 
   // Function to add product to cart and save in local storage
   function addToCart(product) {
@@ -92,7 +145,7 @@ $(document).ready(function () {
                     <button class="btn btn-outline-secondary btn-sm add-to-cart">
                       <i class="fas fa-cart-plus mr-2"></i>
                     </button>
-                    <button class="btn btn-outline-secondary btn-sm">
+                    <button class="btn btn-outline-secondary btn-sm btn-fav">
                       <i class="far fa-heart"></i>
                     </button>
                   </div>
@@ -110,6 +163,14 @@ $(document).ready(function () {
         BookCard.find(".add-to-cart").on("click", function (e) {
           e.stopPropagation(); // Prevent event bubbling
           addToCart(product);
+        });
+
+        checkheartbutton(product, BookCard);
+
+        BookCard.find(".btn-fav").on("click", function (e) {
+          e.stopPropagation(); // Prevent click from bubbling to the card
+          const buttonfav = $(this);
+          addToFavorite(product, buttonfav);
         });
 
         BookCard.on("click", function () {
