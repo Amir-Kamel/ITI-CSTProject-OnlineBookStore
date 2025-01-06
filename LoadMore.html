@@ -112,9 +112,12 @@
                 <div id="sortContainer" class="d-flex align-items-center justify-content-evenly">
                   <label for="sort">Sort&nbsp;By&nbsp;</label>
                   <select id="sort" class="form-control" aria-label="Default select example">
-                    <option value="name" selected>name</option>
-                    <option value="ascending">Price:low to high</option>
-                    <option value="descending">Price:high to low</option>
+                    <optgroup label="Sort way">
+                      <option value="normal" selected>None</option>
+                      <option value="name">name</option>
+                      <option value="ascending">Price:low to high</option>
+                      <option value="descending">Price:high to low</option>
+                    </optgroup>
                   </select>
                 </div>
               </div>
@@ -152,14 +155,12 @@
     <!-- Footer -->
     <footer id="footer" class="text-center text-lg-start text-white" style="background-color: #e4cfb6"></footer>
     <!-- Footer -->
-    <script src="./Assests/javascribt/jquery-3.7.1.slim.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="./Assests/javascribt/jquery-ui.js"></script>
     <script src="./Assests/javascribt/jquery-3.7.1.slim.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="./Assests/javascribt/jquery-ui.js"></script>
     <script src="Assests/javascribt/nav.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
     <script src="./Assests/javascribt/Loadmore.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

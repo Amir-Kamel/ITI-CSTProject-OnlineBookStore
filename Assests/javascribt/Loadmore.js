@@ -31,16 +31,49 @@ $(function () {
   // console.log(productsCategories);
   //display number of products in the categories-container div
   const container = $("#categories-container");
-  console.log("before");
   fillBookCategory(container, allProducts, productsCategories);
+  $("#sort").on("click", function () {
+    sortWay = $(this).val();
+    // console.log(sortWay);
 
-  // display products based on category choosen
-  console.log("after");
+    getDisplayedProducts()
+      .then((displayedProducts) => {
+        // console.log("Retrieved displayed products:", displayedProducts);
+        // displayedProducts = displayedProducts.map((id) => allProducts[id]);
+        console.log(displayedProducts);
+        switch (sortWay) {
+          case "name":
+            displayedProducts.sort((a, b) => {
+              if (allProducts[a].title < allProducts[b].title) return -1;
+              if (allProducts[a].title > allProducts[b].title) return 1;
+              return 0;
+            });
+            console.log(displayedProducts);
+            break;
+          case "ascending":
+            displayedProducts.sort((a, b) => allProducts[a].price - allProducts[b].price);
+            console.log(displayedProducts);
+            break;
+          case "descending":
+            displayedProducts.sort((a, b) => allProducts[b].price - allProducts[a].price);
+            console.log(displayedProducts);
+            break;
+          default:
+            break;
+        }
+        // update the displayed products
+        updateDisplayedProducts(allProducts, displayedProducts);
+      })
+      .catch((error) => {
+        console.error(error);
+        // Handle the error case (e.g., display a message to the user)
+      });
+  });
   $("#slider-range").slider({
     range: true,
-    min: minPrice,
-    max: maxPrice,
-    values: [minPrice, maxPrice],
+    min: 0,
+    max: 500,
+    values: [0, 500],
     slide: function (event, ui) {
       // console.log(ui);
       $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
@@ -119,6 +152,7 @@ function fillBookCategory(container, allProducts, productsCategories) {
     for (let key in productsCategories) {
       // console.log(key, productsCategories[key]);
       length = productsCategories[key].length;
+
       // console.log(length);
       let categoryLi = $("<li>");
       categoryLi.text(key.charAt(0).toUpperCase() + key.slice(1));
@@ -127,6 +161,7 @@ function fillBookCategory(container, allProducts, productsCategories) {
       let ulContainer = $("<ul>");
       ulContainer.addClass("list-unstyled counter d-flex justify-content-between fs-5");
       if (key == "all") {
+        $("#items-counter").text(length);
         lastChoosenCategory = ulContainer;
         ulContainer.addClass("text-primary fs-4");
       }
@@ -138,96 +173,105 @@ function fillBookCategory(container, allProducts, productsCategories) {
           lastChoosenCategory.removeClass("text-primary fs-4");
           lastChoosenCategory = $(this);
           lastChoosenCategory.addClass("text-primary fs-4");
-          fillProductsContainer(allProducts, productsCategories, $(lastChoosenCategory.children()[0]).text().toLowerCase());
+          $("#items-counter").text(lastChoosenCategory.children()[1].innerText);
+          updateDisplayedProducts(allProducts, productsCategories[$(lastChoosenCategory.children()[0]).text().toLowerCase()])
+            .then((displayedProducts) => {
+              // Save to local storage
+              localStorage.setItem("displayedProducts", JSON.stringify(displayedProducts));
+              // console.log("Displayed products saved to localStorage:", displayedProducts);
+            })
+            .catch((error) => {
+              console.error("Error processing products:", error);
+            });
         }
       });
       container.append(ulContainer);
     }
 
-    fillProductsContainer(allProducts, productsCategories, $(lastChoosenCategory.children()[0]).text().toLowerCase());
+    updateDisplayedProducts(allProducts, productsCategories[$(lastChoosenCategory.children()[0]).text().toLowerCase()])
+      .then((displayedProducts) => {
+        // Save to local storage
+        localStorage.setItem("displayedProducts", JSON.stringify(displayedProducts));
+        // console.log("Displayed products saved to localStorage:", displayedProducts);
+      })
+      .catch((error) => {
+        console.error("Error processing products:", error);
+      });
   });
   container.fadeIn(300);
 }
 
-function fillProductsContainer(products, productsCategories, category) {
-  let productsContainer = $("#products-container");
-  // console.log(products);
-  // console.log(productsCategories);
-  // console.log(category);
-  productsContainer.fadeOut(300, function () {
-    productsContainer.empty();
-    productsCategories[category].forEach((productId) => {
-      // console.log(productId);
-      let product = products[productId];
-      if (minPrice > product.price) {
-        minPrice = product.price;
-        console.log("min" + minPrice);
-      }
-      if (maxPrice < product.price) {
-        maxPrice = product.price;
-        console.log("max" + maxPrice);
-      }
-      // image container
-      img = $("<img />");
-      img.prop("src", product.img_src);
-      img.prop("alt", product.title);
-      img.addClass("card-img-top");
-      //overlay container
-      let cartButton = $("<button>");
-      cartButton.addClass("btn cart btn-outline-secondary btn-lg");
-      let cartShape = $("<i>");
-      cartShape.addClass("fas fs-2 fa-cart-plus");
-      cartButton.append(cartShape);
-      let favButton = $("<button>");
-      favButton.addClass("btn wish-list btn-outline-secondary btn-lg");
-      let favShape = $("<i>");
-      favShape.addClass("far fs-2 fa-heart");
-      favButton.append(favShape);
-      let overlay = $("<div>");
-      overlay.addClass("overlay");
-      overlay.append(cartButton);
-      overlay.append(favButton);
-      let imgContainer = $("<div>");
-      imgContainer.addClass("img-container");
-      imgContainer.append(img);
-      imgContainer.append(overlay);
-      //card container
-      let productTitle = $("<h5>");
-      productTitle.addClass("card-title");
-      productTitle.text(product.title);
-      let productDescription = $("<p>");
-      productDescription.addClass("card-text");
-      productDescription.text(product.description);
-      let productPrice = $("<p>");
-      productPrice.addClass("card-text text-success fw-bold");
-      productPrice.text("price: $" + product.price);
-      let cardBody = $("<div>");
-      cardBody.addClass("card-body");
-      cardBody.append(productTitle);
-      cardBody.append(productDescription);
-      cardBody.append(productPrice);
+function updateDisplayedProducts(products, filteredProducts) {
+  return new Promise((resolve, reject) => {
+    let productsContainer = $("#products-container");
+    let displayedProducts = [];
+    let minPrice = Infinity;
+    let maxPrice = -Infinity;
 
-      // card
-      let card = $("<div>");
-      card.addClass("card");
-      card.append(imgContainer);
-      card.append(cardBody);
-      // append to products-container
-      productsContainer.append(card);
-      // container that contain the responsive classes
-      let container = $("<div>");
-      container.addClass("col-lg-4 col-md-6 col-sm-12 p-0v");
-      container.append(card);
-      productsContainer.append(container);
-    });
-    $(".cart").on("click", function () {
-      console.log(this);
-      // console.log("from cart");
-    });
-    $(".wish-list").on("click", function () {
-      console.log(this);
-      // console.log("from wish list");
+    // Fade out and process products
+    productsContainer.fadeOut(300, function () {
+      try {
+        productsContainer.empty();
+        filteredProducts.forEach((productId) => {
+          let product = products[productId];
+          displayedProducts.push(productId);
+
+          if (minPrice > product.price) {
+            minPrice = product.price;
+          }
+          if (maxPrice < product.price) {
+            maxPrice = product.price;
+          }
+
+          // Create the card UI elements (as in the original code)
+          let img = $("<img />").prop("src", product.img_src).prop("alt", product.title).addClass("card-img-top");
+          let cartButton = $("<button>").addClass("btn cart btn-outline-secondary btn-lg").append($("<i>").addClass("fas fs-2 fa-cart-plus"));
+          let favButton = $("<button>").addClass("btn wish-list btn-outline-secondary btn-lg").append($("<i>").addClass("far fs-2 fa-heart"));
+          let overlay = $("<div>").addClass("overlay").append(cartButton).append(favButton);
+          let imgContainer = $("<div>").addClass("img-container").append(img).append(overlay);
+          let productTitle = $("<h5>").addClass("card-title").text(product.title);
+          let productDescription = $("<p>").addClass("card-text").text(product.description);
+          let productPrice = $("<p>")
+            .addClass("card-text text-success fw-bold")
+            .text("price: $" + product.price);
+          let cardBody = $("<div>").addClass("card-body").append(productTitle).append(productDescription).append(productPrice);
+          let card = $("<div>").addClass("card").append(imgContainer).append(cardBody);
+          let container = $("<div>").addClass("col-lg-4 col-md-6 col-sm-12 p-0v").append(card);
+
+          productsContainer.append(container);
+        });
+
+        // Attach event handlers
+        $(".cart").on("click", function () {
+          console.log(this);
+        });
+        $(".wish-list").on("click", function () {
+          console.log(this);
+        });
+
+        productsContainer.fadeIn(300);
+
+        // Resolve the Promise with displayed products
+        resolve(displayedProducts);
+      } catch (error) {
+        // Reject the Promise in case of errors
+        reject(error);
+      }
     });
   });
-  productsContainer.fadeIn(300);
+}
+function getDisplayedProducts() {
+  return new Promise((resolve, reject) => {
+    try {
+      const storedProducts = localStorage.getItem("displayedProducts");
+      if (storedProducts) {
+        const displayedProducts = JSON.parse(storedProducts);
+        resolve(displayedProducts); // Successfully retrieved and parsed
+      } else {
+        reject("No displayed products found in localStorage."); // Handle missing data
+      }
+    } catch (error) {
+      reject(`Error retrieving displayed products: ${error.message}`); // Handle parse or other errors
+    }
+  });
 }
