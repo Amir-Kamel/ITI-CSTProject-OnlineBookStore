@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (elementId === "mainNavigation") {
           // Call the updateCartBadge function defined in nav.js
           updateCartBadge();
+          updateFavoritesBadge();
         }
       })
       .catch((error) => console.error("Error loading content:", error));
@@ -38,6 +39,39 @@ $(document).ready(function () {
   }
 
   let allProducts = getData();
+
+  // Function to add product to favorite and save in local storage
+  function addToFavorite(product) {
+    const loggedInUserEmail = getLoggedInUserEmail();
+    if (loggedInUserEmail) {
+      const favKey = `${loggedInUserEmail}_fav`;
+      let wishlist = JSON.parse(localStorage.getItem(favKey)) || [];
+      const index = wishlist.findIndex((item) => item.title === product.title);
+        
+      if (index === -1) {
+        // Add product to favorites
+        wishlist.push(product);
+        localStorage.setItem(favKey, JSON.stringify(wishlist));
+        Toast.fire({
+          icon: "success",
+          title: "Item added to wishlist successfully.",
+        });
+      }
+      else {
+        // Remove product from favorites
+        wishlist.splice(index, 1);
+        buttonfav.addClass("btn-outline-secondary").removeClass("btn-success");
+      }
+  
+      // Show toast notification for adding product to favorite
+    } else {
+      Toast.fire({
+        icon: "info",
+        title: "You need to be logged in to add products to wishlist.",
+      });
+    }
+    updateFavoritesBadge();
+  }
 
   // Function to add product to cart and save in local storage
   function addToCart(product) {
@@ -92,7 +126,7 @@ $(document).ready(function () {
                     <button class="btn btn-outline-secondary btn-sm add-to-cart">
                       <i class="fas fa-cart-plus mr-2"></i>
                     </button>
-                    <button class="btn btn-outline-secondary btn-sm">
+                    <button class="btn btn-outline-secondary btn-sm btn-fav">
                       <i class="far fa-heart"></i>
                     </button>
                   </div>
@@ -110,6 +144,11 @@ $(document).ready(function () {
         BookCard.find(".add-to-cart").on("click", function (e) {
           e.stopPropagation(); // Prevent event bubbling
           addToCart(product);
+        });
+
+        BookCard.find(".btn-fav").on("click", function (e) {
+          e.stopPropagation(); // Prevent click from bubbling to the card
+          addToFavorite(product)
         });
 
         BookCard.on("click", function () {
