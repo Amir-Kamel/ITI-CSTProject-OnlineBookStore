@@ -65,7 +65,7 @@ $(document).ready(function () {
         buttonfav.addClass("btn-outline-secondary").removeClass("btn-danger");
         updateFavoritesBadge();
         Toast.fire({
-          icon: "success",
+          icon: "warning", // Change to warning for yellow color",
           title: "Item removed from wishlist successfully.",
         });
       }
