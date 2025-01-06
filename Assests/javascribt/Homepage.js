@@ -47,22 +47,22 @@ $(document).ready(function () {
       const favKey = `${loggedInUserEmail}_fav`;
       let wishlist = JSON.parse(localStorage.getItem(favKey)) || [];
       const index = wishlist.findIndex((item) => item.title === product.title);
-        
+
       if (index === -1) {
         // Add product to favorites
         wishlist.push(product);
         localStorage.setItem(favKey, JSON.stringify(wishlist));
+        buttonfav.addClass("btn-success").removeClass(" btn-outline-secondary");
         Toast.fire({
           icon: "success",
           title: "Item added to wishlist successfully.",
         });
-      }
-      else {
+      } else {
         // Remove product from favorites
         wishlist.splice(index, 1);
         buttonfav.addClass("btn-outline-secondary").removeClass("btn-success");
       }
-  
+
       // Show toast notification for adding product to favorite
     } else {
       Toast.fire({
@@ -148,7 +148,7 @@ $(document).ready(function () {
 
         BookCard.find(".btn-fav").on("click", function (e) {
           e.stopPropagation(); // Prevent click from bubbling to the card
-          addToFavorite(product)
+          addToFavorite(product);
         });
 
         BookCard.on("click", function () {
