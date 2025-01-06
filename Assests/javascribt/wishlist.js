@@ -1,3 +1,24 @@
+document.addEventListener("DOMContentLoaded", function () {
+  function loadContent(url, elementId) {
+    fetch(url)
+      .then((response) => response.text())
+      .then((data) => {
+        document.getElementById(elementId).innerHTML = data;
+        // Ensure the badge is updated after the navigation is loaded
+        if (elementId === "mainNavigation") {
+          // Call the updateCartBadge function defined in nav.js
+          updateCartBadge();
+          updateFavoritesBadge()
+        }
+      })
+      .catch((error) => console.error("Error loading content:", error));
+  }
+
+  // Load navigation and footer
+  loadContent("nav.html", "mainNavigation");
+  loadContent("footer.html", "footer");
+});
+
 $(document).ready(function () {
   // Function to get favorites from localStorage
   function getData() {

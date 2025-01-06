@@ -16,6 +16,17 @@ function updateCartBadge() {
   }
 }
 
+function updateFavoritesBadge() {
+  const loggedInUserEmail = getLoggedInUserEmail();
+  if (loggedInUserEmail) {
+    const favKey = `${loggedInUserEmail}_cart`;
+    let wishlist = JSON.parse(localStorage.getItem(favKey)) || [];
+    $("#heartBadge").text(wishlist.length);
+  } else {
+    $("#heartBadge").text(0);
+  }
+}
+
 // Sign-in function
 function signInUser(email) {
   const sessionData = {
