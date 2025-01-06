@@ -19,7 +19,7 @@ function updateCartBadge() {
 function updateFavoritesBadge() {
   const loggedInUserEmail = getLoggedInUserEmail();
   if (loggedInUserEmail) {
-    const favKey = `${loggedInUserEmail}_cart`;
+    const favKey = `${loggedInUserEmail}_fav`;
     let wishlist = JSON.parse(localStorage.getItem(favKey)) || [];
     $("#heartBadge").text(wishlist.length);
   } else {
