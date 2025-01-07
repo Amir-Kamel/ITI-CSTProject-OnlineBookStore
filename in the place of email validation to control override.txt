@@ -1,0 +1,41 @@
+// login , register.js 
+// add this function in the place of same existing function
+
+
+
+function validateEmail() {
+  const emailValue = emailField.value.trim();
+
+  if (!emailRegex.test(emailValue)) {
+    emailError.innerHTML = "Invalid Email (e.g., starts with a letter and ends with @gmail.com)";
+    emailField.style.borderBottomColor = "red";
+    emailError.style.display = "block";
+  } else {
+    emailError.style.display = "none";
+    emailField.style.borderBottomColor = "green";
+  }
+}
+
+// Listen to `input` events to capture any changes, including overrides
+emailField.addEventListener("input", validateEmail);
+
+emailField.addEventListener("blur", validateEmail);
+
+===================================================================================================================================
+// take image from me and put it in folder images
+// profile.css
+put maxwidth , maxheight to image in profile page 
+
+
+
+===============================================================================================================
+
+// login , register.js 
+ 
+there are 2 of (const newUser) one of them dont have 
+orders_history: [],
+        inbox: [],
+so add them there
+
+==============================================================================
+convert alerts to toast fire👀👀
