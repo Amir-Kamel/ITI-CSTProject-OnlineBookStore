@@ -4,9 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((response) => response.text())
       .then((data) => {
         document.getElementById(elementId).innerHTML = data;
-        // Ensure the badge is updated after the navigation is loaded
         if (elementId === "mainNavigation") {
-          // Call the updateCartBadge function defined in nav.js
           updateCartBadge();
         }
       })
@@ -19,6 +17,23 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 $(document).ready(function () {
+  // Function to validate email
+  function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  // Function to validate username (no numbers allowed)
+  function validateUsername(username) {
+    const usernameRegex = /^[a-zA-Z\s]+$/;
+    return usernameRegex.test(username);
+  }
+
+  // Function to validate title (not null or empty)
+  function validateTitle(title) {
+    return title && title.trim() !== "";
+  }
+
   // Function to get products from local storage
   function getProducts() {
     return JSON.parse(localStorage.getItem("products")) || {};
@@ -29,51 +44,207 @@ $(document).ready(function () {
     localStorage.setItem("products", JSON.stringify(products));
   }
 
+  // Function to get users from local storage
+  function getUsers() {
+    return JSON.parse(localStorage.getItem("signUpData")) || usersData;
+  }
+
+  // Function to save users to local storage
+  function saveUsers(users) {
+    localStorage.setItem("signUpData", JSON.stringify(users));
+  }
+
+  // Function to update counts (products, users, orders)
+  function updateCounts() {
+    const products = getProducts();
+    const users = getUsers();
+
+    // Update product count
+    const productCount = Object.keys(products).length;
+    $(".productCount").text(productCount);
+
+    // Update user count
+    const userCount =
+      (users.admin ? Object.keys(users.admin).length : 0) +
+      (users.customers ? Object.keys(users.customers).length : 0) +
+      (users.sellers ? Object.keys(users.sellers).length : 0);
+    $(".usersCount").text(userCount);
+
+    // Update order count
+    const orders = JSON.parse(localStorage.getItem("orders")) || {};
+    const orderCount = Object.keys(orders).length;
+    $(".ordersCount").text(orderCount);
+  }
+
   // Function to render the products table
   function renderProductsTable() {
     const products = getProducts();
     $(".productsTable").html(""); // Clear the table
     $.each(products, function (id, product) {
       $(".productsTable").append(`
-        <tr data-id="${id}">
-          <td>${product.title}</td>
-          <td><img src="${product.img_src}" alt="${product.title}" style="width: 100px; height: auto;"></td>
-          <td><button class="btn btn-primary editProductBtn">Edit</button></td>
-          <td><button class="btn btn-danger deleteProductBtn">Delete</button></td>
-        </tr>
-      `);
+          <tr data-id="${id}">
+            <td>${product.title}</td>
+            <td><img src="${product.img_src}" alt="${product.title}" style="width: 100px; height: auto;"></td>
+            <td><button class="btn btn-primary editProductBtn">Edit</button></td>
+            <td><button class="btn btn-danger deleteProductBtn">Delete</button></td>
+          </tr>
+        `);
     });
+
+    // Update counts after rendering the products table
+    updateCounts();
   }
 
-  // Render the products table on page load
+  // Function to render the users table
+  function renderUsersTable() {
+    const users = getUsers();
+    const admins = users.admin ? Object.keys(users.admin).length : 0;
+    const customers = users.customers ? Object.keys(users.customers).length : 0;
+    const sellers = users.sellers ? Object.keys(users.sellers).length : 0;
+
+    // Update admin, customer, and seller counts
+    $(".admins").text(admins);
+    $(".members").text(customers);
+    $(".sellers").text(sellers);
+
+    // Clear the table
+    $(".usersTable").html("");
+
+    // Render admins
+    if (users.admin) {
+      $.each(users.admin, function (email, user) {
+        $(".usersTable").append(`
+            <tr data-email="${email}" data-role="admin">
+              <td><input type="text" class="form-control username-input" value="${
+                user.username
+              }"></td>
+              <td><input type="email" class="form-control email-input" value="${email}" disabled></td>
+              <td>
+                <select class="form-control" disabled>
+                  <option value="admin" selected>Admin</option>
+                </select>
+              </td>
+              <td>
+                <select class="form-control account-status">
+                  <option value="Active" ${
+                    user.accountstate === "Active" ? "selected" : ""
+                  }>Active</option>
+                  <option value="Suspended" ${
+                    user.accountstate === "Suspended" ? "selected" : ""
+                  }>Suspended</option>
+                </select>
+              </td>
+              <td><button class="btn btn-primary updateUserBtn">Update</button></td>
+              <td><button class="btn btn-danger deleteUserBtn" disabled>Delete</button></td>
+            </tr>
+          `);
+      });
+    }
+
+    // Render customers
+    if (users.customers) {
+      $.each(users.customers, function (email, user) {
+        $(".usersTable").append(`
+            <tr data-email="${email}" data-role="customer">
+              <td><input type="text" class="form-control username-input" value="${
+                user.username
+              }"></td>
+              <td><input type="email" class="form-control email-input" value="${email}"></td>
+              <td>
+                <select class="form-control">
+                  <option value="customer" ${
+                    user.role === "customer" ? "selected" : ""
+                  }>Customer</option>
+                  <option value="seller" ${
+                    user.role === "seller" ? "selected" : ""
+                  }>Seller</option>
+                </select>
+              </td>
+              <td>
+                <select class="form-control account-status">
+                  <option value="Active" ${
+                    user.accountstate === "Active" ? "selected" : ""
+                  }>Active</option>
+                  <option value="Suspended" ${
+                    user.accountstate === "Suspended" ? "selected" : ""
+                  }>Suspended</option>
+                </select>
+              </td>
+              <td><button class="btn btn-primary updateUserBtn">Update</button></td>
+              <td><button class="btn btn-danger deleteUserBtn">Delete</button></td>
+            </tr>
+          `);
+      });
+    }
+
+    // Render sellers
+    if (users.sellers) {
+      $.each(users.sellers, function (email, user) {
+        $(".usersTable").append(`
+            <tr data-email="${email}" data-role="seller">
+              <td><input type="text" class="form-control username-input" value="${
+                user.username
+              }"></td>
+              <td><input type="email" class="form-control email-input" value="${email}"></td>
+              <td>
+                <select class="form-control">
+                  <option value="customer" ${
+                    user.role === "customer" ? "selected" : ""
+                  }>Customer</option>
+                  <option value="seller" ${
+                    user.role === "seller" ? "selected" : ""
+                  }>Seller</option>
+                </select>
+              </td>
+              <td>
+                <select class="form-control account-status">
+                  <option value="Active" ${
+                    user.accountstate === "Active" ? "selected" : ""
+                  }>Active</option>
+                  <option value="Suspended" ${
+                    user.accountstate === "Suspended" ? "selected" : ""
+                  }>Suspended</option>
+                </select>
+              </td>
+              <td><button class="btn btn-primary updateUserBtn">Update</button></td>
+              <td><button class="btn btn-danger deleteUserBtn">Delete</button></td>
+            </tr>
+          `);
+      });
+    }
+
+    // Update counts after rendering the users table
+    updateCounts();
+  }
+
+  // Render the products and users tables on page load
   renderProductsTable();
-
-  // Function to clear the form fields and reset the modal to "Add Product" mode
-  function resetModal() {
-    $("#producttitleInput").val("");
-    $("#productPriceInput").val("");
-    $("#productStockInput").val("");
-    $("#productCategoryInput").val("");
-    $("#productDescInput").val("");
-    $("#sellerEmailInput").val("");
-    $("#imageUploadInput").val("");
-
-    // Reset the modal title and buttons
-    $("#addProductModalLabel").text("Add New Product");
-    $("#addBtn").show();
-    $("#updateProductBtn").hide();
-
-    // Remove any stored edit ID from the modal
-    $("#addProductModal").removeData("edit-id");
-  }
-
-  // Event listener for when the modal is hidden
-  $("#addProductModal").on("hidden.bs.modal", function () {
-    resetModal(); // Clear the form and reset the modal
-  });
+  renderUsersTable();
 
   // Add Product Button Click Event
   $("#addBtn").on("click", function () {
+    // Get form values
+    const title = $("#producttitleInput").val();
+    const sellerEmail = $("#sellerEmailInput").val();
+
+    // Validate title
+    if (!validateTitle(title)) {
+      Toast.fire({
+        icon: "error",
+        title: "Title cannot be empty!",
+      });
+      return;
+    }
+
+    // Validate seller email
+    if (!validateEmail(sellerEmail)) {
+      Toast.fire({
+        icon: "error",
+        title: "Invalid seller email!",
+      });
+      return;
+    }
+
     // Get the image file
     const imageFile = $("#imageUploadInput").prop("files")[0];
 
@@ -228,149 +399,35 @@ $(document).ready(function () {
     }
   });
 
-  // Function to get users from local storage
-  function getUsers() {
-    return JSON.parse(localStorage.getItem("signUpData")) || usersData;
-  }
-
-  // Function to save users to local storage
-  function saveUsers(users) {
-    localStorage.setItem("signUpData", JSON.stringify(users));
-  }
-
-  // Function to render the users table
-  function renderUsersTable() {
-    const users = getUsers();
-    const admins = users.admin ? Object.keys(users.admin).length : 0;
-    const customers = users.customers ? Object.keys(users.customers).length : 0;
-    const sellers = users.sellers ? Object.keys(users.sellers).length : 0;
-
-    // Update admin, customer, and seller counts
-    $(".admins").text(admins);
-    $(".members").text(customers);
-    $(".sellers").text(sellers);
-
-    // Clear the table
-    $(".usersTable").html("");
-
-    // Render admins
-    if (users.admin) {
-      $.each(users.admin, function (email, user) {
-        $(".usersTable").append(`
-          <tr data-email="${email}" data-role="admin">
-            <td><input type="text" class="form-control" value="${
-              user.username
-            }"></td>
-            <td><input type="email" class="form-control" value="${email}" disabled></td>
-            <td>
-              <select class="form-control" disabled>
-                <option value="admin" selected>Admin</option>
-              </select>
-            </td>
-            <td>
-              <select class="form-control account-status">
-                <option value="Active" ${
-                  user.accountstate === "Active" ? "selected" : ""
-                }>Active</option>
-                <option value="Suspended" ${
-                  user.accountstate === "Suspended" ? "selected" : ""
-                }>Suspended</option>
-              </select>
-            </td>
-            <td><button class="btn btn-primary updateUserBtn">Update</button></td>
-            <td><button class="btn btn-danger deleteUserBtn" disabled>Delete</button></td>
-          </tr>
-        `);
-      });
-    }
-
-    // Render customers
-    if (users.customers) {
-      $.each(users.customers, function (email, user) {
-        $(".usersTable").append(`
-          <tr data-email="${email}" data-role="customer">
-            <td><input type="text" class="form-control" value="${
-              user.username
-            }"></td>
-            <td><input type="email" class="form-control" value="${email}"></td>
-            <td>
-              <select class="form-control">
-                <option value="customer" ${
-                  user.role === "customer" ? "selected" : ""
-                }>Customer</option>
-                <option value="seller" ${
-                  user.role === "seller" ? "selected" : ""
-                }>Seller</option>
-              </select>
-            </td>
-            <td>
-              <select class="form-control account-status">
-                <option value="Active" ${
-                  user.accountstate === "Active" ? "selected" : ""
-                }>Active</option>
-                <option value="Suspended" ${
-                  user.accountstate === "Suspended" ? "selected" : ""
-                }>Suspended</option>
-              </select>
-            </td>
-            <td><button class="btn btn-primary updateUserBtn">Update</button></td>
-            <td><button class="btn btn-danger deleteUserBtn">Delete</button></td>
-          </tr>
-        `);
-      });
-    }
-
-    // Render sellers
-    if (users.sellers) {
-      $.each(users.sellers, function (email, user) {
-        $(".usersTable").append(`
-          <tr data-email="${email}" data-role="seller">
-            <td><input type="text" class="form-control" value="${
-              user.username
-            }"></td>
-            <td><input type="email" class="form-control" value="${email}"></td>
-            <td>
-              <select class="form-control">
-                <option value="customer" ${
-                  user.role === "customer" ? "selected" : ""
-                }>Customer</option>
-                <option value="seller" ${
-                  user.role === "seller" ? "selected" : ""
-                }>Seller</option>
-              </select>
-            </td>
-            <td>
-              <select class="form-control account-status">
-                <option value="Active" ${
-                  user.accountstate === "Active" ? "selected" : ""
-                }>Active</option>
-                <option value="Suspended" ${
-                  user.accountstate === "Suspended" ? "selected" : ""
-                }>Suspended</option>
-              </select>
-            </td>
-            <td><button class="btn btn-primary updateUserBtn">Update</button></td>
-            <td><button class="btn btn-danger deleteUserBtn">Delete</button></td>
-          </tr>
-        `);
-      });
-    }
-  }
-
-  // Render the users table on page load
-  renderUsersTable();
-
   // Update User Button Click Event
   $(document).on("click", ".updateUserBtn", function () {
     const $row = $(this).closest("tr");
+    const username = $row.find(".username-input").val();
+    const email = $row.find(".email-input").val();
+
+    // Validate username
+    if (!validateUsername(username)) {
+      Toast.fire({
+        icon: "error",
+        title: "Username cannot contain numbers!",
+      });
+      return;
+    }
+
+    // Validate email
+    if (!validateEmail(email)) {
+      Toast.fire({
+        icon: "error",
+        title: "Invalid email!",
+      });
+      return;
+    }
+
     const oldEmail = $row.data("email"); // Get the old email
     const role = $row.data("role");
     const users = getUsers();
 
     // Get updated values
-    const username = $row.find("td:eq(0) input").val();
-    const newEmail =
-      role === "admin" ? oldEmail : $row.find("td:eq(1) input").val(); // Admin email cannot be changed
     const userRole =
       role === "admin" ? "admin" : $row.find("td:eq(2) select").val(); // Admin role cannot be changed
     const accountState = $row.find("td:eq(3) select").val(); // Get the selected account status
@@ -396,7 +453,7 @@ $(document).ready(function () {
       const user = users.customers[oldEmail];
       delete users.customers[oldEmail]; // Remove the old email entry
       user.username = username;
-      user.email = newEmail;
+      user.email = email;
       user.role = userRole;
       user.accountstate = accountState; // Update account status
       users[
@@ -405,12 +462,12 @@ $(document).ready(function () {
           : userRole === "customer"
           ? "customers"
           : "sellers"
-      ][newEmail] = user; // Add the new email entry to the correct role
+      ][email] = user; // Add the new email entry to the correct role
     } else if (role === "seller") {
       const user = users.sellers[oldEmail];
       delete users.sellers[oldEmail]; // Remove the old email entry
       user.username = username;
-      user.email = newEmail;
+      user.email = email;
       user.role = userRole;
       user.accountstate = accountState; // Update account status
       users[
@@ -419,14 +476,14 @@ $(document).ready(function () {
           : userRole === "customer"
           ? "customers"
           : "sellers"
-      ][newEmail] = user; // Add the new email entry to the correct role
+      ][email] = user; // Add the new email entry to the correct role
     }
 
     // Save the updated users object to local storage
     saveUsers(users);
 
     // Update the data-email and data-role attributes of the row
-    $row.attr("data-email", newEmail);
+    $row.attr("data-email", email);
     $row.attr("data-role", userRole);
 
     // Re-render the users table

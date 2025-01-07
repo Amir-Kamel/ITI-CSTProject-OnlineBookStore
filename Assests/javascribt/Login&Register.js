@@ -131,18 +131,15 @@ const doneTypingInterval = 500;
 // Email Validation
 const emailField = document.getElementById("email");
 const emailError = document.getElementById("emailError");
+
 function validateEmail() {
   const emailValue = emailField.value.trim();
   const emailRegex = /^[a-zA-Z0-9._%+-]+(?<!\.)@gmail\.com$/;
   const invalidCharsRegex = /[!#$%^&*(),?":{}|<>]$/;
 
   if (!emailRegex.test(emailValue)) {
-    emailError.innerHTML = "Invalid Email (e.g., user@gmail.com)";
-    emailField.style.borderBottomColor = "red";
-    emailError.style.display = "block";
-  } else if (invalidCharsRegex.test(emailValue.split("@")[0])) {
     emailError.innerHTML =
-      "Email cannot end with special characters before '@gmail.com'";
+      "Invalid Email (e.g., starts with a letter and ends with @gmail.com)";
     emailField.style.borderBottomColor = "red";
     emailError.style.display = "block";
   } else {
@@ -150,10 +147,11 @@ function validateEmail() {
     emailField.style.borderBottomColor = "green";
   }
 }
-emailField.addEventListener("input", function () {
-  clearTimeout(typingTimer);
-  typingTimer = setTimeout(validateEmail, doneTypingInterval);
-});
+
+// Listen to `input` events to capture any changes, including overrides
+emailField.addEventListener("input", validateEmail);
+
+emailField.addEventListener("blur", validateEmail);
 
 // Phone Validation
 const phoneField = document.getElementById("phone");
@@ -355,6 +353,8 @@ signUpButton.addEventListener("click", function (event) {
     imgsrc: "",
     cart: [],
     wishlist: [],
+    orders_history: [],
+    inbox: [],
   };
 
   // Add the new user to the customers object
