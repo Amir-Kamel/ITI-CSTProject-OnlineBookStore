@@ -39,30 +39,6 @@ $(document).ready(function () {
 
   let allProducts = getData();
 
-  // Function to add product to cart and save in local storage
-  function addToCart(product) {
-    const loggedInUserEmail = getLoggedInUserEmail();
-    if (loggedInUserEmail) {
-      const cartKey = `${loggedInUserEmail}_cart`;
-
-      let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
-      cart.push(product);
-      localStorage.setItem(cartKey, JSON.stringify(cart));
-      updateCartBadge(); // Update the cart badge after adding the product
-
-      // Show toast notification for adding product to cart
-      Toast.fire({
-        icon: "success",
-        title: "Item added to cart successfully.",
-      });
-    } else {
-      Toast.fire({
-        icon: "info",
-        title: "You need to be logged in to add products to cart.",
-      });
-    }
-  }
-
   function displayProducts(products, category = "All") {
     const container = $("#books-Container");
 
@@ -75,9 +51,7 @@ $(document).ready(function () {
           ? products // if the tab is all show the all products
           : Object.fromEntries(
               //else convert object to array then filter
-              Object.entries(products).filter(
-                ([key, product]) => product.category === category
-              )
+              Object.entries(products).filter(([key, product]) => product.category === category),
             );
 
       let obj = Object.keys(filteredProducts);
@@ -109,12 +83,12 @@ $(document).ready(function () {
         // Handle "add to cart" button click
         BookCard.find(".add-to-cart").on("click", function (e) {
           e.stopPropagation(); // Prevent event bubbling
-          addToCart(product);
+          addToCart(key);
         });
 
         BookCard.on("click", function () {
           localStorage.setItem("selectedProduct", JSON.stringify(product));
-          window.location.href = "product Page.html";
+          window.location.href = "Product Page.html";
         });
         container.append(BookCard);
       });

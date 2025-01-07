@@ -15,6 +15,11 @@
   height: 30% !important;
 }
 /* end of banner */
+/* books counter */
+.counter:hover {
+  cursor: pointer;
+}
+/* end of books counter */
 /* slider-range */
 #slider-range {
   height: 7px !important;
@@ -27,13 +32,14 @@
 #slider-range .ui-slider-handle {
   background-color: #810b0b;
   border-radius: 50%; /* Make it circular */
-  width: 15px; /* Set width */
-  height: 15px; /* Set height */
+  width: 20px; /* Set width */
+  height: 20px; /* Set height */
   border: 2px solid #ffffff; /* Border color */
   position: absolute; /* Absolute to position within the slider */
   top: 3px; /* Adjust to center the handle within the slider */
-  transform: translateY(-50%); /* Center handle vertically */
+  transform: translate(-50%, -50%);
 }
+
 #slider-range:hover {
   cursor: pointer;
 }
@@ -82,6 +88,7 @@
   position: relative;
 }
 .img-container img {
+  height: 450px !important;
   transition: transform 0.3s ease;
 }
 .img-container:hover img {
