@@ -71,7 +71,7 @@ $(document).ready(function () {
   // get stored photo from Local Storage
   const selectedImage = localStorage.getItem("img_src");
   if (selectedImage) {
-      $("#product-image").attr("src", selectedImage);
+      $("#products").attr("src", selectedImage);
   } else {
       alert("No image selected!");
   }
