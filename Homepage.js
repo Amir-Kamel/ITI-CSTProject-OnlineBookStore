@@ -39,38 +39,87 @@ $(document).ready(function () {
   }
 
   let allProducts = getData();
+  // console.log(allProducts);
+
+  let allProductsLength = Object.keys(allProducts).length   ;
+  const randomProducts = allProducts[Math.floor(Math.random()*(allProductsLength-1+1)+1)]
+  console.log(randomProducts)
+  // console.log(Object.keys(allProducts).length)
+  // اختيار صورة عشوائية
+  // const randomImage = storedImages[Math.floor(Math.random() * storedImages.length)];
+
+  // // تحديث الصورة في البانر
+   if (randomProducts) {
+     $("#banner ").attr("src", randomProducts.img_src); // تغيير الصورة
+    //  $("#title").text(`${randomProducts.title}`); // تحديث عنوان الكتاب
+     $("#desc").text(`${randomProducts.description}`); 
+   }
+   $("#shop-now").on("click", function () {
+    localStorage.setItem("selectedProduct", JSON.stringify(randomProducts));
+  window.location.href = "product Page.html";
+});
+//container.append();
+
+  // // عند الضغط على زر "Shop now"
+  // $("#shop-now").on("click", function () {
+  //   // تخزين بيانات الكتاب المختار
+  //   localStorage.setItem("img_src", JSON.stringify(randomImage));
+  //   // الانتقال إلى صفحة المنتج
+  //   window.location.href = "Product Page.html";
+  // });
+
+
 
   // Function to add product to favorite and save in local storage
-  function addToFavorite(product) {
+  function addToFavorite(product, buttonfav) {
     const loggedInUserEmail = getLoggedInUserEmail();
     if (loggedInUserEmail) {
       const favKey = `${loggedInUserEmail}_fav`;
       let wishlist = JSON.parse(localStorage.getItem(favKey)) || [];
       const index = wishlist.findIndex((item) => item.title === product.title);
-
+  
       if (index === -1) {
         // Add product to favorites
         wishlist.push(product);
         localStorage.setItem(favKey, JSON.stringify(wishlist));
-        buttonfav.addClass("btn-success").removeClass(" btn-outline-secondary");
+        buttonfav.addClass("btn-danger").removeClass("btn-outline-secondary");
+        updateFavoritesBadge();
         Toast.fire({
           icon: "success",
           title: "Item added to wishlist successfully.",
         });
       } else {
         // Remove product from favorites
-        wishlist.splice(index, 1);
-        buttonfav.addClass("btn-outline-secondary").removeClass("btn-success");
+        wishlist.splice(index, 1); // Remove item from the array
+        localStorage.setItem(favKey, JSON.stringify(wishlist)); // Update localStorage
+        buttonfav.addClass("btn-outline-secondary").removeClass("btn-danger");
+        updateFavoritesBadge();
+        Toast.fire({
+          icon: "warning", // Change to warning for yellow color",
+          title: "Item removed from wishlist successfully.",
+        });
       }
-
-      // Show toast notification for adding product to favorite
     } else {
       Toast.fire({
         icon: "info",
         title: "You need to be logged in to add products to wishlist.",
       });
     }
-    updateFavoritesBadge();
+  }
+  
+    //check love button
+    function checkheartbutton(product, BookCard) {
+      const loggedInUserEmail = getLoggedInUserEmail();
+      if (loggedInUserEmail) {
+        const favKey = `${loggedInUserEmail}_fav`;
+        let wishlist = JSON.parse(localStorage.getItem(favKey)) || [];
+      const isFavorite = wishlist.some((item) => item.title === product.title);
+      if (isFavorite) {
+        BookCard.find(".btn-fav")
+          .addClass("btn-danger")
+          .removeClass("btn-outline-secondary");
+      }
+    }
   }
 
   // Function to add product to cart and save in local storage
@@ -146,13 +195,16 @@ $(document).ready(function () {
           addToCart(product);
         });
 
+        checkheartbutton(product, BookCard);
+
         BookCard.find(".btn-fav").on("click", function (e) {
           e.stopPropagation(); // Prevent click from bubbling to the card
-          addToFavorite(product);
+          const buttonfav = $(this);
+          addToFavorite(product, buttonfav);
         });
 
-        BookCard.on("click", function () {
-          localStorage.setItem("selectedProduct", JSON.stringify(product));
+          BookCard.on("click", function () {
+            localStorage.setItem("selectedProduct", JSON.stringify(product));
           window.location.href = "product Page.html";
         });
         container.append(BookCard);
@@ -175,24 +227,23 @@ $(document).ready(function () {
   });
 });
 $(document).ready(function () {
-  // get data fromLocalStorage
- function getData() 
-  {
-    const  storedData = localStorage.getItem("products");
+  // وظيفة لإحضار البيانات من LocalStorage
+  function getData() {
+    const storedData = localStorage.getItem("products");
     return JSON.parse(storedData);
   }
 
-  // choose 4 ran book
+  // وظيفة لاختيار 4 منتجات عشوائية
   function getRandomProducts(products) {
     const randomProducts = [];
     const productKeys = Object.keys(products);
 
-    // choose 4 ran book
+    // اختيار 4 منتجات عشوائية
     while (randomProducts.length < 4) {
       const randomIndex = Math.floor(Math.random() * productKeys.length);
       const randomProduct = products[productKeys[randomIndex]];
 
-      // لو مضفناش الكتاب قبل كدا 
+      // التأكد من أن المنتج لم يتم إضافته مسبقًا
       if (!randomProducts.includes(randomProduct)) {
         randomProducts.push(randomProduct);
       }
@@ -200,13 +251,13 @@ $(document).ready(function () {
     return randomProducts;
   }
 
-  // display
+  // وظيفة لعرض المنتجات في الصفحة
   function displayRandomProducts() {
     const allProducts = getData();
     const randomProducts = getRandomProducts(allProducts);
     const container = $(".ran-products .row");
 
-    container.empty(); // delete prev
+    container.empty(); // مسح المحتوى السابق
 
     randomProducts.forEach((product) => {
       const productCard = `
@@ -223,8 +274,27 @@ $(document).ready(function () {
     });
   }
 
- 
-  
   displayRandomProducts();
 });
 
+// $(document).ready(function () {
+//   // جلب بيانات الصور المخزنة في localStorage
+//   // const storedImages = JSON.parse(localStorage.getItem("products")) || [];
+
+//   // اختيار صورة عشوائية
+//   const randomImage = storedImages[Math.floor(Math.random() * storedImages.length)];
+
+//   // تحديث الصورة في البانر
+//   if (randomImage) {
+//     $("#banner ").attr("src", randomImage.img_src); // تغيير الصورة
+//     $("#banner p span").text(`Book of the Month: ${randomImage.title}`); // تحديث عنوان الكتاب
+//   }
+
+//   // عند الضغط على زر "Shop now"
+//   $("#shop-now").on("click", function () {
+//     // تخزين بيانات الكتاب المختار
+//     localStorage.setItem("img_src", JSON.stringify(randomImage));
+//     // الانتقال إلى صفحة المنتج
+//     window.location.href = "Product Page.html";
+//   });
+// });
