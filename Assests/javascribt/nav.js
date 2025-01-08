@@ -17,15 +17,32 @@ function updateCartBadge() {
 }
 
 function updateFavoritesBadge() {
-  const loggedInUserEmail = getLoggedInUserEmail();
-  if (loggedInUserEmail) {
-    const favKey = `${loggedInUserEmail}_fav`;
-    let wishlist = JSON.parse(localStorage.getItem(favKey)) || [];
-    $("#heartBadge").text(wishlist.length);
+  const currentSession = JSON.parse(sessionStorage.getItem("currentSession"));
+
+  if (currentSession && currentSession.session && currentSession.session.email) {
+    const loggedInUserEmail = currentSession.session.email;
+
+    // Get the signUpData object from localStorage
+    const signUpData = JSON.parse(localStorage.getItem("signUpData")) || {};
+
+    if (signUpData.customers && signUpData.customers[loggedInUserEmail]) {
+      const customer = signUpData.customers[loggedInUserEmail];
+
+      // Get the wishlist count
+      const wishlistCount = customer.wishlist ? customer.wishlist.length : 0;
+
+      // Update the badge count on all pages
+      $("#heartBadge").text(wishlistCount);
+    } else {
+      // If the user is not found in signUpData, set badge count to 0
+      $("#heartBadge").text(0);
+    }
   } else {
+    // If no user is logged in, set badge count to 0
     $("#heartBadge").text(0);
   }
 }
+
 
 // Sign-in function
 function signInUser(email) {

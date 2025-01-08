@@ -42,55 +42,87 @@ $(document).ready(function () {
 
   // Function to add product to favorite and save in local storage
   function addToFavorite(product, buttonfav) {
-    const loggedInUserEmail = getLoggedInUserEmail();
-    if (loggedInUserEmail) {
-      const favKey = `${loggedInUserEmail}_fav`;
-      let wishlist = JSON.parse(localStorage.getItem(favKey)) || [];
-      const index = wishlist.findIndex((item) => item.title === product.title);
+    const currentSession = JSON.parse(sessionStorage.getItem("currentSession"));
   
-      if (index === -1) {
-        // Add product to favorites
-        wishlist.push(product);
-        localStorage.setItem(favKey, JSON.stringify(wishlist));
-        buttonfav.addClass("btn-danger").removeClass("btn-outline-secondary");
+    if (currentSession && currentSession.session && currentSession.session.email) {
+      const loggedInUserEmail = currentSession.session.email;
+      const signUpData = JSON.parse(localStorage.getItem("signUpData")) || {};
+  
+      if (signUpData.customers && signUpData.customers[loggedInUserEmail]) {
+        const customer = signUpData.customers[loggedInUserEmail];
+        const productIndex = customer.wishlist.findIndex((item) => item.title === product.title);
+  
+        if (productIndex === -1) {
+          // Add the product to the wishlist
+          customer.wishlist.push(product);
+          buttonfav.addClass("btn-danger").removeClass("btn-outline-secondary");
+          Toast.fire({
+            icon: "success",
+            title: "Item added to wishlist successfully.",
+          });
+        } else {
+          // Remove the product from the wishlist
+          customer.wishlist.splice(productIndex, 1);
+          buttonfav.addClass("btn-outline-secondary").removeClass("btn-danger");
+          Toast.fire({
+            icon: "warning",
+            title: "Item removed from wishlist successfully.",
+          });
+        }
+  
+        // Save updated data to localStorage
+        localStorage.setItem("signUpData", JSON.stringify(signUpData));
         updateFavoritesBadge();
-        Toast.fire({
-          icon: "success",
-          title: "Item added to wishlist successfully.",
-        });
       } else {
-        // Remove product from favorites
-        wishlist.splice(index, 1); // Remove item from the array
-        localStorage.setItem(favKey, JSON.stringify(wishlist)); // Update localStorage
-        buttonfav.addClass("btn-outline-secondary").removeClass("btn-danger");
-        updateFavoritesBadge();
         Toast.fire({
-          icon: "success",
-          title: "Item removed from wishlist successfully.",
+          icon: "info",
+          title: "You need to sign up to add products to wishlist.",
         });
       }
     } else {
       Toast.fire({
         icon: "info",
-        title: "You need to be logged in to add products to wishlist.",
+        title: "You need to log in to add products to wishlist.",
       });
     }
   }
   
+  
     //check love button
     function checkheartbutton(product, BookCard) {
-      const loggedInUserEmail = getLoggedInUserEmail();
-      if (loggedInUserEmail) {
-        const favKey = `${loggedInUserEmail}_fav`;
-        let wishlist = JSON.parse(localStorage.getItem(favKey)) || [];
-      const isFavorite = wishlist.some((item) => item.title === product.title);
-      if (isFavorite) {
+      const currentSession = JSON.parse(sessionStorage.getItem("currentSession"));
+    
+      if (currentSession && currentSession.session && currentSession.session.email) {
+        const loggedInUserEmail = currentSession.session.email;
+        const signUpData = JSON.parse(localStorage.getItem("signUpData")) || {};
+    
+        if (signUpData.customers && signUpData.customers[loggedInUserEmail]) {
+          const customer = signUpData.customers[loggedInUserEmail];
+          const wishlist = customer.wishlist || []; // Fetch the wishlist from the customer data
+    
+          // Check if the product is in the wishlist
+          const isFavorite = wishlist.some((item) => item.title === product.title);
+    
+          if (isFavorite) {
+            // Update the button style for favorite products
+            BookCard.find(".btn-fav")
+              .addClass("btn-danger")
+              .removeClass("btn-outline-secondary");
+          } else {
+            // Reset the button style for non-favorite products
+            BookCard.find(".btn-fav")
+              .addClass("btn-outline-secondary")
+              .removeClass("btn-danger");
+          }
+        }
+      } else {
+        // If no user is logged in, ensure the button has the default style
         BookCard.find(".btn-fav")
-          .addClass("btn-danger")
-          .removeClass("btn-outline-secondary");
+          .addClass("btn-outline-secondary")
+          .removeClass("btn-danger");
       }
     }
-  }
+    
 
   // Function to add product to cart and save in local storage
   function addToCart(product) {
