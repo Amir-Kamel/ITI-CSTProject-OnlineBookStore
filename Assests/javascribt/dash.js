@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById(elementId).innerHTML = data;
         if (elementId === "mainNavigation") {
           updateCartBadge();
+          updateFavoritesBadge();
         }
       })
       .catch((error) => console.error("Error loading content:", error));

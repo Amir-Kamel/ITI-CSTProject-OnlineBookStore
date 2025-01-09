@@ -17,6 +17,8 @@
 
     <link rel="stylesheet" href="./Assests/stylesheet/bootstrap.min.css">
     <link rel="stylesheet" href="Assests/stylesheet/nav.css">
+    <link rel="stylesheet" href="./Assests/stylesheet/toastSweeralert.css" />
+
 
     <!-- end bootstrap -->
     <!-- icons -->
@@ -49,12 +51,9 @@
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user fa-lg"></i>
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="./Login&Register.html">Sign in</a></li>
-                        <li><a class="dropdown-item" href="./profile.html">Your Account</a></li>
-                        <!-- Dashboard link for admin or seller -->
+                    <ul class="dropdown-menu" id="userDropdownMenu" aria-labelledby="userDropdown">
                         <li id="dashboard-link"><a class="dropdown-item d-none" href="./dashboard.html">Dashboard</a>
-                        </li>
+
                     </ul>
                 </div>
 
@@ -107,29 +106,31 @@
                 <i class="fas fa-bars"></i>
             </button>
         </div>
-        <div class="text-center mt-3 collapse navbar-collapse " id="navbarNavDropdown">
-            <ul class="navbar-nav mx-auto col-2 col-md-5 col-lg-5 col-sm-0">
-                <li class="nav-item ">
-                    <a class="nav-link active" aria-current="page" href="./HomePage.html">Home</a>
+        <div class="text-center mt-3 collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mx-auto col-2 col-md-5 col-lg-5 col-sm-0" id="navbarLinks">
+                <li class="nav-item">
+                    <a class="nav-link" href="./HomePage.html" id="home-link">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./About Us.html">About</a>
+                    <a class="nav-link" href="./About Us.html" id="about-link">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./Contact Us.html">Contact</a>
+                    <a class="nav-link" href="./Contact Us.html" id="contact-link">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./service-page.html">Service</a>
+                    <a class="nav-link" href="./service-page.html" id="service-link">Service</a>
                 </li>
             </ul>
         </div>
+
     </div>
 
     <!-- End Navbar -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./Assests/javascribt/jquery-3.7.1.slim.js"></script>
     <script src="./Assests/javascribt/nav.js"></script>
-
+    <script src="./Assests/javascribt/sweetalert2.all.min.js"></script>
+    <script src="./Assests/javascribt/toastSweetalert.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"

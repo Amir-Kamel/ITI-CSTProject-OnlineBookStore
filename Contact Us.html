@@ -141,6 +141,9 @@
             if (elementId === "mainNavigation") {
               // Call the updateCartBadge function defined in nav.js
               updateCartBadge();
+              updateFavoritesBadge();
+              setActiveLink();
+
             }
           })
           .catch((error) => console.error("Error loading content:", error));
