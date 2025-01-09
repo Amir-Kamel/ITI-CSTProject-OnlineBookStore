@@ -133,6 +133,5 @@ setActiveLink = function () {
   } else if (pathName.includes("service") && pathName) {
     document.getElementById("service-link").classList?.add("active");
   } else {
-    document.getElementById("home-link").classList?.add("active");
   }
 };

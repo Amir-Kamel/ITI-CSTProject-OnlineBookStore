@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (elementId === "mainNavigation") {
           updateCartBadge();
           updateFavoritesBadge();
+          setActiveLink();
+          updateUserDropdown();
         }
       })
       .catch((error) => console.error("Error loading content:", error));
@@ -20,10 +22,14 @@ $(document).ready(function () {
   // Function to get favorites for the logged-in user
   function getUserFavorites() {
     const currentSession = JSON.parse(sessionStorage.getItem("currentSession"));
-    if (currentSession && currentSession.session && currentSession.session.email) {
+    if (
+      currentSession &&
+      currentSession.session &&
+      currentSession.session.email
+    ) {
       const loggedInUserEmail = currentSession.session.email;
       const signUpData = JSON.parse(localStorage.getItem("signUpData")) || {};
-      
+
       if (signUpData.customers && signUpData.customers[loggedInUserEmail]) {
         const customer = signUpData.customers[loggedInUserEmail];
         return customer.wishlist || [];
@@ -35,10 +41,14 @@ $(document).ready(function () {
   // Save favorites for the logged-in user
   function saveUserFavorites(favorites) {
     const currentSession = JSON.parse(sessionStorage.getItem("currentSession"));
-    if (currentSession && currentSession.session && currentSession.session.email) {
+    if (
+      currentSession &&
+      currentSession.session &&
+      currentSession.session.email
+    ) {
       const loggedInUserEmail = currentSession.session.email;
       const signUpData = JSON.parse(localStorage.getItem("signUpData")) || {};
-      
+
       if (signUpData.customers && signUpData.customers[loggedInUserEmail]) {
         signUpData.customers[loggedInUserEmail].wishlist = favorites;
         localStorage.setItem("signUpData", JSON.stringify(signUpData));
@@ -105,6 +115,19 @@ $(document).ready(function () {
       favContainer.fadeIn(300); // Add fadeIn animation
     });
   }
-  
+
   displayFavorites(allFavorites);
 });
+setActiveLink = function () {
+  const pathName = window?.location?.pathname?.toLowerCase();
+  if (pathName.includes("home") && pathName) {
+    document.getElementById("home-link")?.classList?.add("active");
+  } else if (pathName.includes("about") && pathName) {
+    document.getElementById("about-link")?.classList?.add("active");
+  } else if (pathName.includes("contact") && pathName) {
+    document.getElementById("contact-link")?.classList?.add("active");
+  } else if (pathName.includes("service") && pathName) {
+    document.getElementById("service-link").classList?.add("active");
+  } else {
+  }
+};
