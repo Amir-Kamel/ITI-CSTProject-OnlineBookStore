@@ -19,27 +19,31 @@ document.addEventListener("DOMContentLoaded", function () {
 $(document).ready(function () {
   // Function to get favorites for the logged-in user
   function getUserFavorites() {
-    const loggedInUserEmail = getLoggedInUserEmail(); // Example: "amirk@gmail.com"
-    if (!loggedInUserEmail) {
-      console.warn("No user is logged in.");
-      return [];
+    const currentSession = JSON.parse(sessionStorage.getItem("currentSession"));
+    if (currentSession && currentSession.session && currentSession.session.email) {
+      const loggedInUserEmail = currentSession.session.email;
+      const signUpData = JSON.parse(localStorage.getItem("signUpData")) || {};
+      
+      if (signUpData.customers && signUpData.customers[loggedInUserEmail]) {
+        const customer = signUpData.customers[loggedInUserEmail];
+        return customer.wishlist || [];
+      }
     }
-
-    const favKey = `${loggedInUserEmail}_fav`;
-    const favData = localStorage.getItem(favKey);
-    return JSON.parse(favData) || [];
+    return [];
   }
 
   // Save favorites for the logged-in user
   function saveUserFavorites(favorites) {
-    const loggedInUserEmail = getLoggedInUserEmail();
-    if (!loggedInUserEmail) {
-      console.warn("No user is logged in.");
-      return;
+    const currentSession = JSON.parse(sessionStorage.getItem("currentSession"));
+    if (currentSession && currentSession.session && currentSession.session.email) {
+      const loggedInUserEmail = currentSession.session.email;
+      const signUpData = JSON.parse(localStorage.getItem("signUpData")) || {};
+      
+      if (signUpData.customers && signUpData.customers[loggedInUserEmail]) {
+        signUpData.customers[loggedInUserEmail].wishlist = favorites;
+        localStorage.setItem("signUpData", JSON.stringify(signUpData));
+      }
     }
-
-    const favKey = `${loggedInUserEmail}_fav`;
-    localStorage.setItem(favKey, JSON.stringify(favorites));
   }
 
   // Initial load of favorites
@@ -61,9 +65,9 @@ $(document).ready(function () {
         return;
       }
 
-      // Display the book cards
+      // Display the product cards
       favorites.forEach((favProduct) => {
-        const bookCard = $(`
+        const productCard = $(`
           <div class="col-lg-3 col-md-6 col-sm-12 p-4">
             <div class="card h-100 w-100" data-id="${favProduct.title}">
               <div class="img-container">
@@ -86,7 +90,7 @@ $(document).ready(function () {
         `);
 
         // Handle the "Remove from Favorites" button click
-        bookCard.find(".remove-fav").on("click", function () {
+        productCard.find(".remove-fav").on("click", function () {
           const updatedFavorites = favorites.filter(
             (item) => item.title !== favProduct.title
           );
@@ -95,20 +99,12 @@ $(document).ready(function () {
           updateFavoritesBadge();
         });
 
-        favContainer.append(bookCard); // Add the book card to the container
+        favContainer.append(productCard); // Add the product card to the container
       });
 
       favContainer.fadeIn(300); // Add fadeIn animation
     });
   }
-
-  // Listen for storage events to update favorites dynamically
-  window.addEventListener("storage", function (event) {
-    if (event.key && event.key.endsWith("_fav")) {
-      const updatedFavorites = getUserFavorites();
-      displayFavorites(updatedFavorites);
-    }
-  });
-
+  
   displayFavorites(allFavorites);
 });
