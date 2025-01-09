@@ -1,7 +1,7 @@
 const products = {
   1: {
     title: "The Epic of Gilgamesh",
-    seller_email: "",
+
     price: 11,
     stock: 5,
     description: "An ancient heroic adventure about friendship and immortality.",
@@ -12,7 +12,7 @@ const products = {
   },
   2: {
     title: "Nostromo",
-    seller_email: "",
+
     price: 8,
     stock: 7,
     description: "A gripping tale of greed, colonialism, and revolution.",
@@ -23,7 +23,7 @@ const products = {
   },
   3: {
     title: "Things Fall Apart",
-    seller_email: "",
+
     price: 10,
     stock: 3,
     description: "A powerful story of tradition and change in a Nigerian village.",
@@ -34,7 +34,7 @@ const products = {
   },
   4: {
     title: "Pride and Prejudice",
-    seller_email: "",
+
     price: 9,
     stock: 4,
     description: "A witty and romantic tale of love and societal expectations.",
@@ -45,7 +45,7 @@ const products = {
   },
   5: {
     title: "Crime and Punishment",
-    seller_email: "",
+
     price: 14,
     stock: 6,
     description: "A psychological exploration of guilt and redemption.",
@@ -56,7 +56,7 @@ const products = {
   },
   6: {
     title: "Invisible Man",
-    seller_email: "",
+
     price: 13,
     stock: 3,
     description: "A powerful story of racial identity and social invisibility.",
@@ -67,7 +67,7 @@ const products = {
   },
   7: {
     title: "Gypsy Ballads",
-    seller_email: "",
+
     price: 6,
     stock: 8,
     description: "Simple yet evocative poetry that introduces young readers to Spanish folklore.",
@@ -78,7 +78,7 @@ const products = {
   },
   8: {
     title: "Medea",
-    seller_email: "",
+
     price: 12,
     stock: 2,
     description: "A tragic Greek play about betrayal and revenge.",
@@ -89,7 +89,7 @@ const products = {
   },
   9: {
     title: "One Thousand and One Nights",
-    seller_email: "",
+
     price: 7,
     stock: 5,
     description: "A magical anthology of Middle Eastern folklore featuring Aladdin and Ali Baba.",
@@ -100,7 +100,7 @@ const products = {
   },
   10: {
     title: "Fairy Tales",
-    seller_email: "",
+
     price: 10,
     stock: 9,
     description: "A timeless collection of enchanting tales like The Little Mermaid and The Ugly Duckling.",
@@ -111,7 +111,7 @@ const products = {
   },
   11: {
     title: "Njál's Saga",
-    seller_email: "",
+
     price: 8,
     stock: 4,
     description: "Exciting Icelandic sagas about bravery, family, and adventure.",
@@ -122,7 +122,7 @@ const products = {
   },
   12: {
     title: "The Iliad",
-    seller_email: "",
+
     price: 12,
     stock: 6,
     description: "An epic tale of Greek heroes and mythical battles during the Trojan War.",
@@ -133,7 +133,7 @@ const products = {
   },
   13: {
     title: "Madame Bovary",
-    seller_email: "",
+
     price: 9,
     stock: 7,
     description: "A tragic story of romantic idealism and societal constraints.",
@@ -144,7 +144,7 @@ const products = {
   },
   14: {
     title: "Absalom, Absalom!",
-    seller_email: "",
+
     price: 11,
     stock: 3,
     description: "A complex Southern Gothic tale of family and history.",
@@ -155,7 +155,7 @@ const products = {
   },
   15: {
     title: "One Thousand and One Nights",
-    seller_email: "",
+
     price: 6,
     stock: 8,
     description: "A magical anthology of Middle Eastern folklore featuring Aladdin and Ali Baba.",
@@ -166,7 +166,7 @@ const products = {
   },
   16: {
     title: "The Divine Comedy",
-    seller_email: "",
+
     price: 14,
     stock: 2,
     description: "A poetic journey through Hell, Purgatory, and Heaven.",
@@ -177,7 +177,7 @@ const products = {
   },
   17: {
     title: "Fairy Tales",
-    seller_email: "",
+
     price: 7,
     stock: 5,
     description: "A timeless collection of enchanting tales like The Little Mermaid and The Ugly Duckling.",
@@ -188,7 +188,7 @@ const products = {
   },
   18: {
     title: "The Sound and the Fury",
-    seller_email: "",
+
     price: 13,
     stock: 4,
     description: "A groundbreaking novel of a Southern family’s decline.",
@@ -199,7 +199,7 @@ const products = {
   },
   19: {
     title: "Great Expectations",
-    seller_email: "",
+
     price: 9,
     stock: 3,
     description: "A classic coming-of-age story about ambition, love, and redemption.",
@@ -210,7 +210,7 @@ const products = {
   },
   20: {
     title: "The Brothers Karamazov",
-    seller_email: "",
+
     price: 14,
     stock: 6,
     description: "A profound novel of faith, family, and morality.",
@@ -221,7 +221,7 @@ const products = {
   },
   21: {
     title: "The devil to pay",
-    seller_email: "",
+
     price: 11,
     stock: 8,
     description: "A vibrant collection of tales from medieval Italy.",
@@ -232,7 +232,7 @@ const products = {
   },
   22: {
     title: "Don Quijote De La Mancha",
-    seller_email: "",
+
     price: 10,
     stock: 4,
     description: "A comedic and poignant tale of a delusional knight and his squire.",
@@ -243,7 +243,7 @@ const products = {
   },
   23: {
     title: "Jacques the Fatalist",
-    seller_email: "",
+
     price: 7,
     stock: 5,
     description: "A witty, philosophical novel questioning fate and free will.",
@@ -254,7 +254,7 @@ const products = {
   },
   24: {
     title: "The Canterbury Tales",
-    seller_email: "",
+
     price: 13,
     stock: 3,
     description: "A colorful collection of stories told by pilgrims on a journey.",

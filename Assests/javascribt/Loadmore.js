@@ -1,4 +1,6 @@
 lastChoosenCategory = null;
+let currentPage = 1; // Start at the first page
+const itemsPerPage = 6; // Number of products per page
 
 document.addEventListener("DOMContentLoaded", function () {
   function loadContent(url, elementId) {
@@ -24,6 +26,10 @@ $(function () {
   //create an array of objects that contains each category name and its quantity
   // get all products
   let allProducts = getBooksData();
+
+  // array that contains keys of all products
+  filteredProducts = Object.keys(allProducts);
+  initializePagination(allProducts, filteredProducts);
   // console.log(allProducts);
   storeProductCategory(allProducts);
   let productsCategories = getProductCategory();
@@ -39,7 +45,7 @@ $(function () {
       .then((displayedProducts) => {
         // console.log("Retrieved displayed products:", displayedProducts);
         // displayedProducts = displayedProducts.map((id) => allProducts[id]);
-        console.log(displayedProducts);
+        // console.log(displayedProducts);
         switch (sortWay) {
           case "name":
             displayedProducts.sort((a, b) => {
@@ -47,21 +53,21 @@ $(function () {
               if (allProducts[a].title > allProducts[b].title) return 1;
               return 0;
             });
-            console.log(displayedProducts);
+            // console.log(displayedProducts);
             break;
           case "ascending":
             displayedProducts.sort((a, b) => allProducts[a].price - allProducts[b].price);
-            console.log(displayedProducts);
+            // console.log(displayedProducts);
             break;
           case "descending":
             displayedProducts.sort((a, b) => allProducts[b].price - allProducts[a].price);
-            console.log(displayedProducts);
+            // console.log(displayedProducts);
             break;
           default:
             break;
         }
         // update the displayed products
-        updateDisplayedProducts(allProducts, displayedProducts);
+        refreshProducts(allProducts, displayedProducts);
       })
       .catch((error) => {
         console.error(error);
@@ -152,11 +158,12 @@ function fillBookCategory(container, allProducts, productsCategories) {
           lastChoosenCategory = $(this);
           lastChoosenCategory.addClass("text-primary fs-4");
           $("#items-counter").text(lastChoosenCategory.children()[1].innerText);
-          updateDisplayedProducts(allProducts, productsCategories[$(lastChoosenCategory.children()[0]).text().toLowerCase()])
+          // console.log("inside fill book category");
+          refreshProducts(allProducts, productsCategories[$(lastChoosenCategory.children()[0]).text().toLowerCase()])
             .then((displayedProducts) => {
               // Save to local storage
               localStorage.setItem("displayedProducts", JSON.stringify(displayedProducts));
-              // console.log("Displayed products saved to localStorage:", displayedProducts);
+              // console.log("displayedProducts saved to localStorage", displayedProducts);
             })
             .catch((error) => {
               console.error("Error processing products:", error);
@@ -165,12 +172,12 @@ function fillBookCategory(container, allProducts, productsCategories) {
       });
       container.append(ulContainer);
     }
+    // console.log("inside fill book category initailize");
 
-    updateDisplayedProducts(allProducts, productsCategories[$(lastChoosenCategory.children()[0]).text().toLowerCase()])
+    refreshProducts(allProducts, productsCategories[$(lastChoosenCategory.children()[0]).text().toLowerCase()])
       .then((displayedProducts) => {
         // Save to local storage
         localStorage.setItem("displayedProducts", JSON.stringify(displayedProducts));
-        // console.log("Displayed products saved to localStorage:", displayedProducts);
       })
       .catch((error) => {
         console.error("Error processing products:", error);
@@ -182,17 +189,23 @@ function fillBookCategory(container, allProducts, productsCategories) {
 function updateDisplayedProducts(products, filteredProducts) {
   return new Promise((resolve, reject) => {
     let productsContainer = $("#products-container");
-    let displayedProducts = [];
+    displayedProducts = [];
     let minPrice = Infinity;
     let maxPrice = -Infinity;
+
+    // Calculate start and end indices for the current page
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+
+    // Get products for the current page
+    const paginatedProducts = filteredProducts.slice(startIdx, endIdx);
 
     // Fade out and process products
     productsContainer.fadeOut(300, function () {
       try {
         productsContainer.empty();
-        filteredProducts.forEach((productId) => {
+        paginatedProducts.forEach((productId) => {
           let product = products[productId];
-          displayedProducts.push(productId);
 
           if (minPrice > product.price) {
             minPrice = product.price;
@@ -202,7 +215,7 @@ function updateDisplayedProducts(products, filteredProducts) {
           }
 
           // Create the card UI elements (as in the original code)
-          let img = $("<img />").prop("src", product.img_src).prop("alt", product.title).addClass("card-img-top");
+          let img = $("<img />").prop("src", product.img_src).prop("alt", product.title).addClass("card-img-top img-fluid");
           let cartButton = $("<button>").addClass("btn cart btn-outline-secondary btn-lg").append($("<i>").addClass("fas fs-2 fa-cart-plus"));
           let favButton = $("<button>").addClass("btn wish-list btn-outline-secondary btn-lg").append($("<i>").addClass("far fs-2 fa-heart"));
           cartButton.on("click", function (e) {
@@ -212,12 +225,12 @@ function updateDisplayedProducts(products, filteredProducts) {
           let overlay = $("<div>").addClass("overlay").append(cartButton).append(favButton);
           let imgContainer = $("<div>").addClass("img-container").append(img).append(overlay);
           let productTitle = $("<h5>").addClass("card-title").text(product.title);
-          let productDescription = $("<p>").addClass("card-text").text(product.description);
+          let productDescription = $("<p>").addClass("card-text description").text(product.description);
           let productPrice = $("<p>")
             .addClass("card-text text-success fw-bold")
             .text("price: $" + product.price);
           let cardBody = $("<div>").addClass("card-body").append(productTitle).append(productDescription).append(productPrice);
-          let card = $("<div>").addClass("card").append(imgContainer).append(cardBody);
+          let card = $("<div id='product-card'>").addClass("card").append(imgContainer).append(cardBody);
           let container = $("<div>").addClass("col-lg-4 col-md-6 col-sm-12 p-0v").append(card);
           // Attach event handlers
 
@@ -230,9 +243,14 @@ function updateDisplayedProducts(products, filteredProducts) {
           });
           productsContainer.append(container);
         });
+        generatePagination(products, filteredProducts);
         updateSlider(minPrice, maxPrice);
         productsContainer.fadeIn(300);
 
+        filteredProducts.forEach((productId) => {
+          displayedProducts.push(productId);
+        });
+        // console.log(displayedProducts);
         // Resolve the Promise with displayed products
         resolve(displayedProducts);
       } catch (error) {
@@ -242,6 +260,63 @@ function updateDisplayedProducts(products, filteredProducts) {
     });
   });
 }
+
+// Function to generate pagination buttons
+function generatePagination(allProducts, filteredProducts) {
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const paginationContainer = $("#pagination-controls"); // Use your actual pagination container ID
+  paginationContainer.empty();
+
+  for (let i = 1; i <= totalPages; i++) {
+    const pageItem = $("<li>")
+      .addClass("page-item")
+      .toggleClass("active", i === currentPage); // Highlight the current page
+
+    const pageLink = $("<a>")
+      .addClass("px-md-5 page-link")
+      .text(i)
+      .attr("href", "#")
+      .on("click", function (e) {
+        e.preventDefault(); // Prevent default anchor behavior
+        currentPage = i; // Update the current page
+        refreshProducts(allProducts, filteredProducts); // Refresh products for the selected page
+      });
+
+    if (i === currentPage) {
+      pageLink.css("background-color", "#be9900").addClass("text-white");
+    }
+
+    pageItem.append(pageLink);
+    paginationContainer.append(pageItem);
+  }
+}
+
+// Function to refresh products and update pagination
+function refreshProducts(allProducts, filteredProducts) {
+  return new Promise((resolve, reject) => {
+    updateDisplayedProducts(allProducts, filteredProducts)
+      .then((displayedProducts) => {
+        try {
+          console.log("from refreshProducts", displayedProducts);
+          generatePagination(allProducts, filteredProducts);
+          resolve(displayedProducts); // Resolve with displayedProducts
+        } catch (error) {
+          reject(error); // Reject if generatePagination throws an error
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating products:", error);
+        reject(error); // Reject the promise with the caught error
+      });
+  });
+}
+
+// Call this function after applying filters or on page load
+function initializePagination(allProducts, filteredProducts) {
+  currentPage = 1; // Reset to the first page on new data
+  refreshProducts(allProducts, filteredProducts);
+}
+
 function getDisplayedProducts() {
   return new Promise((resolve, reject) => {
     try {
@@ -321,7 +396,7 @@ function updateFilteredProducts(min, max) {
       }
       // console.log(displayedProducts);
 
-      updateDisplayedProducts(allProducts, displayedProducts)
+      refreshProducts(allProducts, displayedProducts)
         .then((displayedProducts) => {
           // Save to local storage
           localStorage.setItem("displayedProducts", JSON.stringify(displayedProducts));
