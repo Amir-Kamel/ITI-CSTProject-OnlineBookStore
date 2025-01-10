@@ -138,7 +138,7 @@ function updateCartBadge() {
     // Retrieve the cart from local storage and update the cart badge
     let UsersData = getUsersData();
     // console.log(customerCart);
-    let customerCart = customerCart;
+    let customerCart = UsersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
     let productsNumber = 0;
     for (product in customerCart) {
       // console.log(customerCart[product]);
