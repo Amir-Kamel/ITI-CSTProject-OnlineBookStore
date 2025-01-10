@@ -131,16 +131,6 @@ button {
   }
 }
 
-#signUpForm,
-#loginForm {
-  transition: opacity 1s ease-in-out;
-}
-
-#signUpForm.active,
-#loginForm.active {
-  opacity: 1;
-}
-
 .loginText {
   border-top-right-radius: 13px;
   border-bottom-right-radius: 13px;

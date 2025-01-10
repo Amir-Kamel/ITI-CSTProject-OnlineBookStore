@@ -15,6 +15,11 @@
   height: 30% !important;
 }
 /* end of banner */
+/* books counter */
+.counter:hover {
+  cursor: pointer;
+}
+/* end of books counter */
 /* slider-range */
 #slider-range {
   height: 7px !important;
@@ -27,13 +32,14 @@
 #slider-range .ui-slider-handle {
   background-color: #810b0b;
   border-radius: 50%; /* Make it circular */
-  width: 15px; /* Set width */
-  height: 15px; /* Set height */
+  width: 20px; /* Set width */
+  height: 20px; /* Set height */
   border: 2px solid #ffffff; /* Border color */
   position: absolute; /* Absolute to position within the slider */
   top: 3px; /* Adjust to center the handle within the slider */
-  transform: translateY(-50%); /* Center handle vertically */
+  transform: translate(-50%, -50%);
 }
+
 #slider-range:hover {
   cursor: pointer;
 }
@@ -62,6 +68,15 @@
   transform: scale(1.15);
   text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
 }
+.card-body > .card-title,
+.card-body > .card-text,
+#banner-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* font-size: 20px; */
+}
 .main-product .card {
   /* shadow */
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -80,8 +95,11 @@
 }
 .img-container {
   position: relative;
+  /* display: flex; */
 }
 .img-container img {
+  height: 450px !important;
+  /* flex-grow: 1; */
   transition: transform 0.3s ease;
 }
 .img-container:hover img {

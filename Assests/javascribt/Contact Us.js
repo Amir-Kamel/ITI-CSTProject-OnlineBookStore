@@ -18,9 +18,7 @@ $(document).ready(function () {
     }
 
     // Validate email address
-    if (
-      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]{2,}\.[a-zA-Z]{2,}$/.test(emailinput)
-    ) {
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]{2,}\.[a-zA-Z]{2,}$/.test(emailinput)) {
       isValid = false;
       $("#erroremail").removeClass("d-none");
     } else {
@@ -32,14 +30,8 @@ $(document).ready(function () {
       // Save data to local storage
       localStorage.setItem("Contact Name Data", JSON.stringify(nameinput));
       localStorage.setItem("Contact Email Data", JSON.stringify(emailinput));
-      localStorage.setItem(
-        "Contact Subject Data",
-        JSON.stringify(subjectinput)
-      );
-      localStorage.setItem(
-        "Contact Message Data",
-        JSON.stringify(messageinput)
-      );
+      localStorage.setItem("Contact Subject Data", JSON.stringify(subjectinput));
+      localStorage.setItem("Contact Message Data", JSON.stringify(messageinput));
       // show message toast
       $(".toast").toast("show");
 

@@ -19,10 +19,7 @@
 
     <!-- end bootstrap -->
     <!-- icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- end icons -->
     <style>
       #rec {
@@ -65,16 +62,10 @@
       <div id="rec"></div>
       <h4 class="px-3 py-1 text-body-emphasis">Favorite Just For You</h4>
     </div>
-    <div id="fav-conatainer" class="row p-0 m-0 ">
-
-    </div>
+    <div id="fav-conatainer" class="row p-0 m-0"></div>
 
     <!-- Footer -->
-    <footer
-      id="footer"
-      class="text-center text-lg-start text-white"
-      style="background-color: #e4cfb6"
-    ></footer>
+    <footer id="footer" class="text-center text-lg-start text-white" style="background-color: #e4cfb6"></footer>
     <!-- end Footer -->
 
     <!-- JQuery -->
@@ -82,32 +73,33 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- JQuery -->
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            function loadContent(url, elementId) {
-                fetch(url)
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById(elementId).innerHTML = data;
-                    })
-                    .catch(error => console.error('Error loading content:', error));
-            }
+      document.addEventListener("DOMContentLoaded", function () {
+        function loadContent(url, elementId) {
+          fetch(url)
+            .then((response) => response.text())
+            .then((data) => {
+              document.getElementById(elementId).innerHTML = data;
+            })
+            .catch((error) => console.error("Error loading content:", error));
+        }
 
-            // Load navigation and footer
-            loadContent("nav.html", "mainNavigation");
-            loadContent("footer.html", "footer");
-        });
-
-
+        // Load navigation and footer
+        loadContent("nav.html", "mainNavigation");
+        loadContent("footer.html", "footer");
+      });
     </script>
     <script type="module" src="./Assests/javascribt/wishlist.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
-        <script src="Assests/javascribt/nav.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-        crossorigin="anonymous"></script>
-
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script src="Assests/javascribt/nav.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
