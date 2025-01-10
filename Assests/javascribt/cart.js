@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (elementId === "mainNavigation") {
           // Call the updateCartBadge function defined in nav.js
           updateCartBadge();
+          updateFavoritesBadge();
+          setActiveLink();
+          updateUserDropdown();
         }
       })
       .catch((error) => console.error("Error loading content:", error));
@@ -17,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
   loadContent("nav.html", "mainNavigation");
   loadContent("footer.html", "footer");
 });
-
 $(function () {
   usersData = getUsersData();
   loggedInUser = getLoggedInUserEmail();
@@ -107,19 +109,27 @@ $(function () {
         $(cartItem.find(".minus").children()[0]).addClass("d-none");
         $(cartItem.find(".minus").children()[1]).removeClass("d-none");
       }
+      if (!customerCart[productId]["selected"]) {
+        cartItem.find(".form-check-input").prop("checked", false);
+      }
+      //select event
       cartItem.find(".form-check-input").click(function (e) {
         e.stopPropagation(); // Prevent event bubbling
         let product_id = $(this).data("id");
         if (customerCart[product_id]["selected"]) {
           customerCart[product_id]["selected"] = false;
-          calculatingSubtotal(shipping, $("#subtotal"), $("#total"));
+          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
         } else {
           customerCart[product_id]["selected"] = true;
-          calculatingSubtotal(shipping, $("#subtotal"), $("#total"));
+          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
         }
+        setUsersData(usersData);
+
+        // setUsersData(usersData);
         // console.log(product_id);
         // console.log("select event");
       });
+      // decrease product event
       cartItem.find(".minus").click(function (e) {
         e.stopPropagation(); // Prevent event bubbling
         let product_id = $(this).data("id");
@@ -130,7 +140,7 @@ $(function () {
           delete customerCart[product_id];
           setUsersData(usersData);
           updateCartBadge();
-          calculatingSubtotal(shipping, $("#subtotal"), $("#total"));
+          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
           if (Object.keys(customerCart).length == 0) {
             emptyCartWrapper.removeClass("d-none");
             cartItemsWrapper.addClass("d-none");
@@ -140,7 +150,7 @@ $(function () {
           // console.log("inside else");
           // console.log(customerCart[product_id]["quantity"]);
           customerCart[product_id]["quantity"]--;
-          calculatingSubtotal(shipping, $("#subtotal"), $("#total"));
+          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
           // console.log(customerCart[product_id]["quantity"]);
           if (customerCart[product_id]["quantity"] == 1) {
             console.log("inside if which is inside else");
@@ -153,6 +163,7 @@ $(function () {
         }
         // console.log("minus event");
       });
+      //encrease product event
       cartItem.find(".plus").click(function (e) {
         e.stopPropagation(); // Prevent event bubbling
         let product_id = $(this).data("id");
@@ -167,7 +178,7 @@ $(function () {
             $(cart.find(".minus").children()[0]).removeClass("d-none");
           }
           customerCart[product_id]["quantity"]++;
-          calculatingSubtotal(shipping, $("#subtotal"), $("#total"));
+          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
           // console.log(customerCart[product_id]["quantity"]);
           setUsersData(usersData);
           cart.find("#quantity").text(customerCart[product_id]["quantity"]);
@@ -175,6 +186,7 @@ $(function () {
 
         // console.log("plus event");
       });
+      //delete product event
       cartItem.find(".delete").click(function (e) {
         e.stopPropagation(); // Prevent event bubbling
 
@@ -183,7 +195,7 @@ $(function () {
         delete customerCart[product_id];
         setUsersData(usersData);
         updateCartBadge();
-        calculatingSubtotal(shipping, $("#subtotal"), $("#total"));
+        calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
         if (Object.keys(customerCart).length == 0) {
           emptyCartWrapper.removeClass("d-none");
           cartItemsWrapper.addClass("d-none");
@@ -194,22 +206,22 @@ $(function () {
       cartItemsWrapper.append(cartItem);
     }
     let checkout = $(`
-        <div class="container-fluid mt-4">
+        <div id="checkout-container" class="container-fluid mt-4">
           <div class="row justify-content-md-end">
             <div class="col-lg-4 col-md-6 col-sm-12">
               <table class="table table-borderless">
                 <tbody>
                   <tr>
                     <td>Subtotal</td>
-                    <td id="subtotal" class="text-end">$${subtotal}</td>
+                    <td id="subtotal" class="text-end">$</td>
                   </tr>
                   <tr>
                     <td>Shipping</td>
-                    <td class="text-end">$${shipping}</td>
+                    <td id="shipping-checkout" class="text-end">$</td>
                   </tr>
                   <tr>
                     <td>Total</td>
-                    <td id="total" class="text-end">$${subtotal + shipping}</td>
+                    <td id="total" class="text-end">$</td>
                   </tr>
                 </tbody>
               </table>
@@ -222,6 +234,7 @@ $(function () {
         </div>
         `);
     cartItemsWrapper.append(checkout);
+    calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
     if (cartItemsWrapper.hasClass("d-none")) {
       cartItemsWrapper.removeClass("d-none");
       emptyCartWrapper.addClass("d-none");
@@ -321,7 +334,7 @@ $(function () {
       }
     }
     $("#summary-shipping").text(shipping);
-    calculatingSubtotal(shipping, $("#summary-subtotal"), $("#summary-total"));
+    calculatingSubtotal(customerCart, shipping, $("#summary-subtotal"), $("#summary-total"));
     $("#confirm").on("click", function () {
       order_details = {
         date: formattedDate,
@@ -360,17 +373,30 @@ function getProductsData() {
   return JSON.parse(storedData);
 }
 
-function calculatingSubtotal(shipping, subtotal_container, total_container) {
+function calculatingSubtotal(customerCart, shipping, subtotal_container, total_container) {
   let subtotal = 0;
+  let numberOfSelectedItems = 0;
+  checkoutContainer = $("#checkout-container");
+  // console.log("CustomerCart:", customerCart);
   for (let productId in customerCart) {
     let product = getProductsData()[productId];
-    if (customerCart[productId].selected) subtotal += product.price * customerCart[productId]["quantity"];
+    if (customerCart[productId].selected) {
+      // console.log("inside if");
+      numberOfSelectedItems++;
+      subtotal += product.price * customerCart[productId]["quantity"];
+    }
   }
-  subtotal_container.fadeOut(30).text(subtotal).fadeIn(30);
-  total_container
-    .fadeOut(30)
-    .text(subtotal + shipping)
-    .fadeIn(30);
+  if (numberOfSelectedItems == 0) {
+    checkoutContainer.addClass("d-none");
+  } else {
+    checkoutContainer.removeClass("d-none");
+    subtotal_container.fadeOut(30).text(`$${subtotal}`).fadeIn(30);
+    $("#shipping-checkout").text(`$${shipping}`);
+    total_container
+      .fadeOut(30)
+      .text(`$${subtotal + shipping}`)
+      .fadeIn(30);
+  }
 }
 function outOfStockMessage() {
   Toast.fire({

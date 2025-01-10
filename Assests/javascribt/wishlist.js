@@ -22,11 +22,7 @@ $(document).ready(function () {
   // Function to get favorites for the logged-in user
   function getUserFavorites() {
     const currentSession = JSON.parse(sessionStorage.getItem("currentSession"));
-    if (
-      currentSession &&
-      currentSession.session &&
-      currentSession.session.email
-    ) {
+    if (currentSession && currentSession.session && currentSession.session.email) {
       const loggedInUserEmail = currentSession.session.email;
       const signUpData = JSON.parse(localStorage.getItem("signUpData")) || {};
 
@@ -41,11 +37,7 @@ $(document).ready(function () {
   // Save favorites for the logged-in user
   function saveUserFavorites(favorites) {
     const currentSession = JSON.parse(sessionStorage.getItem("currentSession"));
-    if (
-      currentSession &&
-      currentSession.session &&
-      currentSession.session.email
-    ) {
+    if (currentSession && currentSession.session && currentSession.session.email) {
       const loggedInUserEmail = currentSession.session.email;
       const signUpData = JSON.parse(localStorage.getItem("signUpData")) || {};
 
@@ -56,8 +48,21 @@ $(document).ready(function () {
     }
   }
 
-  // Initial load of favorites
-  const allFavorites = getUserFavorites();
+  function getData() {
+    const storedData = localStorage.getItem("products");
+    return JSON.parse(storedData); // This is the object with keys as IDs
+  }
+
+  const allProducts = getData(); // Get all the products
+  const allFavorites = getUserFavorites(); // Get the user's wishlist (favorite products)
+
+  // Convert the allProducts object to an array of products
+  const productsArray = Object.values(allProducts); // Convert to array based on object values
+
+  // Filter products based on the wishlist IDs
+  const favoriteProducts = productsArray.filter(
+    (product, index) => allFavorites.includes(String(index + 1)), // Use the key (index + 1) as the product ID to match with the wishlist
+  );
 
   // Function to display favorites
   function displayFavorites(favorites) {
@@ -68,16 +73,14 @@ $(document).ready(function () {
       favContainer.empty(); // Clear the container
 
       if (favorites.length === 0) {
-        favContainer.html(
-          "<h3 class='text-center text-muted my-5'>Oops! Seems that your favorites list is empty.<br> Why not head back to the store and discover some amazing products to add?</h3>"
-        );
+        favContainer.html("<h3 class='text-center text-muted my-5'>Oops! Seems that your favorites list is empty.<br> Why not head back to the store and discover some amazing products to add?</h3>");
         favContainer.fadeIn(300);
         return;
       }
 
       // Display the product cards
       favorites.forEach((favProduct) => {
-        const productCard = $(`
+        const productCard = $(`  
           <div class="col-lg-3 col-md-6 col-sm-12 p-4">
             <div class="card h-100 w-100" data-id="${favProduct.title}">
               <div class="img-container">
@@ -101,9 +104,7 @@ $(document).ready(function () {
 
         // Handle the "Remove from Favorites" button click
         productCard.find(".remove-fav").on("click", function () {
-          const updatedFavorites = favorites.filter(
-            (item) => item.title !== favProduct.title
-          );
+          const updatedFavorites = favorites.filter((item) => item.title !== favProduct.title);
           saveUserFavorites(updatedFavorites); // Save updated favorites
           displayFavorites(updatedFavorites); // Refresh the display
           updateFavoritesBadge();
@@ -116,8 +117,9 @@ $(document).ready(function () {
     });
   }
 
-  displayFavorites(allFavorites);
+  displayFavorites(favoriteProducts); // Display the filtered favorites based on wishlist
 });
+
 setActiveLink = function () {
   const pathName = window?.location?.pathname?.toLowerCase();
   if (pathName.includes("home") && pathName) {

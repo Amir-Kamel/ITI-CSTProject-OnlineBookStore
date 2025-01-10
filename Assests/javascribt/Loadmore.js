@@ -30,6 +30,22 @@ $(function () {
   // get all products
   let allProducts = getBooksData();
 
+  //banner
+  let randomProducts = localStorage.getItem("bannerProduct");
+  randomProducts = JSON.parse(randomProducts);
+  // console.log(randomProducts);
+
+  //updating banner photo,title and description
+  if (randomProducts) {
+    $("#banner > div>img ").prop("src", randomProducts.img_src); // updating image
+    $("#banner-title").text(`Book of the Month : ${randomProducts.title}`); // updating title
+    $("#banner-description").text(`${randomProducts.description}`);
+  }
+  $("#banner-btn").on("click", function () {
+    localStorage.setItem("selectedProduct", JSON.stringify(randomProducts));
+    window.location.href = "./Product Page.html";
+  });
+
   // array that contains keys of all products
   filteredProducts = Object.keys(allProducts);
   initializePagination(allProducts, filteredProducts);
@@ -220,7 +236,7 @@ function updateDisplayedProducts(products, filteredProducts) {
           // Create the card UI elements (as in the original code)
           let img = $("<img />").prop("src", product.img_src).prop("alt", product.title).addClass("card-img-top img-fluid");
           let cartButton = $("<button>").addClass("btn cart btn-outline-secondary btn-lg").append($("<i>").addClass("fas fs-2 fa-cart-plus"));
-          let favButton = $("<button>").addClass("btn add-to-fav btn-outline-secondary btn-lg").append($("<i>").addClass("far fs-2 fa-heart"));
+          let favButton = $("<button>").addClass("btn add-to-fav btn-outline-secondary btn-lg").append($("<i>").addClass("fa-regular fs-2 fa-heart"));
           cartButton.on("click", function (e) {
             e.stopPropagation(); // Prevent event bubbling
             addToCart(productId);

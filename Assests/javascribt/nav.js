@@ -28,8 +28,6 @@ setActiveLink = function () {
     document.getElementById("about-link")?.classList?.add("active");
   } else if (pathName.includes("contact") && pathName) {
     document.getElementById("contact-link")?.classList?.add("active");
-  } else if (pathName.includes("service") && pathName) {
-    document.getElementById("service-link").classList?.add("active");
   } else {
     document.getElementById("home-link").classList?.add("active");
   }

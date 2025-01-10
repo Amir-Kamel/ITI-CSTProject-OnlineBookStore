@@ -153,18 +153,8 @@ const products = {
     category: "drama",
     Availability: true,
   },
-  15: {
-    title: "One Thousand and One Nights",
 
-    price: 6,
-    stock: 8,
-    description: "A magical anthology of Middle Eastern folklore featuring Aladdin and Ali Baba.",
-    sold: 3,
-    img_src: "./Assests/images/one-thousand-and-one-nights.jpg",
-    category: "kids",
-    Availability: true,
-  },
-  16: {
+  15: {
     title: "The Divine Comedy",
 
     price: 14,
@@ -175,7 +165,7 @@ const products = {
     category: "fantasy",
     Availability: true,
   },
-  17: {
+  16: {
     title: "Fairy Tales",
 
     price: 7,
@@ -186,7 +176,7 @@ const products = {
     category: "fantasy",
     Availability: true,
   },
-  18: {
+  17: {
     title: "The Sound and the Fury",
 
     price: 13,
@@ -197,7 +187,7 @@ const products = {
     category: "drama",
     Availability: true,
   },
-  19: {
+  18: {
     title: "Great Expectations",
 
     price: 9,
@@ -208,7 +198,7 @@ const products = {
     category: "drama",
     Availability: true,
   },
-  20: {
+  19: {
     title: "The Brothers Karamazov",
 
     price: 14,
@@ -219,7 +209,7 @@ const products = {
     category: "drama",
     Availability: true,
   },
-  21: {
+  20: {
     title: "The devil to pay",
 
     price: 11,
@@ -230,7 +220,7 @@ const products = {
     category: "comedy",
     Availability: true,
   },
-  22: {
+  21: {
     title: "Don Quijote De La Mancha",
 
     price: 10,
@@ -241,7 +231,7 @@ const products = {
     category: "comedy",
     Availability: true,
   },
-  23: {
+  22: {
     title: "Jacques the Fatalist",
 
     price: 7,
@@ -252,7 +242,7 @@ const products = {
     category: "comedy",
     Availability: true,
   },
-  24: {
+  23: {
     title: "The Canterbury Tales",
 
     price: 13,

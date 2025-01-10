@@ -68,10 +68,11 @@
   transform: scale(1.15);
   text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
 }
-#product-card > .card-title,
-#product-card > .card-body > .description {
+.card-body > .card-title,
+.card-body > .card-text,
+#banner-description {
   display: -webkit-box;
-  line-clamp: 1;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   /* font-size: 20px; */
