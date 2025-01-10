@@ -25,15 +25,12 @@ $(document).ready(function () {
   // Retrieve the selected product ID from localStorage
   const selectedProduct = JSON.parse(localStorage.getItem("selectedProduct"));
 
-
   // Retrieve all products from localStorage
   const products = JSON.parse(localStorage.getItem("products"));
-
 
   // Find the selected product using its ID
   const productId = selectedProduct;
   const product = products?.[productId]; // Access the product using its ID
-
 
   // Display the product details on the page
   if (product) {
@@ -67,9 +64,9 @@ $(document).ready(function () {
       const customer = usersData.customers[loggedInUser.email];
       // console.log(customer);
       const wishlist = customer.wishlist; // Fetch the wishlist from the customer data
-  
+
       const productIndex = wishlist.findIndex((id) => id === productId);
-  
+
       if (productIndex === -1) {
         // Add the product to the wishlist
         customer.wishlist.push(productId);
@@ -85,13 +82,12 @@ $(document).ready(function () {
           title: "Item removed from wishlist successfully.",
         });
       }
-  
+
       // Save updated data to localStorage
       localStorage.setItem("signUpData", JSON.stringify(usersData));
       updateFavoritesBadge();
     }
   });
-
 });
 setActiveLink = function () {
   const pathName = window?.location?.pathname?.toLowerCase();

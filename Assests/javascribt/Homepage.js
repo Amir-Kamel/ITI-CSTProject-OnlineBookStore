@@ -26,14 +26,20 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#global-search").on("keydown", function (e) {
       // console.log("I am here");
       if (e.key === "Enter") {
-        let allProducts = getData();
+        let allProducts = getProductsData();
         const searchTerm = $(this).val().toLowerCase();
 
-        // console.log(searchTerm);
+        console.log(searchTerm);
+        // console.log(allProducts);
 
         let filteredProducts = [];
         for (let productId in allProducts) {
+          // console.log(productId);
+
           let product = allProducts[productId];
+
+          // console.log(product);
+
           if (product.title.toLowerCase().includes(searchTerm)) {
             filteredProducts.push(productId);
           }
@@ -42,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(filteredProducts);
 
         // save filtered products in local storage
-        localStorage.setItem("displajedProducts", JSON.stringify(filteredProducts));
+        localStorage.setItem("forSearch", JSON.stringify(filteredProducts));
 
         // Redirect to the search results page
         window.location.href = "./LoadMore.html";
@@ -159,7 +165,9 @@ function displayProducts(products, category = "All") {
         ? products // if the tab is all show the all products
         : Object.fromEntries(
             //else convert object to array then filter
-            Object.entries(products).filter(([key, product]) => product.category === category),
+            Object.entries(products).filter(
+              ([key, product]) => product.category === category
+            )
           );
 
     let obj = Object.keys(filteredProducts);

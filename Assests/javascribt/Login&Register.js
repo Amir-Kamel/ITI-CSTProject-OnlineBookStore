@@ -1,7 +1,8 @@
 import { usersData } from "./accounts.js";
 
 // Initialize localStorage with usersData if not already set
-const signUpObject = JSON.parse(localStorage.getItem("signUpData")) ?? usersData;
+const signUpObject =
+  JSON.parse(localStorage.getItem("signUpData")) ?? usersData;
 
 if (!localStorage.getItem("signUpData")) {
   localStorage.setItem("signUpData", JSON.stringify(signUpObject));
@@ -23,7 +24,8 @@ $(document).ready(function () {
   const $signUpButton = $("#signUpButton");
   const $signUpError = $("#signUpError");
   const passwordLengthRegex = /.{8,}/;
-  const passwordStrengthRegex = /^(?=.[A-Za-z])(?=.\d)(?=.[!@#$%^&(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+  const passwordStrengthRegex =
+    /^(?=.[A-Za-z])(?=.\d)(?=.[!@#$%^&(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
   const phoneRegex = /^(011|012|010|015)\d{8}$/;
   const emailValue = $emailField.val().trim();
   const emailRegex = /^[a-zA-Z0-9._%+-]+(?<!\.)@gmail\.com$/;
@@ -38,11 +40,15 @@ $(document).ready(function () {
   //email validation function
   function validateEmail() {
     if (!emailRegex.test(emailValue)) {
-      $emailError.text("Invalid Email (e.g., starts with a letter and ends with @gmail.com)");
+      $emailError.text(
+        "Invalid Email (e.g., starts with a letter and ends with @gmail.com)"
+      );
       $emailField.css("border-bottom-color", "red");
       $emailError.show();
     } else if (invalidCharsRegex.test(emailValue.split("@")[0])) {
-      $emailError.text("Email cannot end with special characters before '@gmail.com'");
+      $emailError.text(
+        "Email cannot end with special characters before '@gmail.com'"
+      );
       $emailField.css("border-bottom-color", "red");
       $emailError.show();
     } else {
@@ -124,11 +130,15 @@ $(document).ready(function () {
   function validateUsername() {
     const usernameValue = $usernameField.val().trim();
     if (!usernameValue.match(usernameRegex)) {
-      $usernameError.text("Username can only contain letters, spaces, underscores, or dashes.");
+      $usernameError.text(
+        "Username can only contain letters, spaces, underscores, or dashes."
+      );
       $usernameField.css("border-bottom-color", "red");
       $usernameError.show();
     } else if (!invalidStartEndMiddleRegex.test(usernameValue)) {
-      $usernameError.text("Special characters are not allowed at the start, middle, or end.");
+      $usernameError.text(
+        "Special characters are not allowed at the start, middle, or end."
+      );
       $usernameField.css("border-bottom-color", "red");
       $usernameError.show();
     } else if (localStorage.getItem(usernameValue)) {
@@ -197,8 +207,12 @@ $(document).ready(function () {
     };
 
     // Check if username or email already exists in the customers object
-    const isUsernameTaken = Object.values(signUpObject.customers).some((user) => user.username === username);
-    const isEmailTaken = Object.values(signUpObject.customers).some((user) => user.email === email);
+    const isUsernameTaken = Object.values(signUpObject.customers).some(
+      (user) => user.username === username
+    );
+    const isEmailTaken = Object.values(signUpObject.customers).some(
+      (user) => user.email === email
+    );
 
     if (isUsernameTaken) {
       $usernameError.text("This Username Has Been Taken Before").show();
@@ -273,7 +287,8 @@ $(document).ready(function () {
     if (!emailRegex.test(email)) {
       Toast.fire({
         icon: "info",
-        title: "Please enter a valid email address with at least 2 characters before '@gmail.com'.",
+        title:
+          "Please enter a valid email address with at least 2 characters before '@gmail.com'.",
       });
       return;
     }
@@ -312,6 +327,8 @@ $(document).ready(function () {
 
     // Compare entered password with the stored password
     if (foundUser.password !== hashPassword(password)) {
+      console.log(foundUser.password);
+      console.log(hashPassword(password));
       Toast.fire({
         icon: "error",
         title: "Email or Password is incorrect. Please try again.",
@@ -330,12 +347,12 @@ $(document).ready(function () {
 
     // Redirect based on role
     if (role === "admin") {
-      window.location.href = "admindashboard.html";
+      window.location.href = "dash.html";
     } else if (role === "customer") {
       window.location = "HomePage.html";
       // window.location =
     } else if (role === "seller") {
-      window.location.href = "ProductsSearch.html";
+      window.location.href = "SellerDashboard.html";
     } else {
       signInError.text("User role not recognized.");
       signInError.css("display", "block");

@@ -26,14 +26,20 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#global-search").on("keydown", function (e) {
       // console.log("I am here");
       if (e.key === "Enter") {
-        let allProducts = getData();
+        let allProducts = getProductsData();
         const searchTerm = $(this).val().toLowerCase();
 
-        // console.log(searchTerm);
+        console.log(searchTerm);
+        // console.log(allProducts);
 
         let filteredProducts = [];
         for (let productId in allProducts) {
+          // console.log(productId);
+
           let product = allProducts[productId];
+
+          // console.log(product);
+
           if (product.title.toLowerCase().includes(searchTerm)) {
             filteredProducts.push(productId);
           }
@@ -42,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(filteredProducts);
 
         // save filtered products in local storage
-        localStorage.setItem("displajedProducts", JSON.stringify(filteredProducts));
+        localStorage.setItem("forSearch", JSON.stringify(filteredProducts));
 
         // Redirect to the search results page
         window.location.href = "./LoadMore.html";
@@ -53,7 +59,8 @@ document.addEventListener("DOMContentLoaded", function () {
 $(function () {
   usersData = getUsersData();
   loggedInUser = getLoggedInUserEmail();
-  customerCart = usersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
+  customerCart =
+    usersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
   // console.log(customerCart);
   let cartLength = Object.keys(customerCart).length;
   // console.log(cartLength);
@@ -69,7 +76,9 @@ $(function () {
     h5.addClass("fw-bold display-6");
     h5.appendTo(emptyCartWrapper);
     p = $("<p>");
-    p.html("Looks like you have not added anything to your cart.</br> Go ahead & explore top categories");
+    p.html(
+      "Looks like you have not added anything to your cart.</br> Go ahead & explore top categories"
+    );
     p.addClass("text-body-tertiary text-center fs-4");
     p.appendTo(emptyCartWrapper);
     shopNowButton = $("<button>");
@@ -148,10 +157,20 @@ $(function () {
         let product_id = $(this).data("id");
         if (customerCart[product_id]["selected"]) {
           customerCart[product_id]["selected"] = false;
-          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+          calculatingSubtotal(
+            customerCart,
+            shipping,
+            $("#subtotal"),
+            $("#total")
+          );
         } else {
           customerCart[product_id]["selected"] = true;
-          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+          calculatingSubtotal(
+            customerCart,
+            shipping,
+            $("#subtotal"),
+            $("#total")
+          );
         }
         setUsersData(usersData);
 
@@ -170,7 +189,12 @@ $(function () {
           delete customerCart[product_id];
           setUsersData(usersData);
           updateCartBadge();
-          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+          calculatingSubtotal(
+            customerCart,
+            shipping,
+            $("#subtotal"),
+            $("#total")
+          );
           if (Object.keys(customerCart).length == 0) {
             emptyCartWrapper.removeClass("d-none");
             cartItemsWrapper.addClass("d-none");
@@ -180,7 +204,12 @@ $(function () {
           // console.log("inside else");
           // console.log(customerCart[product_id]["quantity"]);
           customerCart[product_id]["quantity"]--;
-          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+          calculatingSubtotal(
+            customerCart,
+            shipping,
+            $("#subtotal"),
+            $("#total")
+          );
           // console.log(customerCart[product_id]["quantity"]);
           if (customerCart[product_id]["quantity"] == 1) {
             console.log("inside if which is inside else");
@@ -208,7 +237,12 @@ $(function () {
             $(cart.find(".minus").children()[0]).removeClass("d-none");
           }
           customerCart[product_id]["quantity"]++;
-          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+          calculatingSubtotal(
+            customerCart,
+            shipping,
+            $("#subtotal"),
+            $("#total")
+          );
           // console.log(customerCart[product_id]["quantity"]);
           setUsersData(usersData);
           cart.find("#quantity").text(customerCart[product_id]["quantity"]);
@@ -225,7 +259,12 @@ $(function () {
         delete customerCart[product_id];
         setUsersData(usersData);
         updateCartBadge();
-        calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+        calculatingSubtotal(
+          customerCart,
+          shipping,
+          $("#subtotal"),
+          $("#total")
+        );
         if (Object.keys(customerCart).length == 0) {
           emptyCartWrapper.removeClass("d-none");
           cartItemsWrapper.addClass("d-none");
@@ -294,7 +333,8 @@ $(function () {
     }
   });
   $("#check-out-button").on("click", function () {
-    let customerData = usersData[loggedInUser["category"]][loggedInUser["email"]];
+    let customerData =
+      usersData[loggedInUser["category"]][loggedInUser["email"]];
     // console.log(customerData);
     $("#user-name").val(customerData["username"]);
     $("#user-email").val(customerData["email"]);
@@ -302,13 +342,27 @@ $(function () {
     $("#user-phone").val(customerData["phone"]);
   });
   $("#go-to-payment").on("click", function () {
-    let customerData = usersData[loggedInUser["category"]][loggedInUser["email"]];
+    let customerData =
+      usersData[loggedInUser["category"]][loggedInUser["email"]];
     customerData["address"] = $("#user-address").val();
     setUsersData(usersData);
     //order summary
     const today = new Date();
     // Array of month names
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
 
     // Extract components
     const year = today.getFullYear();
@@ -364,7 +418,12 @@ $(function () {
       }
     }
     $("#summary-shipping").text(shipping);
-    calculatingSubtotal(customerCart, shipping, $("#summary-subtotal"), $("#summary-total"));
+    calculatingSubtotal(
+      customerCart,
+      shipping,
+      $("#summary-subtotal"),
+      $("#summary-total")
+    );
     $("#confirm").on("click", function () {
       order_details = {
         date: formattedDate,
@@ -403,7 +462,12 @@ function getProductsData() {
   return JSON.parse(storedData);
 }
 
-function calculatingSubtotal(customerCart, shipping, subtotal_container, total_container) {
+function calculatingSubtotal(
+  customerCart,
+  shipping,
+  subtotal_container,
+  total_container
+) {
   let subtotal = 0;
   let numberOfSelectedItems = 0;
   checkoutContainer = $("#checkout-container");
