@@ -1,38 +1,3 @@
-// Function to highlight the active link in the navbarfunction setActiveLink() {
-document.addEventListener("DOMContentLoaded", function () {
-  const currentUrl = window.location.pathname; // Get the current page URL
-  const navLinks = document.querySelectorAll(".nav-link"); // Select all links
-
-  navLinks.forEach((link) => {
-    // Check if the link's href matches the current URL
-    if (link.getAttribute("href") === currentUrl) {
-      link.classList.add("active"); // Add the 'active' class to the matching link
-    } else {
-      link.classList.remove("active"); // Remove 'active' from others
-    }
-  });
-});
-
-// Call the updateUserDropdown function once the page loads
-window.onload = function () {
-  updateUserDropdown();
-  setActiveLink();
-  updateCartBadge();
-};
-
-setActiveLink = function () {
-  const pathName = window?.location?.pathname?.toLowerCase();
-  if (pathName.includes("home") && pathName) {
-    document.getElementById("home-link")?.classList?.add("active");
-  } else if (pathName.includes("about") && pathName) {
-    document.getElementById("about-link")?.classList?.add("active");
-  } else if (pathName.includes("contact") && pathName) {
-    document.getElementById("contact-link")?.classList?.add("active");
-  } else {
-    document.getElementById("home-link").classList?.add("active");
-  }
-};
-
 function updateUserDropdown() {
   const checkUserDropdown = setInterval(function () {
     const userDropdownMenu = document.getElementById("userDropdownMenu");
@@ -293,3 +258,38 @@ function checkheartbutton() {
   //   BookCard.find(".btn-fav").addClass("btn-outline-secondary").removeClass("btn-danger");
   // }
 }
+
+// Function to highlight the active link in the navbarfunction setActiveLink() {
+document.addEventListener("DOMContentLoaded", function () {
+  const currentUrl = window.location.pathname; // Get the current page URL
+  const navLinks = document.querySelectorAll(".nav-link"); // Select all links
+
+  navLinks.forEach((link) => {
+    // Check if the link's href matches the current URL
+    if (link.getAttribute("href") === currentUrl) {
+      link.classList.add("active"); // Add the 'active' class to the matching link
+    } else {
+      link.classList.remove("active"); // Remove 'active' from others
+    }
+  });
+});
+
+// Call the updateUserDropdown function once the page loads
+window.onload = function () {
+  updateUserDropdown();
+  setActiveLink();
+  updateCartBadge();
+};
+
+setActiveLink = function () {
+  const pathName = window?.location?.pathname?.toLowerCase();
+  if (pathName.includes("home") && pathName) {
+    document.getElementById("home-link")?.classList?.add("active");
+  } else if (pathName.includes("about") && pathName) {
+    document.getElementById("about-link")?.classList?.add("active");
+  } else if (pathName.includes("contact") && pathName) {
+    document.getElementById("contact-link")?.classList?.add("active");
+  } else {
+    document.getElementById("home-link").classList?.add("active");
+  }
+};

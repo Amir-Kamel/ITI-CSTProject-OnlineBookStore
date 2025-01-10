@@ -55,7 +55,6 @@ $(document).ready(function () {
 
   const allProducts = getData(); // Get all the products
   const allFavorites = getUserFavorites(); // Get the user's wishlist (favorite products)
-  console.log(allFavorites); //
 
   // Function to display favorites
   function displayFavorites(favorites, allProducts) {
@@ -70,7 +69,6 @@ $(document).ready(function () {
         favContainer.fadeIn(300);
         return;
       }
-      console.log("favorites ", favorites);
 
       // Display the product cards
       favorites.forEach((productId) => {
@@ -86,10 +84,10 @@ $(document).ready(function () {
                 <h5 class="card-title">${product.title}</h5>
                 <p class="card-text">${product.description}</p>
                 <p class="card-text price" style="color: green; font-weight: bold;">Price: ${product.price}</p>
-                <button class="btn btn-success btn-sm mb-2 add-to-cart">
+                <button class="btn btn-success btn-sm my-2 me-2 add-to-cart">
                   <i class="fas fa-cart-plus me-2"></i> Add To Cart
                 </button>
-                <button class="btn btn-danger btn-sm remove-fav">
+                <button class="btn btn-danger btn-sm my-2 remove-fav">
                   <i class="fas fa-trash-alt me-2"></i> Remove From Favorites
                 </button>
               </div>
@@ -98,15 +96,24 @@ $(document).ready(function () {
         `);
 
         // Handle the "Remove from Favorites" button click
-        productCard.find(".remove-fav").on("click", function () {
-          console.log("before remove from Favorites", favorites);
+        productCard.find(".remove-fav").on("click", function (e) {
+          e.stopPropagation();
           let index = favorites.indexOf(productId);
 
-          console.log(productId, favorites.splice(index, 1));
-          console.log("after remove from Favorites", favorites);
+          favorites.splice(index, 1);
           saveUserFavorites(favorites); // Save updated favorites
           displayFavorites(favorites, allProducts); // Refresh the display
           updateFavoritesBadge();
+        });
+
+        productCard.find(".add-to-cart").on("click", function (e) {
+          e.stopPropagation();
+          addToCart(productId);
+        });
+
+        productCard.on("click", ".overlay", function () {
+          localStorage.setItem("selectedProduct", JSON.stringify(productId));
+          window.location.href = "Product Page.html";
         });
 
         favContainer.append(productCard); // Add the product card to the container
