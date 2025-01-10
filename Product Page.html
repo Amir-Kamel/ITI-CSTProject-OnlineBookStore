@@ -11,12 +11,15 @@
       rel="stylesheet"
     />
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="./Assests/stylesheet/bootstrap.min.css" />
-
     <link rel="stylesheet" href="./Assests/stylesheet/Product Page.css" />
+
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="./Assests/stylesheet/toastSweeralert.css" />
 
     <!--Css JS -->
   </head>
@@ -44,11 +47,11 @@
           <h5 class="mb-4"><strong>Price:</strong> <span id="product-price"></span></h5>
           <p id="product-description"></p>
 
-          <button class="btn btn-primary btn-h mb-5 add-to-favourite-btn d-flex align-items-center"><i class="fas fa-heart me-2"></i> Add to Favourite</button>
+          <button class="btn btn-primary btn-h mb-5 add-to-favourite-btn d-flex align-items-center addtofav"><i class="fas fa-heart me-2"></i> Add to Favourite</button>
 
           <div class="d-flex align-items-center gap-3">
             <input type="number" placeholder="Quantity" class="form-control w-auto text-center bg-light quantity-input" value="1" min="1" step="1" oninput="this.value = Math.floor(this.value)" />
-            <button class="btn btn-primary btn-h flex-shrink-0 add-to-cart-btn d-flex align-items-center"><i class="fas fa-shopping-cart me-2"></i> Add to Cart</button>
+            <button class="btn btn-primary btn-h flex-shrink-0 add-to-cart-btn d-flex align-items-center addtocart"><i class="fas fa-shopping-cart me-2"></i> Add to Cart</button>
           </div>
 
           <div class="d-flex gap-3 my-5">
@@ -66,10 +69,21 @@
     <footer id="footer" class="text-center text-lg-start text-white" style="background-color: #e4cfb6"></footer>
     <!-- Footer -->
 
+    <!-- jQuery for DOM manipulation and event handling -->
     <script src="./Assests/javascribt/jquery-3.7.1.slim.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- SweetAlert2 for alerts and toasts -->
+    <script src="./Assests/javascribt/sweetalert2.all.min.js"></script>
+    <script src="./Assests/javascribt/toastSweetalert.js"></script>
+
+    <!-- Navigation script -->
     <script src="Assests/javascribt/nav.js"></script>
+
+    <!-- Homepage script -->
+    <script type="module" src="./Assests/javascribt/Homepage.js"></script>
     <script src="./Assests/javascribt/productpage.js"></script>
+    <!-- Bootstrap JS and Popper.js for Bootstrap components -->
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
       integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"

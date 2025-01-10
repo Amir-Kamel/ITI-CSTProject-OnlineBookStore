@@ -312,6 +312,8 @@ $(document).ready(function () {
 
     // Compare entered password with the stored password
     if (foundUser.password !== hashPassword(password)) {
+      console.log(foundUser.password);
+      console.log(hashPassword(password));
       Toast.fire({
         icon: "error",
         title: "Email or Password is incorrect. Please try again.",
@@ -330,7 +332,7 @@ $(document).ready(function () {
 
     // Redirect based on role
     if (role === "admin") {
-      window.location.href = "admindashboard.html";
+      window.location.href = "dash.html";
     } else if (role === "customer") {
       window.location = "HomePage.html";
       // window.location =
