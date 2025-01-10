@@ -92,3 +92,26 @@ body {
   font-size: 48px;
   text-transform: none;
 }
+
+.navbar-nav .nav-link {
+  color: black;
+  text-decoration: none;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #be9900;
+  /* text-decoration: underline; */
+}
+
+.navbar-nav .nav-link.active {
+  color: yellow;
+  /* text-decoration: underline; */
+  text-underline-offset: 4px;
+}
+
+.nav-link.active {
+  color: white;
+  /* text-decoration: underline; */
+  text-underline-offset: 4px;
+}

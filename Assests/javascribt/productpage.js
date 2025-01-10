@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (elementId === "mainNavigation") {
           // Call the updateCartBadge function defined in nav.js
           updateCartBadge();
+          updateFavoritesBadge();
+          setActiveLink();
+          updateUserDropdown();
         }
       })
       .catch((error) => console.error("Error loading content:", error));
@@ -40,3 +43,16 @@ $(document).ready(function () {
   // Update the cart badge when the page loads
   updateCartBadge();
 });
+setActiveLink = function () {
+  const pathName = window?.location?.pathname?.toLowerCase();
+  if (pathName.includes("home") && pathName) {
+    document.getElementById("home-link")?.classList?.add("active");
+  } else if (pathName.includes("about") && pathName) {
+    document.getElementById("about-link")?.classList?.add("active");
+  } else if (pathName.includes("contact") && pathName) {
+    document.getElementById("contact-link")?.classList?.add("active");
+  } else if (pathName.includes("service") && pathName) {
+    document.getElementById("service-link").classList?.add("active");
+  } else {
+  }
+};

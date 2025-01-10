@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (elementId === "mainNavigation") {
           // Call the updateCartBadge function defined in nav.js
           updateCartBadge();
+          updateFavoritesBadge();
+          setActiveLink();
+          updateUserDropdown();
         }
       })
       .catch((error) => console.error("Error loading content:", error));
@@ -17,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
   loadContent("nav.html", "mainNavigation");
   loadContent("footer.html", "footer");
 });
-
 // Importing Products Data
 import { products } from "./productsdata.js";
 
