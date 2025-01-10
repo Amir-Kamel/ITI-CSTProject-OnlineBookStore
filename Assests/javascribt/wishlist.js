@@ -70,6 +70,7 @@ $(document).ready(function () {
         favContainer.fadeIn(300);
         return;
       }
+      console.log("favorites ", favorites);
 
       // Display the product cards
       favorites.forEach((productId) => {
@@ -99,10 +100,12 @@ $(document).ready(function () {
         // Handle the "Remove from Favorites" button click
         productCard.find(".remove-fav").on("click", function () {
           console.log("before remove from Favorites", favorites);
-          favorites.splice(productId, 1);
+          let index = favorites.indexOf(productId);
+
+          console.log(productId, favorites.splice(index, 1));
           console.log("after remove from Favorites", favorites);
           saveUserFavorites(favorites); // Save updated favorites
-          displayFavorites(favorites); // Refresh the display
+          displayFavorites(favorites, allProducts); // Refresh the display
           updateFavoritesBadge();
         });
 
