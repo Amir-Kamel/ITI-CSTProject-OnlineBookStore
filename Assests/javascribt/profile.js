@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
           // Call the updateCartBadge function defined in nav.js
           updateCartBadge();
           updateFavoritesBadge();
+          setActiveLink();
+          updateUserDropdown();
         }
       })
       .catch((error) => console.error("Error loading content:", error));
@@ -29,11 +31,7 @@ async function getCurrentUsername() {
   const currentEmail = sessionData.session.email;
   const signUpData = JSON.parse(localStorage.getItem("signUpData"));
 
-  if (
-    !signUpData ||
-    !signUpData.customers ||
-    !signUpData.customers[currentEmail]
-  ) {
+  if (!signUpData || !signUpData.customers || !signUpData.customers[currentEmail]) {
     return "";
   }
 
@@ -86,10 +84,7 @@ function validatePassword(password) {
 // Function to hash password (using SHA-256)
 async function hashPassword(password) {
   const encoder = new TextEncoder();
-  const hashedBuffer = await crypto.subtle.digest(
-    "SHA-256",
-    encoder.encode(password)
-  );
+  const hashedBuffer = await crypto.subtle.digest("SHA-256", encoder.encode(password));
   return Array.from(new Uint8Array(hashedBuffer))
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("");
@@ -110,9 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function autofillProfileData() {
     const usernameField = document.querySelector('[name="username"]');
     const emailField = document.querySelector('[name="email"]');
-    const currentPasswordField = document.querySelector(
-      '[name="current-password"]'
-    );
+    const currentPasswordField = document.querySelector('[name="current-password"]');
 
     // Check if fields are available in the form
     if (!usernameField || !emailField || !currentPasswordField) {
@@ -133,11 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Get the sign-up data from localStorage
     const signUpData = JSON.parse(localStorage.getItem("signUpData"));
 
-    if (
-      !signUpData ||
-      !signUpData.customers ||
-      !signUpData.customers[currentEmail]
-    ) {
+    if (!signUpData || !signUpData.customers || !signUpData.customers[currentEmail]) {
       console.error("User data not found.");
       return;
     }
@@ -154,15 +143,9 @@ document.addEventListener("DOMContentLoaded", function () {
   async function saveChanges() {
     const username = document.querySelector('[name="username"]').value.trim();
     const email = document.querySelector('[name="email"]').value.trim();
-    const currentPassword = document
-      .querySelector('[name="current-password"]')
-      .value.trim();
-    const newPassword = document
-      .querySelector('[name="new-password"]')
-      .value.trim();
-    const repeatPassword = document
-      .querySelector('[name="repeat-password"]')
-      .value.trim();
+    const currentPassword = document.querySelector('[name="current-password"]').value.trim();
+    const newPassword = document.querySelector('[name="new-password"]').value.trim();
+    const repeatPassword = document.querySelector('[name="repeat-password"]').value.trim();
 
     console.log({
       username,
@@ -174,9 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Validate username
     if (!validateUsername(username)) {
-      alert(
-        "Invalid username. It must only contain letters, and no special characters or numbers."
-      );
+      alert("Invalid username. It must only contain letters, and no special characters or numbers.");
       return;
     }
 
@@ -190,11 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentEmail = sessionData.session.email;
 
     // Check if the username is already taken, but skip if the entered username is the same as the current one
-    if (
-      username !== "" &&
-      username !== (await getCurrentUsername()) &&
-      isUsernameTaken(username)
-    ) {
+    if (username !== "" && username !== (await getCurrentUsername()) && isUsernameTaken(username)) {
       alert("Username already exists.");
       return;
     }
@@ -215,9 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Validate passwords
     if (newPassword || repeatPassword) {
       if (!validatePassword(newPassword)) {
-        alert(
-          "Password must be at least 8 characters long and contain at least one letter, one digit, and one special character."
-        );
+        alert("Password must be at least 8 characters long and contain at least one letter, one digit, and one special character.");
         return;
       }
       if (newPassword && newPassword !== repeatPassword) {
@@ -228,11 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Get sign-up data from localStorage
     const signUpData = JSON.parse(localStorage.getItem("signUpData"));
-    if (
-      !signUpData ||
-      !signUpData.customers ||
-      !signUpData.customers[currentEmail]
-    ) {
+    if (!signUpData || !signUpData.customers || !signUpData.customers[currentEmail]) {
       console.error("User data not found in localStorage.");
       return;
     }
@@ -326,11 +297,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Load the image from signUpData in localStorage if it exists
   const signUpData = JSON.parse(localStorage.getItem("signUpData"));
-  if (
-    signUpData &&
-    signUpData.customers &&
-    signUpData.customers[currentEmail]
-  ) {
+  if (signUpData && signUpData.customers && signUpData.customers[currentEmail]) {
     const userData = signUpData.customers[currentEmail];
     const savedImageSrc = userData.imgsrc || avatarURL; // Use saved image or default avatar
     profilePicture.src = savedImageSrc;
@@ -365,11 +332,7 @@ document.addEventListener("DOMContentLoaded", function () {
         profilePicture.src = base64Image;
 
         // Save the base64 string to imgsrc in signUpData in localStorage
-        if (
-          signUpData &&
-          signUpData.customers &&
-          signUpData.customers[currentEmail]
-        ) {
+        if (signUpData && signUpData.customers && signUpData.customers[currentEmail]) {
           signUpData.customers[currentEmail].imgsrc = base64Image;
           localStorage.setItem("signUpData", JSON.stringify(signUpData));
         }
@@ -386,13 +349,22 @@ document.addEventListener("DOMContentLoaded", function () {
     profilePicture.src = avatarURL;
 
     // Set imgsrc to an empty string in localStorage (update it to empty)
-    if (
-      signUpData &&
-      signUpData.customers &&
-      signUpData.customers[currentEmail]
-    ) {
+    if (signUpData && signUpData.customers && signUpData.customers[currentEmail]) {
       signUpData.customers[currentEmail].imgsrc = "";
       localStorage.setItem("signUpData", JSON.stringify(signUpData));
     }
   });
 });
+setActiveLink = function () {
+  const pathName = window?.location?.pathname?.toLowerCase();
+  if (pathName.includes("home") && pathName) {
+    document.getElementById("home-link")?.classList?.add("active");
+  } else if (pathName.includes("about") && pathName) {
+    document.getElementById("about-link")?.classList?.add("active");
+  } else if (pathName.includes("contact") && pathName) {
+    document.getElementById("contact-link")?.classList?.add("active");
+  } else if (pathName.includes("service") && pathName) {
+    document.getElementById("service-link").classList?.add("active");
+  } else {
+  }
+};

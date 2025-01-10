@@ -1,21 +1,55 @@
 document.addEventListener("DOMContentLoaded", function () {
-  function loadContent(url, elementId) {
-    fetch(url)
-      .then((response) => response.text())
-      .then((data) => {
-        document.getElementById(elementId).innerHTML = data;
-        if (elementId === "mainNavigation") {
-          updateCartBadge();
-        }
-      })
-      .catch((error) => console.error("Error loading content:", error));
+  async function loadContent(url, elementId) {
+    try {
+      const response = await fetch(url);
+      const data = await response.text();
+      document.getElementById(elementId).innerHTML = data;
+
+      // Ensure the badge is updated after the navigation is loaded
+      if (elementId === "mainNavigation") {
+        // Call the functions defined in nav.js
+        updateCartBadge();
+        updateFavoritesBadge();
+        setActiveLink();
+        updateUserDropdown();
+      }
+    } catch (error) {
+      console.error("Error loading content:", error);
+    }
   }
 
-  // Load navigation and footer
-  loadContent("nav.html", "mainNavigation");
-  loadContent("footer.html", "footer");
-});
+  // Load navigation and footer, then initialize search functionality
+  (async function () {
+    await loadContent("nav.html", "mainNavigation");
+    await loadContent("footer.html", "footer");
+    // Initialize search functionality after navigation content is loaded
+    $("#global-search").on("keydown", function (e) {
+      // console.log("I am here");
+      if (e.key === "Enter") {
+        let allProducts = getData();
+        const searchTerm = $(this).val().toLowerCase();
 
+        // console.log(searchTerm);
+
+        let filteredProducts = [];
+        for (let productId in allProducts) {
+          let product = allProducts[productId];
+          if (product.title.toLowerCase().includes(searchTerm)) {
+            filteredProducts.push(productId);
+          }
+        }
+
+        console.log(filteredProducts);
+
+        // save filtered products in local storage
+        localStorage.setItem("displajedProducts", JSON.stringify(filteredProducts));
+
+        // Redirect to the search results page
+        window.location.href = "./LoadMore.html";
+      }
+    });
+  })();
+});
 $(document).ready(function () {
   // Function to validate email
   function validateEmail(email) {
@@ -64,10 +98,7 @@ $(document).ready(function () {
     $(".productCount").text(productCount);
 
     // Update user count
-    const userCount =
-      (users.admin ? Object.keys(users.admin).length : 0) +
-      (users.customers ? Object.keys(users.customers).length : 0) +
-      (users.sellers ? Object.keys(users.sellers).length : 0);
+    const userCount = (users.admin ? Object.keys(users.admin).length : 0) + (users.customers ? Object.keys(users.customers).length : 0) + (users.sellers ? Object.keys(users.sellers).length : 0);
     $(".usersCount").text(userCount);
 
     // Update order count
@@ -115,9 +146,7 @@ $(document).ready(function () {
       $.each(users.admin, function (email, user) {
         $(".usersTable").append(`
             <tr data-email="${email}" data-role="admin">
-              <td><input type="text" class="form-control username-input" value="${
-                user.username
-              }"></td>
+              <td><input type="text" class="form-control username-input" value="${user.username}"></td>
               <td><input type="email" class="form-control email-input" value="${email}" disabled></td>
               <td>
                 <select class="form-control" disabled>
@@ -126,12 +155,8 @@ $(document).ready(function () {
               </td>
               <td>
                 <select class="form-control account-status">
-                  <option value="Active" ${
-                    user.accountstate === "Active" ? "selected" : ""
-                  }>Active</option>
-                  <option value="Suspended" ${
-                    user.accountstate === "Suspended" ? "selected" : ""
-                  }>Suspended</option>
+                  <option value="Active" ${user.accountstate === "Active" ? "selected" : ""}>Active</option>
+                  <option value="Suspended" ${user.accountstate === "Suspended" ? "selected" : ""}>Suspended</option>
                 </select>
               </td>
               <td><button class="btn btn-primary updateUserBtn">Update</button></td>
@@ -146,28 +171,18 @@ $(document).ready(function () {
       $.each(users.customers, function (email, user) {
         $(".usersTable").append(`
             <tr data-email="${email}" data-role="customer">
-              <td><input type="text" class="form-control username-input" value="${
-                user.username
-              }"></td>
+              <td><input type="text" class="form-control username-input" value="${user.username}"></td>
               <td><input type="email" class="form-control email-input" value="${email}"></td>
               <td>
                 <select class="form-control">
-                  <option value="customer" ${
-                    user.role === "customer" ? "selected" : ""
-                  }>Customer</option>
-                  <option value="seller" ${
-                    user.role === "seller" ? "selected" : ""
-                  }>Seller</option>
+                  <option value="customer" ${user.role === "customer" ? "selected" : ""}>Customer</option>
+                  <option value="seller" ${user.role === "seller" ? "selected" : ""}>Seller</option>
                 </select>
               </td>
               <td>
                 <select class="form-control account-status">
-                  <option value="Active" ${
-                    user.accountstate === "Active" ? "selected" : ""
-                  }>Active</option>
-                  <option value="Suspended" ${
-                    user.accountstate === "Suspended" ? "selected" : ""
-                  }>Suspended</option>
+                  <option value="Active" ${user.accountstate === "Active" ? "selected" : ""}>Active</option>
+                  <option value="Suspended" ${user.accountstate === "Suspended" ? "selected" : ""}>Suspended</option>
                 </select>
               </td>
               <td><button class="btn btn-primary updateUserBtn">Update</button></td>
@@ -182,28 +197,18 @@ $(document).ready(function () {
       $.each(users.sellers, function (email, user) {
         $(".usersTable").append(`
             <tr data-email="${email}" data-role="seller">
-              <td><input type="text" class="form-control username-input" value="${
-                user.username
-              }"></td>
+              <td><input type="text" class="form-control username-input" value="${user.username}"></td>
               <td><input type="email" class="form-control email-input" value="${email}"></td>
               <td>
                 <select class="form-control">
-                  <option value="customer" ${
-                    user.role === "customer" ? "selected" : ""
-                  }>Customer</option>
-                  <option value="seller" ${
-                    user.role === "seller" ? "selected" : ""
-                  }>Seller</option>
+                  <option value="customer" ${user.role === "customer" ? "selected" : ""}>Customer</option>
+                  <option value="seller" ${user.role === "seller" ? "selected" : ""}>Seller</option>
                 </select>
               </td>
               <td>
                 <select class="form-control account-status">
-                  <option value="Active" ${
-                    user.accountstate === "Active" ? "selected" : ""
-                  }>Active</option>
-                  <option value="Suspended" ${
-                    user.accountstate === "Suspended" ? "selected" : ""
-                  }>Suspended</option>
+                  <option value="Active" ${user.accountstate === "Active" ? "selected" : ""}>Active</option>
+                  <option value="Suspended" ${user.accountstate === "Suspended" ? "selected" : ""}>Suspended</option>
                 </select>
               </td>
               <td><button class="btn btn-primary updateUserBtn">Update</button></td>
@@ -428,8 +433,7 @@ $(document).ready(function () {
     const users = getUsers();
 
     // Get updated values
-    const userRole =
-      role === "admin" ? "admin" : $row.find("td:eq(2) select").val(); // Admin role cannot be changed
+    const userRole = role === "admin" ? "admin" : $row.find("td:eq(2) select").val(); // Admin role cannot be changed
     const accountState = $row.find("td:eq(3) select").val(); // Get the selected account status
 
     // If the user is being updated to admin, demote the existing admin (if any)
@@ -456,13 +460,7 @@ $(document).ready(function () {
       user.email = email;
       user.role = userRole;
       user.accountstate = accountState; // Update account status
-      users[
-        userRole === "admin"
-          ? "admin"
-          : userRole === "customer"
-          ? "customers"
-          : "sellers"
-      ][email] = user; // Add the new email entry to the correct role
+      users[userRole === "admin" ? "admin" : userRole === "customer" ? "customers" : "sellers"][email] = user; // Add the new email entry to the correct role
     } else if (role === "seller") {
       const user = users.sellers[oldEmail];
       delete users.sellers[oldEmail]; // Remove the old email entry
@@ -470,13 +468,7 @@ $(document).ready(function () {
       user.email = email;
       user.role = userRole;
       user.accountstate = accountState; // Update account status
-      users[
-        userRole === "admin"
-          ? "admin"
-          : userRole === "customer"
-          ? "customers"
-          : "sellers"
-      ][email] = user; // Add the new email entry to the correct role
+      users[userRole === "admin" ? "admin" : userRole === "customer" ? "customers" : "sellers"][email] = user; // Add the new email entry to the correct role
     }
 
     // Save the updated users object to local storage
