@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (elementId === "mainNavigation") {
           // Call the updateCartBadge function defined in nav.js
           updateCartBadge();
+          updateFavoritesBadge();
+          setActiveLink();
+          updateUserDropdown();
         }
       })
       .catch((error) => console.error("Error loading content:", error));
@@ -217,10 +220,14 @@ function updateDisplayedProducts(products, filteredProducts) {
           // Create the card UI elements (as in the original code)
           let img = $("<img />").prop("src", product.img_src).prop("alt", product.title).addClass("card-img-top img-fluid");
           let cartButton = $("<button>").addClass("btn cart btn-outline-secondary btn-lg").append($("<i>").addClass("fas fs-2 fa-cart-plus"));
-          let favButton = $("<button>").addClass("btn wish-list btn-outline-secondary btn-lg").append($("<i>").addClass("far fs-2 fa-heart"));
+          let favButton = $("<button>").addClass("btn add-to-fav btn-outline-secondary btn-lg").append($("<i>").addClass("far fs-2 fa-heart"));
           cartButton.on("click", function (e) {
             e.stopPropagation(); // Prevent event bubbling
             addToCart(productId);
+          });
+          favButton.on("click", function (e) {
+            e.stopPropagation(); // Prevent event bubbling
+            addToFavorite(productId, $(this));
           });
           let overlay = $("<div>").addClass("overlay").append(cartButton).append(favButton);
           let imgContainer = $("<div>").addClass("img-container").append(img).append(overlay);
@@ -230,13 +237,10 @@ function updateDisplayedProducts(products, filteredProducts) {
             .addClass("card-text text-success fw-bold")
             .text("price: $" + product.price);
           let cardBody = $("<div>").addClass("card-body").append(productTitle).append(productDescription).append(productPrice);
-          let card = $("<div id='product-card'>").addClass("card").append(imgContainer).append(cardBody);
+          let card = $(`<div id="product_${productId}">`).addClass("card").append(imgContainer).append(cardBody);
           let container = $("<div>").addClass("col-lg-4 col-md-6 col-sm-12 p-0v").append(card);
           // Attach event handlers
 
-          $(".wish-list").on("click", function () {
-            console.log(this);
-          });
           card.on("click", function () {
             localStorage.setItem("selectedProduct", JSON.stringify(product));
             window.location.href = "Product Page.html";
@@ -245,6 +249,7 @@ function updateDisplayedProducts(products, filteredProducts) {
         });
         generatePagination(products, filteredProducts);
         updateSlider(minPrice, maxPrice);
+        checkheartbutton();
         productsContainer.fadeIn(300);
 
         filteredProducts.forEach((productId) => {
@@ -297,7 +302,7 @@ function refreshProducts(allProducts, filteredProducts) {
     updateDisplayedProducts(allProducts, filteredProducts)
       .then((displayedProducts) => {
         try {
-          console.log("from refreshProducts", displayedProducts);
+          // console.log("from refreshProducts", displayedProducts);
           generatePagination(allProducts, filteredProducts);
           resolve(displayedProducts); // Resolve with displayedProducts
         } catch (error) {

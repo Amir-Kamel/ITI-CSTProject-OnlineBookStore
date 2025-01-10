@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 // Importing Products Data
 import { products } from "./productsdata.js";
-
 // Using jQuery to set data and interact with DOM
 $(document).ready(function () {
   function setData() {
@@ -61,15 +60,15 @@ $(document).ready(function () {
         const product = filteredProducts[key];
         const BookCard = $(`
             <div class="col-lg-3 col-md-6 col-sm-12 p-4">
-              <div class="card h-100 w-100" data-id="${product.title}">
+              <div class="card h-100 w-100" id="product_${key}">
                 <div class="img-container">
                   <img src="${product.img_src}" alt="${product.title}" class="card-img-top imgmain"/>
                   <div class="overlay">
                     <button class="btn btn-outline-secondary btn-sm add-to-cart">
                       <i class="fas fa-cart-plus mr-2"></i>
                     </button>
-                    <button class="btn btn-outline-secondary btn-sm">
-                      <i class="far fa-heart"></i>
+                    <button class="btn btn-outline-secondary btn-sm add-to-fav">
+                      <i class="fa-regular fa-heart"></i>
                     </button>
                   </div>
                 </div>
@@ -88,13 +87,22 @@ $(document).ready(function () {
           addToCart(key);
         });
 
+        // checkheartbutton(product, BookCard);
+
+        BookCard.find(".add-to-fav").on("click", function (e) {
+          e.stopPropagation(); // Prevent click from bubbling to the card
+          // console.log("event fired");
+          const buttonfav = $(this);
+          addToFavorite(key, buttonfav);
+        });
+
         BookCard.on("click", function () {
           localStorage.setItem("selectedProduct", JSON.stringify(product));
           window.location.href = "Product Page.html";
         });
         container.append(BookCard);
       });
-
+      checkheartbutton();
       // Add fadeIn animation
       container.fadeIn(300);
     });
