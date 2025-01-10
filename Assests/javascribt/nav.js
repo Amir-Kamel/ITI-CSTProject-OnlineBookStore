@@ -226,7 +226,7 @@ function addToFavorite(key, buttonfav) {
   if (loggedInUser) {
     // const loggedInUserEmail = currentSession.session.email;
     const usersData = getUsersData();
-    console.log(usersData);
+    // console.log(usersData);
     // console.log(usersData.customers[loggedInUser.email]);
     const customer = usersData.customers[loggedInUser.email];
     // console.log(customer);
