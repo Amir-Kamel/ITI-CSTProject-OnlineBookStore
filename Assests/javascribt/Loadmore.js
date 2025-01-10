@@ -30,14 +30,20 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#global-search").on("keydown", function (e) {
       // console.log("I am here");
       if (e.key === "Enter") {
-        let allProducts = localStorage.getItem("allProducts");
+        let allProducts = getProductsData();
         const searchTerm = $(this).val().toLowerCase();
 
-        // console.log(searchTerm);
+        console.log(searchTerm);
+        // console.log(allProducts);
 
         let filteredProducts = [];
         for (let productId in allProducts) {
+          // console.log(productId);
+
           let product = allProducts[productId];
+
+          // console.log(product);
+
           if (product.title.toLowerCase().includes(searchTerm)) {
             filteredProducts.push(productId);
           }
@@ -46,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(filteredProducts);
 
         // save filtered products in local storage
-        localStorage.setItem("displajedProducts", JSON.stringify(filteredProducts));
+        localStorage.setItem("forSearch", JSON.stringify(filteredProducts));
 
         // Redirect to the search results page
         window.location.href = "./LoadMore.html";
@@ -76,16 +82,30 @@ $(function () {
     window.location.href = "./Product Page.html";
   });
 
-  // array that contains keys of all products
-  filteredProducts = Object.keys(allProducts);
-  initializePagination(allProducts, filteredProducts);
-  // console.log(allProducts);
-  storeProductCategory(allProducts);
-  let productsCategories = getProductCategory();
-  // console.log(productsCategories);
-  //display number of products in the categories-container div
-  const container = $("#categories-container");
-  fillBookCategory(container, allProducts, productsCategories);
+  //check if this page was loaded for search results or not
+  let searchResults = localStorage.getItem("forSearch");
+  searchResults = JSON.parse(searchResults);
+  if (searchResults) {
+    console.log("Search results page was loaded");
+    console.log(searchResults);
+
+    // update the search results page with the search results
+    initializePagination(allProducts, searchResults);
+
+    // reset the search term and remove the search results from local storage
+    localStorage.removeItem("forSearch");
+  } else {
+    // array that contains keys of all products
+    filteredProducts = Object.keys(allProducts);
+    initializePagination(allProducts, filteredProducts);
+    // console.log(allProducts);
+    storeProductCategory(allProducts);
+    let productsCategories = getProductCategory();
+    // console.log(productsCategories);
+    //display number of products in the categories-container div
+    const container = $("#categories-container");
+    fillBookCategory(container, allProducts, productsCategories);
+  }
   $("#sort").on("click", function () {
     sortWay = $(this).val();
     // console.log(sortWay);
@@ -208,29 +228,18 @@ function fillBookCategory(container, allProducts, productsCategories) {
           lastChoosenCategory.addClass("text-primary fs-4");
           $("#items-counter").text(lastChoosenCategory.children()[1].innerText);
           // console.log("inside fill book category");
-          refreshProducts(allProducts, productsCategories[$(lastChoosenCategory.children()[0]).text().toLowerCase()])
-            .then((displayedProducts) => {
-              // Save to local storage
-              localStorage.setItem("displayedProducts", JSON.stringify(displayedProducts));
-              // console.log("displayedProducts saved to localStorage", displayedProducts);
-            })
-            .catch((error) => {
-              console.error("Error processing products:", error);
-            });
+          refreshProducts(allProducts, productsCategories[$(lastChoosenCategory.children()[0]).text().toLowerCase()]).catch((error) => {
+            console.error("Error processing products:", error);
+          });
         }
       });
       container.append(ulContainer);
     }
     // console.log("inside fill book category initailize");
 
-    refreshProducts(allProducts, productsCategories[$(lastChoosenCategory.children()[0]).text().toLowerCase()])
-      .then((displayedProducts) => {
-        // Save to local storage
-        localStorage.setItem("displayedProducts", JSON.stringify(displayedProducts));
-      })
-      .catch((error) => {
-        console.error("Error processing products:", error);
-      });
+    refreshProducts(allProducts, productsCategories[$(lastChoosenCategory.children()[0]).text().toLowerCase()]).catch((error) => {
+      console.error("Error processing products:", error);
+    });
   });
   container.fadeIn(300);
 }
@@ -301,7 +310,7 @@ function updateDisplayedProducts(products, filteredProducts) {
         filteredProducts.forEach((productId) => {
           displayedProducts.push(productId);
         });
-        // console.log(displayedProducts);
+        console.log(displayedProducts);
         // Resolve the Promise with displayed products
         resolve(displayedProducts);
       } catch (error) {
@@ -350,6 +359,11 @@ function refreshProducts(allProducts, filteredProducts) {
         try {
           // console.log("from refreshProducts", displayedProducts);
           generatePagination(allProducts, filteredProducts);
+
+          // Save to local storage
+          localStorage.setItem("displayedProducts", JSON.stringify(displayedProducts));
+          // console.log("displayedProducts saved to localStorage", displayedProducts);
+
           resolve(displayedProducts); // Resolve with displayedProducts
         } catch (error) {
           reject(error); // Reject if generatePagination throws an error
