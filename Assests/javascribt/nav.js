@@ -234,7 +234,7 @@ function checkheartbutton() {
   const loggedInUser = getLoggedInUserEmail();
   // console.log(loggedInUser);
 
-  if (loggedInUser) {
+  if (loggedInUser && loggedInUser.category === "customers") {
     // const loggedInUserEmail = currentSession.session.email;
     const usersData = getUsersData();
     // console.log(usersData);

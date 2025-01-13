@@ -337,7 +337,7 @@ $(document).ready(function () {
       window.location = "HomePage.html";
       // window.location =
     } else if (role === "seller") {
-      window.location.href = "ProductsSearch.html";
+      window.location.href = "SellerDashboard.html";
     } else {
       signInError.text("User role not recognized.");
       signInError.css("display", "block");
