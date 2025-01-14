@@ -68,11 +68,7 @@ function getProductsData() {
 function updateFavoritesBadge() {
   const currentSession = JSON.parse(sessionStorage.getItem("currentSession"));
 
-  if (
-    currentSession &&
-    currentSession.session &&
-    currentSession.session.email
-  ) {
+  if (currentSession && currentSession.session && currentSession.session.email) {
     const loggedInUserEmail = currentSession.session.email;
 
     // Get the signUpData object from localStorage
@@ -105,8 +101,7 @@ function updateCartBadge() {
     // Retrieve the cart from local storage and update the cart badge
     let UsersData = getUsersData();
     // console.log(customerCart);
-    let customerCart =
-      UsersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
+    let customerCart = UsersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
     let productsNumber = 0;
     for (product in customerCart) {
       // console.log(customerCart[product]);
@@ -136,8 +131,7 @@ function addToCart(product_id) {
   if (loggedInUser) {
     // Retrieve the cart from local storage and update the cart badge
     let UsersData = getUsersData();
-    let customerCart =
-      UsersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
+    let customerCart = UsersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
     let inStock = getProductsData()[product_id]["stock"];
     // console.log(inStock);
     if (inStock == 0) {
@@ -201,17 +195,14 @@ function addToFavorite(key, buttonfav) {
     // console.log(usersData.customers[loggedInUser.email]);
     const customer = usersData.customers[loggedInUser.email];
     // console.log(customer);
-    const wishlist = customer.wishlist;
-    // Fetch the wishlist from the customer data
+    const wishlist = customer.wishlist; // Fetch the wishlist from the customer data
 
     const productIndex = wishlist.findIndex((id) => id === key);
 
     if (productIndex === -1) {
       // Add the product to the wishlist
       customer.wishlist.push(key);
-      $(buttonfav.children()[0])
-        .removeClass("fa-regular ")
-        .addClass("fa-solid text-danger");
+      $(buttonfav.children()[0]).removeClass("fa-regular ").addClass("fa-solid text-danger");
       Toast.fire({
         icon: "success",
         title: "Item added to wishlist successfully.",
@@ -219,9 +210,7 @@ function addToFavorite(key, buttonfav) {
     } else {
       // Remove the product from the wishlist
       customer.wishlist.splice(productIndex, 1);
-      $(buttonfav.children()[0])
-        .removeClass("fa-solid text-danger")
-        .addClass("fa-regular");
+      $(buttonfav.children()[0]).removeClass("fa-solid text-danger").addClass("fa-regular");
       Toast.fire({
         icon: "warning",
         title: "Item removed from wishlist successfully.",
@@ -245,27 +234,24 @@ function checkheartbutton() {
   const loggedInUser = getLoggedInUserEmail();
   // console.log(loggedInUser);
 
-  if (loggedInUser) {
+  if (loggedInUser && loggedInUser.category === "customers") {
     // const loggedInUserEmail = currentSession.session.email;
     const usersData = getUsersData();
     // console.log(usersData);
     // console.log(usersData.customers[loggedInUser.email]);
-    const customer = usersData[loggedInUser.category][loggedInUser.email];
+    const customer = usersData.customers[loggedInUser.email];
     // console.log(customer);
     const wishlist = customer.wishlist; // Fetch the wishlist from the customer data
-    if (wishlist) {
-      // Check if the product is in the wishlist
-      // console.log(wishlist);
-      wishlist.forEach((productId) => {
-        // console.log(`#${productId}`);
-        let product = $(`#product_${productId}`);
-        favButton = product.find(".add-to-fav");
-        $(favButton.children()[0])
-          .removeClass("fa-regular ")
-          .addClass("fa-solid text-danger");
-        // console.log(product);
-      });
-    }
+
+    // Check if the product is in the wishlist
+    // console.log(wishlist);
+    wishlist.forEach((productId) => {
+      // console.log(`#${productId}`);
+      let product = $(`#product_${productId}`);
+      favButton = product.find(".add-to-fav");
+      $(favButton.children()[0]).removeClass("fa-regular ").addClass("fa-solid text-danger");
+      // console.log(product);
+    });
   }
   // else {
   //   // If no user is logged in, ensure the button has the default style
