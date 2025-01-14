@@ -65,7 +65,6 @@ $(document).ready(function () {
   const sessionData = JSON.parse(sessionStorage.getItem("currentSession"));
   if (sessionData && sessionData.session.category === "customers") {
     const email = sessionData.session.email;
-    console.log(email);
     if (email) {
       // Set the email in the input field and make it readonly
       $("#email").val(email);
@@ -100,7 +99,7 @@ $(document).ready(function () {
     }
 
     // If all validations pass
-    if (isValid) {
+    if (isValid && sessionData) {
       // Save data to local storage
       const contactData = {
         name: nameinput,
@@ -110,13 +109,24 @@ $(document).ready(function () {
         solved: false,
       };
       inbox.push(contactData);
-      console.log(inbox);
       localStorage.setItem("inbox", JSON.stringify(inbox));
-
       // clear the form
+      if (sessionData.session.category === "customers") {
+        $("#formcontact")[0].reset();
+        $("#email").val(sessionData.session.email);
+      }
+      else{
+      $("#formcontact")[0].reset();
+      }
+      // show message toast
+      $("#successtoast").toast("show");
+      updateInboxBadge();
+
+    }else{
       $("#formcontact")[0].reset();
       // show message toast
-      $(".toast").toast("show");
+      $("#failedtoast").toast("show");
+      
     }
   });
 });

@@ -20,10 +20,10 @@ function updateUserDropdown() {
         if (logoutBtn) {
           logoutBtn.addEventListener("click", () => {
             sessionStorage.removeItem("currentSession");
-            Toast.fire({
-              icon: "success",
-              title: "Logged out successfully.",
-            });
+            // Toast.fire({
+            //   icon: "success",
+            //   title: "Logged out successfully.",
+            // });
             window.location.href = "./Login&Register.html"; // Redirect to the login page
           });
         }
@@ -98,14 +98,15 @@ function updateFavoritesBadge() {
 
 // Function to update the inbox badge based on the messages in local inbox local storage
 function updateInboxBadge() {
+  const sessionData = JSON.parse(sessionStorage.getItem("currentSession"));
   const inbox = JSON.parse(localStorage.getItem("inbox")) || [];
-
-  const inboxItems = inbox.length;
-
+  inboxItems = inbox.length;
   $("#inboxBadge").text(inboxItems);
 
-  if (inboxItems > 0) {
+  if (inboxItems > 0 && sessionData) {
     animateBell();
+  }else{
+    $("#inboxBadge").text(0);
   }
 }
 
