@@ -1,47 +1,129 @@
 document.addEventListener("DOMContentLoaded", function () {
-  function loadContent(url, elementId) {
-    fetch(url)
-      .then((response) => response.text())
-      .then((data) => {
-        document.getElementById(elementId).innerHTML = data;
-        // Ensure the badge is updated after the navigation is loaded
-        if (elementId === "mainNavigation") {
-          // Call the updateCartBadge function defined in nav.js
-          updateCartBadge();
-          updateFavoritesBadge();
-          setActiveLink();
-          updateUserDropdown();
-        }
-      })
-      .catch((error) => console.error("Error loading content:", error));
+  async function loadContent(url, elementId) {
+    try {
+      const response = await fetch(url);
+      const data = await response.text();
+      document.getElementById(elementId).innerHTML = data;
+
+      // Ensure the badge is updated after the navigation is loaded
+      if (elementId === "mainNavigation") {
+        // Call the functions defined in nav.js
+        updateCartBadge();
+        updateFavoritesBadge();
+        setActiveLink();
+        updateUserDropdown();
+      }
+    } catch (error) {
+      console.error("Error loading content:", error);
+    }
   }
 
-  // Load navigation and footer
-  loadContent("nav.html", "mainNavigation");
-  loadContent("footer.html", "footer");
+  // Load navigation and footer, then initialize search functionality
+  (async function () {
+    await loadContent("nav.html", "mainNavigation");
+    await loadContent("footer.html", "footer");
+    // Initialize search functionality after navigation content is loaded
+    $("#global-search").on("keydown", function (e) {
+      // console.log("I am here");
+      if (e.key === "Enter") {
+        let allProducts = getProductsData();
+        const searchTerm = $(this).val().toLowerCase();
+
+        console.log(searchTerm);
+        // console.log(allProducts);
+
+        let filteredProducts = [];
+        for (let productId in allProducts) {
+          // console.log(productId);
+
+          let product = allProducts[productId];
+
+          // console.log(product);
+
+          if (product.title.toLowerCase().includes(searchTerm)) {
+            filteredProducts.push(productId);
+          }
+        }
+
+        console.log(filteredProducts);
+
+        // save filtered products in local storage
+        localStorage.setItem("forSearch", JSON.stringify(filteredProducts));
+
+        // Redirect to the search results page
+        window.location.href = "./LoadMore.html";
+      }
+    });
+  })();
 });
 
 $(document).ready(function () {
-  function getProductData() {
-    const storedProduct = localStorage.getItem("selectedProduct");
-    return storedProduct ? JSON.parse(storedProduct) : null;
-  }
+  // Retrieve the selected product ID from localStorage
+  const selectedProduct = JSON.parse(localStorage.getItem("selectedProduct"));
 
-  const product = getProductData();
+  // Retrieve all products from localStorage
+  const products = JSON.parse(localStorage.getItem("products"));
 
+  // Find the selected product using its ID
+  const productId = selectedProduct;
+  const product = products?.[productId]; // Access the product using its ID
+
+  // Display the product details on the page
   if (product) {
     $("#main-image").attr("src", product.img_src);
     $("#product-title").text(product.title);
     $("#product-category").text(product.category);
-    $("#product-availability").text("In stock");
+    $("#product-availability").text(product.stock > 0 ? "In stock" : "Out of stock");
     $("#product-price").text("Price: " + product.price);
     $("#product-description").text(product.description);
   } else {
-    // Handle case where no product data is found
     alert("No product data found. Please go back and select a product.");
   }
+
   // Update the cart badge when the page loads
   updateCartBadge();
+
+  $(document).on("click", ".addtocart", function () {
+    const quantity = parseInt($(".quantity-input").val(), 10);
+    for (let i = 0; i < quantity; i++) {
+      addToCart(productId);
+    }
+  });
+
+  $(document).on("click", ".addtofav", function () {
+    const loggedInUser = getLoggedInUserEmail();
+    if (loggedInUser) {
+      // const loggedInUserEmail = currentSession.session.email;
+      const usersData = getUsersData();
+      // console.log(usersData);
+      // console.log(usersData.customers[loggedInUser.email]);
+      const customer = usersData.customers[loggedInUser.email];
+      // console.log(customer);
+      const wishlist = customer.wishlist; // Fetch the wishlist from the customer data
+
+      const productIndex = wishlist.findIndex((id) => id === productId);
+
+      if (productIndex === -1) {
+        // Add the product to the wishlist
+        customer.wishlist.push(productId);
+        Toast.fire({
+          icon: "success",
+          title: "Item added to wishlist successfully.",
+        });
+      } else {
+        // Remove the product from the wishlist
+        customer.wishlist.splice(productIndex, 1);
+        Toast.fire({
+          icon: "warning",
+          title: "Item removed from wishlist successfully.",
+        });
+      }
+
+      // Save updated data to localStorage
+      localStorage.setItem("signUpData", JSON.stringify(usersData));
+      updateFavoritesBadge();
+    }
+  });
 });
 setActiveLink = function () {
   const pathName = window?.location?.pathname?.toLowerCase();

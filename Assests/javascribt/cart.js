@@ -1,24 +1,60 @@
 document.addEventListener("DOMContentLoaded", function () {
-  function loadContent(url, elementId) {
-    fetch(url)
-      .then((response) => response.text())
-      .then((data) => {
-        document.getElementById(elementId).innerHTML = data;
-        // Ensure the badge is updated after the navigation is loaded
-        if (elementId === "mainNavigation") {
-          // Call the updateCartBadge function defined in nav.js
-          updateCartBadge();
-          updateFavoritesBadge();
-          setActiveLink();
-          updateUserDropdown();
-        }
-      })
-      .catch((error) => console.error("Error loading content:", error));
+  async function loadContent(url, elementId) {
+    try {
+      const response = await fetch(url);
+      const data = await response.text();
+      document.getElementById(elementId).innerHTML = data;
+
+      // Ensure the badge is updated after the navigation is loaded
+      if (elementId === "mainNavigation") {
+        // Call the functions defined in nav.js
+        updateCartBadge();
+        updateFavoritesBadge();
+        setActiveLink();
+        updateUserDropdown();
+      }
+    } catch (error) {
+      console.error("Error loading content:", error);
+    }
   }
 
-  // Load navigation and footer
-  loadContent("nav.html", "mainNavigation");
-  loadContent("footer.html", "footer");
+  // Load navigation and footer, then initialize search functionality
+  (async function () {
+    await loadContent("nav.html", "mainNavigation");
+    await loadContent("footer.html", "footer");
+    // Initialize search functionality after navigation content is loaded
+    $("#global-search").on("keydown", function (e) {
+      // console.log("I am here");
+      if (e.key === "Enter") {
+        let allProducts = getProductsData();
+        const searchTerm = $(this).val().toLowerCase();
+
+        console.log(searchTerm);
+        // console.log(allProducts);
+
+        let filteredProducts = [];
+        for (let productId in allProducts) {
+          // console.log(productId);
+
+          let product = allProducts[productId];
+
+          // console.log(product);
+
+          if (product.title.toLowerCase().includes(searchTerm)) {
+            filteredProducts.push(productId);
+          }
+        }
+
+        console.log(filteredProducts);
+
+        // save filtered products in local storage
+        localStorage.setItem("forSearch", JSON.stringify(filteredProducts));
+
+        // Redirect to the search results page
+        window.location.href = "./LoadMore.html";
+      }
+    });
+  })();
 });
 $(function () {
   usersData = getUsersData();
@@ -335,18 +371,38 @@ $(function () {
     }
     $("#summary-shipping").text(shipping);
     calculatingSubtotal(customerCart, shipping, $("#summary-subtotal"), $("#summary-total"));
+
+    //function to generate ID for product 
+    function generateOrderId() {
+      const timestamp = Date.now(); 
+      const randomNum = Math.floor(Math.random() * 1000);
+      return `ORD-${timestamp}-${randomNum}`; // Combine timestamp and random number
+    }
+
+    //confirm that the order 
     $("#confirm").on("click", function () {
-      order_details = {
+      const orderId = generateOrderId(); // Generate a unique order ID
+      const order_details = {
+        orderId: orderId, // Use the generated order ID
         date: formattedDate,
         time: time,
         products: soldProducts,
+        totalAmount: subtotal + shipping,
+        customerName: customerData.username, // Add customer name
       };
-      console.log(order_details);
+    
+      // Add the order to the customer's order history
       customerData["orders_history"].push(order_details);
-      for (productId in customerCart) {
+    
+      // Remove selected items from the cart
+      for (let productId in customerCart) {
         if (customerCart[productId]["selected"]) delete customerCart[productId];
       }
+    
+      // Save updated data
       setUsersData(usersData);
+    
+      // Show success message
       Swal.fire({
         title: "Great!",
         text: "Thank you for your payment! Your products will be with you soon. We hope you enjoy your purchase!",
