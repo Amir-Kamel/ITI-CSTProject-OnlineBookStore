@@ -290,6 +290,10 @@ setActiveLink = function () {
   } else if (pathName.includes("contact") && pathName) {
     document.getElementById("contact-link")?.classList?.add("active");
   } else {
+<<<<<<< HEAD
     // document.getElementById("home-link").classList?.add("active");
+=======
+    document.getElementById("home-link").classList?.add("active");
+>>>>>>> main
   }
 };

@@ -58,6 +58,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 $(document).ready(function () {
+  inbox = getInbox();
+  console.log(inbox);
   $("#formcontact").on("submit", function (event) {
     event.preventDefault(); // prevent the default not to refresh the page to show the message toast after submit
 
@@ -87,10 +89,26 @@ $(document).ready(function () {
     // If all validations pass
     if (isValid) {
       // Save data to local storage
+<<<<<<< HEAD
       localStorage.setItem("Contact Name Data", JSON.stringify(nameinput));
       localStorage.setItem("Contact Email Data", JSON.stringify(emailinput));
       localStorage.setItem("Contact Subject Data", JSON.stringify(subjectinput));
       localStorage.setItem("Contact Message Data", JSON.stringify(messageinput));
+=======
+      const contactData = {
+        name: nameinput,
+        email: emailinput,
+        subject: subjectinput,
+        message: messageinput,
+        solved: false,
+      };
+      inbox.push(contactData);
+      console.log(inbox);
+      localStorage.setItem("inbox", JSON.stringify(inbox));
+
+      // clear the form
+      $("#formcontact")[0].reset();
+>>>>>>> main
       // show message toast
       $(".toast").toast("show");
 
@@ -99,6 +117,14 @@ $(document).ready(function () {
     }
   });
 });
+<<<<<<< HEAD
+=======
+
+function getInbox() {
+  const inbox = localStorage.getItem("inbox");
+  return JSON.parse(inbox);
+}
+>>>>>>> main
 setActiveLink = function () {
   const pathName = window?.location?.pathname?.toLowerCase();
   if (pathName.includes("home") && pathName) {

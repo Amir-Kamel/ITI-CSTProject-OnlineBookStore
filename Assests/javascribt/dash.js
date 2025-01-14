@@ -8,10 +8,17 @@ document.addEventListener("DOMContentLoaded", function () {
       // Ensure the badge is updated after the navigation is loaded
       if (elementId === "mainNavigation") {
         // Call the functions defined in nav.js
+<<<<<<< HEAD
         // updateCartBadge();
         // updateFavoritesBadge();
         // setActiveLink();
         // updateUserDropdown();
+=======
+        updateCartBadge();
+        updateFavoritesBadge();
+        setActiveLink();
+        updateUserDropdown();
+>>>>>>> main
       }
     } catch (error) {
       console.error("Error loading content:", error);
@@ -24,19 +31,43 @@ document.addEventListener("DOMContentLoaded", function () {
     await loadContent("footer.html", "footer");
     // Initialize search functionality after navigation content is loaded
     $("#global-search").on("keydown", function (e) {
+<<<<<<< HEAD
+=======
+      // console.log("I am here");
+>>>>>>> main
       if (e.key === "Enter") {
         let allProducts = getProductsData();
         const searchTerm = $(this).val().toLowerCase();
 
+<<<<<<< HEAD
         let filteredProducts = [];
         for (let productId in allProducts) {
           let product = allProducts[productId];
+=======
+        console.log(searchTerm);
+        // console.log(allProducts);
+
+        let filteredProducts = [];
+        for (let productId in allProducts) {
+          // console.log(productId);
+
+          let product = allProducts[productId];
+
+          // console.log(product);
+
+>>>>>>> main
           if (product.title.toLowerCase().includes(searchTerm)) {
             filteredProducts.push(productId);
           }
         }
 
+<<<<<<< HEAD
         // Save filtered products in local storage
+=======
+        console.log(filteredProducts);
+
+        // save filtered products in local storage
+>>>>>>> main
         localStorage.setItem("forSearch", JSON.stringify(filteredProducts));
 
         // Redirect to the search results page
@@ -45,7 +76,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   })();
 });
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 $(document).ready(function () {
   // Function to validate email
   function validateEmail(email) {
@@ -64,6 +98,7 @@ $(document).ready(function () {
     return title && title.trim() !== "";
   }
 
+<<<<<<< HEAD
   // Function to validate price (must be a positive number)
   function validatePrice(price) {
     return !isNaN(price) && parseFloat(price) > 0;
@@ -95,6 +130,8 @@ $(document).ready(function () {
     return imageFile !== undefined;
   }
 
+=======
+>>>>>>> main
   // Function to get products from local storage
   function getProducts() {
     return JSON.parse(localStorage.getItem("products")) || {};
@@ -219,7 +256,11 @@ $(document).ready(function () {
       });
     }
 
+<<<<<<< HEAD
     // Render sellers and customers
+=======
+    // Render sellers
+>>>>>>> main
     if (users.sellers) {
       $.each(users.sellers, function (email, user) {
         $(".usersTable").append(`
@@ -245,6 +286,7 @@ $(document).ready(function () {
       });
     }
 
+<<<<<<< HEAD
 
     // Event listener for the Update User button
     $(document).on("click", ".updateUserBtn", function () {
@@ -355,10 +397,13 @@ $(document).on("click", ".deleteUserBtn", function () {
     }
   });
 });
+=======
+>>>>>>> main
     // Update counts after rendering the users table
     updateCounts();
   }
 
+<<<<<<< HEAD
   // Function to clear the Add Product modal form
   function clearAddProductForm() {
     $("#addProductTitleInput").val("");
@@ -423,16 +468,77 @@ $(document).on("click", ".deleteUserBtn", function () {
     }
 
     // If all validations pass, proceed to add the product
+=======
+  // Render the products , users and inbox tables on page load
+  renderProductsTable();
+  renderUsersTable();
+  renderInboxTable();
+
+  // Add Product Button Click Event
+  $("#addBtn").on("click", function () {
+    // Get form values
+    const title = $("#producttitleInput").val();
+    const sellerEmail = $("#sellerEmailInput").val();
+
+    // Validate title
+    if (!validateTitle(title)) {
+      Toast.fire({
+        icon: "error",
+        title: "Title cannot be empty!",
+      });
+      return;
+    }
+
+    // Validate seller email
+    if (!validateEmail(sellerEmail)) {
+      Toast.fire({
+        icon: "error",
+        title: "Invalid seller email!",
+      });
+      return;
+    }
+
+    // Get the image file
+    const imageFile = $("#imageUploadInput").prop("files")[0];
+
+    // Validate required fields
+    if (
+      !$("#producttitleInput").val() ||
+      !$("#productPriceInput").val() ||
+      !$("#productStockInput").val() ||
+      !$("#productCategoryInput").val() ||
+      !$("#productDescInput").val() ||
+      !$("#sellerEmailInput").val() ||
+      !imageFile
+    ) {
+      Toast.fire({
+        icon: "error",
+        title: "Please fill in all required fields and upload an image.",
+      });
+      return;
+    }
+
+    // Convert the image file to a Base64-encoded string
+>>>>>>> main
     const reader = new FileReader();
     reader.onload = function (event) {
       const product = {
         id: Date.now(), // Unique ID for the product
+<<<<<<< HEAD
         title: title,
         price: parseFloat(price),
         stock: parseInt(stock),
         category: category,
         description: description,
         seller_email: sellerEmail,
+=======
+        title: $("#producttitleInput").val(),
+        price: parseFloat($("#productPriceInput").val()), // Convert to number
+        stock: parseInt($("#productStockInput").val()), // Convert to number
+        category: $("#productCategoryInput").val(),
+        description: $("#productDescInput").val(),
+        seller_email: $("#sellerEmailInput").val(),
+>>>>>>> main
         img_src: event.target.result, // Base64-encoded image
         sold: 0,
         Availability: true,
@@ -451,15 +557,28 @@ $(document).on("click", ".deleteUserBtn", function () {
       renderProductsTable();
 
       // Clear the form fields and reset the modal
+<<<<<<< HEAD
       clearAddProductForm();
 
       // Close the modal
+=======
+      resetModal();
+
+      // Close the modal (optional)
+>>>>>>> main
       $("#addProductModal").modal("hide");
 
       // Show success message
       Toast.fire({
         icon: "success",
         title: "Product added successfully!",
+<<<<<<< HEAD
+=======
+        showCloseButton: true,
+      }).then(() => {
+        // Redirect to the dashboard after the success message
+        window.location.href = "dash.html"; // Replace with your dashboard URL
+>>>>>>> main
       });
     };
 
@@ -473,6 +592,7 @@ $(document).on("click", ".deleteUserBtn", function () {
     const products = getProducts();
     const product = products[productId];
 
+<<<<<<< HEAD
     // Populate the Edit Product modal form
     populateEditProductForm(product);
 
@@ -533,12 +653,51 @@ $(document).on("click", ".deleteUserBtn", function () {
     product.seller_email = sellerEmail;
 
     // Handle image update if a new image is uploaded
+=======
+    // Populate the modal fields with the product data
+    $("#producttitleInput").val(product.title);
+    $("#productPriceInput").val(product.price);
+    $("#productStockInput").val(product.stock);
+    $("#productCategoryInput").val(product.category);
+    $("#productDescInput").val(product.description);
+    $("#sellerEmailInput").val(product.seller_email);
+
+    // Set the product ID in a hidden field or data attribute for reference
+    $("#addProductModal").data("edit-id", productId);
+
+    // Change the modal title and button text
+    $("#addProductModalLabel").text("Edit Product");
+    $("#addBtn").hide();
+    $("#updateProductBtn").show();
+
+    // Open the modal
+    $("#addProductModal").modal("show");
+  });
+
+  // Update Product Button Click Event
+  $("#updateProductBtn").on("click", function () {
+    const productId = $("#addProductModal").data("edit-id"); // Get the product ID from the modal
+    const products = getProducts();
+    const product = products[productId];
+
+    // Update the product details
+    product.title = $("#producttitleInput").val();
+    product.price = parseFloat($("#productPriceInput").val());
+    product.stock = parseInt($("#productStockInput").val());
+    product.category = $("#productCategoryInput").val();
+    product.description = $("#productDescInput").val();
+    product.seller_email = $("#sellerEmailInput").val();
+
+    // Handle image update if a new image is uploaded
+    const imageFile = $("#imageUploadInput").prop("files")[0];
+>>>>>>> main
     if (imageFile) {
       const reader = new FileReader();
       reader.onload = function (event) {
         product.img_src = event.target.result; // Update the image source
         saveProducts(products); // Save the updated products
         renderProductsTable(); // Re-render the table
+<<<<<<< HEAD
         $("#editProductModal").modal("hide"); // Close the modal
 
         // Show success message
@@ -546,11 +705,16 @@ $(document).on("click", ".deleteUserBtn", function () {
           icon: "success",
           title: "Product updated successfully!",
         });
+=======
+        $("#addProductModal").modal("hide"); // Close the modal
+        resetModal(); // Clear the form and reset the modal
+>>>>>>> main
       };
       reader.readAsDataURL(imageFile);
     } else {
       saveProducts(products); // Save the updated products
       renderProductsTable(); // Re-render the table
+<<<<<<< HEAD
       $("#editProductModal").modal("hide"); // Close the modal
 
       // Show success message
@@ -559,12 +723,24 @@ $(document).on("click", ".deleteUserBtn", function () {
         title: "Product updated successfully!",
       });
     }
+=======
+      $("#addProductModal").modal("hide"); // Close the modal
+      resetModal(); // Clear the form and reset the modal
+    }
+
+    // Show success message
+    Toast.fire({
+      icon: "success",
+      title: "Product updated successfully!",
+    });
+>>>>>>> main
   });
 
   // Delete Product Button Click Event
   $(document).on("click", ".deleteProductBtn", function () {
     const productId = $(this).closest("tr").data("id"); // Get the product ID from the table row
     const products = getProducts();
+<<<<<<< HEAD
   
     // SweetAlert2 confirmation dialog
     Swal.fire({
@@ -771,3 +947,284 @@ $(document).on("click", ".deleteUserBtn", function () {
   renderUsersTable();
   renderOrdersTable(); // Render orders table
 });
+=======
+
+    // Confirm deletion
+    if (confirm("Are you sure you want to delete this product?")) {
+      delete products[productId]; // Delete the product
+      saveProducts(products); // Save the updated products
+      renderProductsTable(); // Re-render the table
+
+      // Show success message
+      Toast.fire({
+        icon: "success",
+        title: "Product deleted successfully!",
+      });
+    }
+  });
+
+  // Update User Button Click Event
+  $(document).on("click", ".updateUserBtn", function () {
+    const $row = $(this).closest("tr");
+    const username = $row.find(".username-input").val();
+    const email = $row.find(".email-input").val();
+
+    // Validate username
+    if (!validateUsername(username)) {
+      Toast.fire({
+        icon: "error",
+        title: "Username cannot contain numbers!",
+      });
+      return;
+    }
+
+    // Validate email
+    if (!validateEmail(email)) {
+      Toast.fire({
+        icon: "error",
+        title: "Invalid email!",
+      });
+      return;
+    }
+
+    const oldEmail = $row.data("email"); // Get the old email
+    const role = $row.data("role");
+    const users = getUsers();
+
+    // Get updated values
+    const userRole = role === "admin" ? "admin" : $row.find("td:eq(2) select").val(); // Admin role cannot be changed
+    const accountState = $row.find("td:eq(3) select").val(); // Get the selected account status
+
+    // If the user is being updated to admin, demote the existing admin (if any)
+    if (userRole === "admin" && role !== "admin") {
+      const existingAdminEmail = Object.keys(users.admin)[0];
+      if (existingAdminEmail) {
+        const existingAdmin = users.admin[existingAdminEmail];
+        delete users.admin[existingAdminEmail];
+        existingAdmin.role = "customer"; // Demote to customer
+        users.customers[existingAdminEmail] = existingAdmin;
+      }
+    }
+
+    // Update user data
+    if (role === "admin") {
+      const user = users.admin[oldEmail];
+      user.username = username; // Only update the username for admin
+      user.accountstate = accountState; // Update account status
+      users.admin[oldEmail] = user;
+    } else if (role === "customer") {
+      const user = users.customers[oldEmail];
+      delete users.customers[oldEmail]; // Remove the old email entry
+      user.username = username;
+      user.email = email;
+      user.role = userRole;
+      user.accountstate = accountState; // Update account status
+      users[userRole === "admin" ? "admin" : userRole === "customer" ? "customers" : "sellers"][email] = user; // Add the new email entry to the correct role
+    } else if (role === "seller") {
+      const user = users.sellers[oldEmail];
+      delete users.sellers[oldEmail]; // Remove the old email entry
+      user.username = username;
+      user.email = email;
+      user.role = userRole;
+      user.accountstate = accountState; // Update account status
+      users[userRole === "admin" ? "admin" : userRole === "customer" ? "customers" : "sellers"][email] = user; // Add the new email entry to the correct role
+    }
+
+    // Save the updated users object to local storage
+    saveUsers(users);
+
+    // Update the data-email and data-role attributes of the row
+    $row.attr("data-email", email);
+    $row.attr("data-role", userRole);
+
+    // Re-render the users table
+    renderUsersTable();
+
+    // Show success message
+    Toast.fire({
+      icon: "success",
+      title: "User updated successfully!",
+    });
+  });
+
+  // Delete User Button Click Event
+  $(document).on("click", ".deleteUserBtn", function () {
+    const email = $(this).closest("tr").data("email");
+    const role = $(this).closest("tr").data("role");
+    const users = getUsers();
+
+    // Prevent deletion of admin
+    if (role === "admin") {
+      Toast.fire({
+        icon: "error",
+        title: "Admin cannot be deleted!",
+      });
+      return;
+    }
+
+    // Confirm deletion for non-admin users
+    if (confirm("Are you sure you want to delete this user?")) {
+      if (role === "customer") {
+        delete users.customers[email];
+      } else if (role === "seller") {
+        delete users.sellers[email];
+      }
+
+      // Save the updated users object to local storage
+      saveUsers(users);
+
+      // Re-render the users table
+      renderUsersTable();
+
+      // Show success message
+      Toast.fire({
+        icon: "success",
+        title: "User deleted successfully!",
+      });
+    }
+  });
+});
+
+// Function to get inbox
+function getInbox() {
+  return JSON.parse(localStorage.getItem("inbox")) || [];
+}
+
+// Function to save inbox
+function saveInbox(inbox) {
+  return new Promise((resolve, reject) => {
+    try {
+      localStorage.setItem("inbox", JSON.stringify(inbox));
+      resolve("Inbox saved successfully");
+    } catch (error) {
+      reject("Failed to save inbox: " + error.message);
+    }
+  });
+}
+
+function getUsersData() {
+  const storedData = localStorage.getItem("signUpData");
+  return JSON.parse(storedData);
+}
+function setUsersData(data) {
+  // console.log("inside setUsersData");
+  return new Promise((resolve, reject) => {
+    try {
+      localStorage.setItem("signUpData", JSON.stringify(data));
+      resolve("data saved successfully!");
+    } catch (error) {
+      reject("Error saving data: " + error.message);
+    }
+  });
+}
+
+// Function to render the inbox table
+function renderInboxTable() {
+  const inbox = getInbox();
+
+  $(".inboxCount").text(inbox.length);
+
+  $(".inboxTable").html(""); // Clear the table
+  $.each(inbox, function (index, message) {
+    // console.log(message);
+
+    //show the unsolved message only
+
+    // name
+    let nameColumn = $("<td>");
+    let nameInput = $("<input type='text' disabled >");
+    nameInput.addClass("form-control text-center");
+    nameInput.val(message.name);
+    nameColumn.append(nameInput);
+    // nameColumn.addClass("d-flex justify-content-center");
+
+    // mail
+    let mailColumn = $("<td>");
+    let mailInput = $("<input type='email' disabled >");
+    mailInput.addClass("form-control text-center");
+    mailInput.val(message.email);
+    mailColumn.append(mailInput);
+    // nameColumn.addClass("d-flex justify-content-center");
+
+    // subject
+    let subjectColumn = $("<td>");
+    let subjectInput = $("<input type='text' disabled >");
+    subjectInput.addClass("form-control text-center");
+    subjectInput.val(message.subject);
+    subjectColumn.append(subjectInput);
+    // nameColumn.addClass("d-flex justify-content-center");
+
+    //status
+    let statusColumn = $("<td valign='middle'>");
+    let statusButton = $("<button class = 'btn' ></button>");
+    statusButton.addClass("form-control text-center");
+    if (message.solved) {
+      statusButton.text("Solved");
+      statusButton.addClass("bg-success text-white");
+    } else {
+      statusButton.text("Unsolved");
+      statusButton.addClass("bg-danger text-white");
+    }
+    statusColumn.append(statusButton);
+    // statusColumn.addClass("d-flex justify-content-center");
+
+    statusButton.on("click", function () {
+      if (!message.solved) {
+        message.solved = true;
+        statusButton.text("Solved");
+        statusButton.removeClass("bg-danger ");
+        statusButton.addClass("bg-success ");
+
+        // console.log(inbox);
+        saveInbox(inbox)
+          .then(() => {
+            // console.log(inbox);
+            renderInboxTable();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+        //update user inbox
+        const usersData = getUsersData();
+        // console.log(usersData);
+        // console.log(usersData.customers);
+        let customer = usersData.customers[message.email];
+        let solvedMessageForm = {
+          subject: message.subject,
+          message: "your issue solved successfully!",
+          solved: true,
+          seen: false,
+        };
+        if (customer) {
+          customer.inbox.push(solvedMessageForm);
+          setUsersData(usersData);
+        }
+
+        // console.log(customer);
+      }
+    });
+
+    // message button
+    let messageColumn = $("<td>");
+    let messageButton = $("<button type='button' class='btn btn-primary messageBtn'>Show message</button>");
+    messageButton.data("index", index);
+    messageColumn.append(messageButton);
+
+    // add event listeners on messageButton
+    messageButton.click(function () {
+      Swal.fire({
+        title: message.subject,
+        icon: "info",
+        text: message.message,
+        confirmButtonText: "Close",
+      });
+    });
+
+    // append to row
+    let row = $("<tr>");
+    row.append(nameColumn, mailColumn, subjectColumn, statusColumn, messageColumn);
+    $(".inboxTable").append(row);
+  });
+}
+>>>>>>> main

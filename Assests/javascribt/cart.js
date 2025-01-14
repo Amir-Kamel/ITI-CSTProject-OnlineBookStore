@@ -174,8 +174,12 @@ $(function () {
           cart.addClass("d-none");
           // console.log(product_id);
           delete customerCart[product_id];
+<<<<<<< HEAD
           setUsersData(usersData);
           updateCartBadge();
+=======
+
+>>>>>>> main
           calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
           if (Object.keys(customerCart).length == 0) {
             emptyCartWrapper.removeClass("d-none");
@@ -193,10 +197,18 @@ $(function () {
             $(cart.find(".minus").children()[0]).addClass("d-none");
             $(cart.find(".minus").children()[1]).removeClass("d-none");
           }
+<<<<<<< HEAD
           updateCartBadge();
           setUsersData(usersData);
           cart.find("#quantity").text(customerCart[product_id]["quantity"]);
         }
+=======
+          cart.find("#quantity").text(customerCart[product_id]["quantity"]);
+        }
+        setUsersData(usersData)
+          .then(() => updateCartBadge())
+          .catch((error) => console.log(error));
+>>>>>>> main
         // console.log("minus event");
       });
       //encrease product event
@@ -216,9 +228,17 @@ $(function () {
           customerCart[product_id]["quantity"]++;
           calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
           // console.log(customerCart[product_id]["quantity"]);
+<<<<<<< HEAD
           setUsersData(usersData);
           cart.find("#quantity").text(customerCart[product_id]["quantity"]);
         }
+=======
+          cart.find("#quantity").text(customerCart[product_id]["quantity"]);
+        }
+        setUsersData(usersData)
+          .then(() => updateCartBadge())
+          .catch((error) => console.log(error));
+>>>>>>> main
 
         // console.log("plus event");
       });
@@ -229,8 +249,14 @@ $(function () {
         let product_id = $(this).data("id");
         $("#" + product_id + "").addClass("d-none");
         delete customerCart[product_id];
+<<<<<<< HEAD
         setUsersData(usersData);
         updateCartBadge();
+=======
+        setUsersData(usersData)
+          .then(() => updateCartBadge())
+          .catch((error) => console.log(error));
+>>>>>>> main
         calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
         if (Object.keys(customerCart).length == 0) {
           emptyCartWrapper.removeClass("d-none");
@@ -342,6 +368,17 @@ $(function () {
     // console.log(time); // e.g., "5:05 PM"
     $($("#time").children()[1]).text(time);
 
+<<<<<<< HEAD
+=======
+    // Calculate delivery day
+    const deliveryDate = new Date(today);
+    deliveryDate.setDate(today.getDate() + 2); // Add 2 days to today
+    const deliveryDay = deliveryDate.getDate();
+    const deliveryMonth = months[deliveryDate.getMonth()];
+    const deliveryYear = deliveryDate.getFullYear();
+    const formattedDeliveryDate = `${deliveryDay} ${deliveryMonth} ${deliveryYear}`;
+
+>>>>>>> main
     // products & quantities
     let products = getProductsData();
     let productsSummaryWrapper = $("#products-summary-wrapper");
@@ -352,6 +389,10 @@ $(function () {
       // console.log(customerCart);
       if (customerCart[productId]["selected"]) {
         productDetails = {
+<<<<<<< HEAD
+=======
+          productId: productId,
+>>>>>>> main
           category: product.category,
           title: product.title,
           price: product.price,
@@ -371,6 +412,7 @@ $(function () {
     }
     $("#summary-shipping").text(shipping);
     calculatingSubtotal(customerCart, shipping, $("#summary-subtotal"), $("#summary-total"));
+<<<<<<< HEAD
 
     //function to generate ID for product 
     function generateOrderId() {
@@ -403,10 +445,35 @@ $(function () {
       setUsersData(usersData);
     
       // Show success message
+=======
+    $("#confirm").on("click", function () {
+      order_details = {
+        order_date: {
+          date: formattedDate,
+          time: time,
+        },
+        delivery_date: {
+          date: formattedDeliveryDate,
+        },
+        products: soldProducts,
+      };
+      console.log(order_details);
+      customerData["orders_history"].push(order_details);
+      for (productId in customerCart) {
+        if (customerCart[productId]["selected"]) delete customerCart[productId];
+      }
+      setUsersData(usersData);
+      updateProducts(soldProducts);
+>>>>>>> main
       Swal.fire({
         title: "Great!",
         text: "Thank you for your payment! Your products will be with you soon. We hope you enjoy your purchase!",
         icon: "success",
+<<<<<<< HEAD
+=======
+      }).then(() => {
+        window.location.reload(); // Reload the window after the dialog is closed
+>>>>>>> main
       });
     });
   });
@@ -417,7 +484,18 @@ function getUsersData() {
 }
 function setUsersData(data) {
   // console.log("inside setUsersData");
+<<<<<<< HEAD
   localStorage.setItem("signUpData", JSON.stringify(data));
+=======
+  return new Promise((resolve, reject) => {
+    try {
+      localStorage.setItem("signUpData", JSON.stringify(data));
+      resolve("data saved successfully!");
+    } catch (error) {
+      reject("Error saving data: " + error.message);
+    }
+  });
+>>>>>>> main
 }
 
 function getLoggedInUserEmail() {
@@ -429,6 +507,23 @@ function getProductsData() {
   return JSON.parse(storedData);
 }
 
+<<<<<<< HEAD
+=======
+function updateProducts(soldProducts) {
+  const products = getProductsData();
+  soldProducts.forEach((product) => {
+    let productId = product.productId;
+    console.log(productId);
+    // console.log("before", products[productId].stock, products[productId].sold);
+    products[productId].stock -= product.quantity;
+    products[productId].sold += product.quantity;
+    // console.log("after", products[productId].stock, products[productId].sold);
+  });
+  localStorage.setItem("products", JSON.stringify(products));
+  // console.log("updated products:", products);
+}
+
+>>>>>>> main
 function calculatingSubtotal(customerCart, shipping, subtotal_container, total_container) {
   let subtotal = 0;
   let numberOfSelectedItems = 0;

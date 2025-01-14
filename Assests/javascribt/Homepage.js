@@ -60,98 +60,45 @@ document.addEventListener("DOMContentLoaded", function () {
 import { products } from "./productsdata.js";
 // Using jQuery to set data and interact with DOM
 $(document).ready(function () {
+  function setData() {
+    localStorage.setItem("products", JSON.stringify(products));
+  }
+
+  function getData() {
+    const storedData = localStorage.getItem("products");
+    return JSON.parse(storedData);
+  }
+
   // If the products data is null
   if (!localStorage.getItem("products")) {
     setData();
   }
 
   let allProducts = getData();
-  displayRandomProducts(allProducts);
 
-  displayProducts(allProducts);
-  let allProductsLength = Object.keys(allProducts).length;
-  let product_id = Math.floor(Math.random() * (allProductsLength - 1 + 1) + 1);
-  const randomProducts = allProducts[product_id];
-  // console.log(randomProducts);
+  // Function to add product to cart and save in local storage
+  function addToCart(product) {
+    const loggedInUserEmail = getLoggedInUserEmail();
+    if (loggedInUserEmail) {
+      const cartKey = `${loggedInUserEmail}_cart`;
 
-  //updating banner photo,title and description
-  if (randomProducts) {
-    $("#banner > div>img ").prop("src", randomProducts.img_src); // updating image
-    $("#banner-title").text(`Book of the Month : ${randomProducts.title}`); // updating title
-    $("#banner-description").text(`${randomProducts.description}`);
-    localStorage.setItem("bannerProduct", JSON.stringify(randomProducts));
-  }
-  $("#banner-btn").on("click", function () {
-    localStorage.setItem("selectedProduct", JSON.stringify(product_id));
-    window.location.href = "./Product Page.html";
-  });
+      let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+      cart.push(product);
+      localStorage.setItem(cartKey, JSON.stringify(cart));
+      updateCartBadge(); // Update the cart badge after adding the product
 
-  $("#tabs .nav-link").click(function (e) {
-    e.preventDefault();
-    $("#tabs .nav-link").removeClass("active text-primary");
-    $(this).addClass("active text-primary");
-    const category = $(this).data("category");
-
-    displayProducts(allProducts, category);
-  });
-});
-function displayRandomProducts(allProducts) {
-  const randomProducts = getRandomProducts(allProducts);
-  const container = $(".ran-products > .row");
-
-  container.empty(); // clear last content
-  // console.log(randomProducts);
-
-  randomProducts.forEach((productId) => {
-    let product = allProducts[productId];
-
-    const productCard = $(`
-      <div class="col">
-        <div class="card card-style mx-auto">
-          <img style="height: 250px" src="${product.img_src}" class="card-img-top" alt="${product.title}" />
-          <div class="card-body text-center">
-            <a href="#" class="btn add-to-cart">Add To Cart</a>
-          </div>
-        </div>
-      </div>
-    `);
-    productCard.find(".add-to-cart").on("click", function (e) {
-      e.stopPropagation(); // Prevent event bubbling
-      addToCart(productId);
-    });
-    container.append(productCard);
-    productCard.on("click", function () {
-      localStorage.setItem("selectedProduct", JSON.stringify(productId));
-      window.location.href = "./Product Page.html";
-    });
-  });
-}
-
-function getRandomProducts(products) {
-  const randomProducts = [];
-  const productKeys = Object.keys(products);
-  // console.log(productKeys);
-
-  // select 4 random products
-  while (randomProducts.length < 4) {
-    const randomIndex = Math.floor(Math.random() * productKeys.length) + 1;
-
-    // check if the product had been added before
-    if (!randomProducts.includes(randomIndex)) {
-      randomProducts.push(randomIndex);
+      // Show toast notification for adding product to cart
+      Toast.fire({
+        icon: "success",
+        title: "Item added to cart successfully.",
+      });
+    } else {
+      Toast.fire({
+        icon: "info",
+        title: "You need to be logged in to add products to cart.",
+      });
     }
   }
-  return randomProducts;
-}
-
-function setData() {
-  localStorage.setItem("products", JSON.stringify(products));
-}
-
-function getData() {
-  const storedData = localStorage.getItem("products");
-  return JSON.parse(storedData);
-}
 
 function displayProducts(products, category = "All") {
   const container = $("#books-Container");
