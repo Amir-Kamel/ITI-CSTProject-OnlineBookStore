@@ -228,9 +228,10 @@ $(document).ready(function () {
     updateCounts();
   }
 
-  // Render the products and users tables on page load
+  // Render the products , users and inbox tables on page load
   renderProductsTable();
   renderUsersTable();
+  renderInboxTable();
 
   // Add Product Button Click Event
   $("#addBtn").on("click", function () {
@@ -531,3 +532,146 @@ $(document).ready(function () {
     }
   });
 });
+
+// Function to get inbox
+function getInbox() {
+  return JSON.parse(localStorage.getItem("inbox")) || [];
+}
+
+// Function to save inbox
+function saveInbox(inbox) {
+  return new Promise((resolve, reject) => {
+    try {
+      localStorage.setItem("inbox", JSON.stringify(inbox));
+      resolve("Inbox saved successfully");
+    } catch (error) {
+      reject("Failed to save inbox: " + error.message);
+    }
+  });
+}
+
+function getUsersData() {
+  const storedData = localStorage.getItem("signUpData");
+  return JSON.parse(storedData);
+}
+function setUsersData(data) {
+  // console.log("inside setUsersData");
+  return new Promise((resolve, reject) => {
+    try {
+      localStorage.setItem("signUpData", JSON.stringify(data));
+      resolve("data saved successfully!");
+    } catch (error) {
+      reject("Error saving data: " + error.message);
+    }
+  });
+}
+
+// Function to render the inbox table
+function renderInboxTable() {
+  const inbox = getInbox();
+
+  $(".inboxCount").text(inbox.length);
+
+  $(".inboxTable").html(""); // Clear the table
+  $.each(inbox, function (index, message) {
+    // console.log(message);
+
+    //show the unsolved message only
+
+    // name
+    let nameColumn = $("<td>");
+    let nameInput = $("<input type='text' disabled >");
+    nameInput.addClass("form-control text-center");
+    nameInput.val(message.name);
+    nameColumn.append(nameInput);
+    // nameColumn.addClass("d-flex justify-content-center");
+
+    // mail
+    let mailColumn = $("<td>");
+    let mailInput = $("<input type='email' disabled >");
+    mailInput.addClass("form-control text-center");
+    mailInput.val(message.email);
+    mailColumn.append(mailInput);
+    // nameColumn.addClass("d-flex justify-content-center");
+
+    // subject
+    let subjectColumn = $("<td>");
+    let subjectInput = $("<input type='text' disabled >");
+    subjectInput.addClass("form-control text-center");
+    subjectInput.val(message.subject);
+    subjectColumn.append(subjectInput);
+    // nameColumn.addClass("d-flex justify-content-center");
+
+    //status
+    let statusColumn = $("<td valign='middle'>");
+    let statusButton = $("<button class = 'btn' ></button>");
+    statusButton.addClass("form-control text-center");
+    if (message.solved) {
+      statusButton.text("Solved");
+      statusButton.addClass("bg-success text-white");
+    } else {
+      statusButton.text("Unsolved");
+      statusButton.addClass("bg-danger text-white");
+    }
+    statusColumn.append(statusButton);
+    // statusColumn.addClass("d-flex justify-content-center");
+
+    statusButton.on("click", function () {
+      if (!message.solved) {
+        message.solved = true;
+        statusButton.text("Solved");
+        statusButton.removeClass("bg-danger ");
+        statusButton.addClass("bg-success ");
+
+        // console.log(inbox);
+        saveInbox(inbox)
+          .then(() => {
+            // console.log(inbox);
+            renderInboxTable();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+        //update user inbox
+        const usersData = getUsersData();
+        // console.log(usersData);
+        // console.log(usersData.customers);
+        let customer = usersData.customers[message.email];
+        let solvedMessageForm = {
+          subject: message.subject,
+          message: "your issue solved successfully!",
+          solved: true,
+          seen: false,
+        };
+        if (customer) {
+          customer.inbox.push(solvedMessageForm);
+          setUsersData(usersData);
+        }
+
+        // console.log(customer);
+      }
+    });
+
+    // message button
+    let messageColumn = $("<td>");
+    let messageButton = $("<button type='button' class='btn btn-primary messageBtn'>Show message</button>");
+    messageButton.data("index", index);
+    messageColumn.append(messageButton);
+
+    // add event listeners on messageButton
+    messageButton.click(function () {
+      Swal.fire({
+        title: message.subject,
+        icon: "info",
+        text: message.message,
+        confirmButtonText: "Close",
+      });
+    });
+
+    // append to row
+    let row = $("<tr>");
+    row.append(nameColumn, mailColumn, subjectColumn, statusColumn, messageColumn);
+    $(".inboxTable").append(row);
+  });
+}
