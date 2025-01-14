@@ -64,6 +64,9 @@ $(document).ready(function () {
   if (!localStorage.getItem("products")) {
     setData();
   }
+  if (!localStorage.getItem("inbox")) {
+    setInbox();
+  }
 
   let allProducts = getData();
   displayRandomProducts(allProducts);
@@ -95,6 +98,13 @@ $(document).ready(function () {
     displayProducts(allProducts, category);
   });
 });
+
+//function to create an inbox that will be seen by admins only
+function setInbox() {
+  let inbox = [];
+  localStorage.setItem("inbox", JSON.stringify(inbox));
+}
+
 function displayRandomProducts(allProducts) {
   const randomProducts = getRandomProducts(allProducts);
   const container = $(".ran-products > .row");
