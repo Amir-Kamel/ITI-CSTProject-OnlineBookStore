@@ -115,3 +115,20 @@ body {
   /* text-decoration: underline; */
   text-underline-offset: 4px;
 }
+
+.shake-animation {
+  animation: shake 0.5s ease-in-out infinite;
+}
+
+.modal-dialog-scrollable .modal-body {
+  max-height: 400px; /* Adjust this value as needed */
+  overflow-y: auto;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+  75% { transform: translateX(-10px); }
+  100% { transform: translateX(0); }
+}

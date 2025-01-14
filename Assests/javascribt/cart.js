@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateFavoritesBadge();
         setActiveLink();
         updateUserDropdown();
+        updateInboxBadge();
       }
     } catch (error) {
       console.error("Error loading content:", error);
@@ -174,8 +175,7 @@ $(function () {
           cart.addClass("d-none");
           // console.log(product_id);
           delete customerCart[product_id];
-          setUsersData(usersData);
-          updateCartBadge();
+
           calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
           if (Object.keys(customerCart).length == 0) {
             emptyCartWrapper.removeClass("d-none");
@@ -193,10 +193,11 @@ $(function () {
             $(cart.find(".minus").children()[0]).addClass("d-none");
             $(cart.find(".minus").children()[1]).removeClass("d-none");
           }
-          updateCartBadge();
-          setUsersData(usersData);
           cart.find("#quantity").text(customerCart[product_id]["quantity"]);
         }
+        setUsersData(usersData)
+          .then(() => updateCartBadge())
+          .catch((error) => console.log(error));
         // console.log("minus event");
       });
       //encrease product event
@@ -216,9 +217,11 @@ $(function () {
           customerCart[product_id]["quantity"]++;
           calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
           // console.log(customerCart[product_id]["quantity"]);
-          setUsersData(usersData);
           cart.find("#quantity").text(customerCart[product_id]["quantity"]);
         }
+        setUsersData(usersData)
+          .then(() => updateCartBadge())
+          .catch((error) => console.log(error));
 
         // console.log("plus event");
       });
@@ -229,8 +232,9 @@ $(function () {
         let product_id = $(this).data("id");
         $("#" + product_id + "").addClass("d-none");
         delete customerCart[product_id];
-        setUsersData(usersData);
-        updateCartBadge();
+        setUsersData(usersData)
+          .then(() => updateCartBadge())
+          .catch((error) => console.log(error));
         calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
         if (Object.keys(customerCart).length == 0) {
           emptyCartWrapper.removeClass("d-none");
@@ -342,6 +346,14 @@ $(function () {
     // console.log(time); // e.g., "5:05 PM"
     $($("#time").children()[1]).text(time);
 
+    // Calculate delivery day
+    const deliveryDate = new Date(today);
+    deliveryDate.setDate(today.getDate() + 2); // Add 2 days to today
+    const deliveryDay = deliveryDate.getDate();
+    const deliveryMonth = months[deliveryDate.getMonth()];
+    const deliveryYear = deliveryDate.getFullYear();
+    const formattedDeliveryDate = `${deliveryDay} ${deliveryMonth} ${deliveryYear}`;
+
     // products & quantities
     let products = getProductsData();
     let productsSummaryWrapper = $("#products-summary-wrapper");
@@ -352,6 +364,7 @@ $(function () {
       // console.log(customerCart);
       if (customerCart[productId]["selected"]) {
         productDetails = {
+          productId: productId,
           category: product.category,
           title: product.title,
           price: product.price,
@@ -373,8 +386,13 @@ $(function () {
     calculatingSubtotal(customerCart, shipping, $("#summary-subtotal"), $("#summary-total"));
     $("#confirm").on("click", function () {
       order_details = {
-        date: formattedDate,
-        time: time,
+        order_date: {
+          date: formattedDate,
+          time: time,
+        },
+        delivery_date: {
+          date: formattedDeliveryDate,
+        },
         products: soldProducts,
       };
       console.log(order_details);
@@ -383,10 +401,13 @@ $(function () {
         if (customerCart[productId]["selected"]) delete customerCart[productId];
       }
       setUsersData(usersData);
+      updateProducts(soldProducts);
       Swal.fire({
         title: "Great!",
         text: "Thank you for your payment! Your products will be with you soon. We hope you enjoy your purchase!",
         icon: "success",
+      }).then(() => {
+        window.location.reload(); // Reload the window after the dialog is closed
       });
     });
   });
@@ -397,7 +418,14 @@ function getUsersData() {
 }
 function setUsersData(data) {
   // console.log("inside setUsersData");
-  localStorage.setItem("signUpData", JSON.stringify(data));
+  return new Promise((resolve, reject) => {
+    try {
+      localStorage.setItem("signUpData", JSON.stringify(data));
+      resolve("data saved successfully!");
+    } catch (error) {
+      reject("Error saving data: " + error.message);
+    }
+  });
 }
 
 function getLoggedInUserEmail() {
@@ -407,6 +435,20 @@ function getLoggedInUserEmail() {
 function getProductsData() {
   const storedData = localStorage.getItem("products");
   return JSON.parse(storedData);
+}
+
+function updateProducts(soldProducts) {
+  const products = getProductsData();
+  soldProducts.forEach((product) => {
+    let productId = product.productId;
+    console.log(productId);
+    // console.log("before", products[productId].stock, products[productId].sold);
+    products[productId].stock -= product.quantity;
+    products[productId].sold += product.quantity;
+    // console.log("after", products[productId].stock, products[productId].sold);
+  });
+  localStorage.setItem("products", JSON.stringify(products));
+  // console.log("updated products:", products);
 }
 
 function calculatingSubtotal(customerCart, shipping, subtotal_container, total_container) {

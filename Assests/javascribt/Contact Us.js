@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateFavoritesBadge();
         setActiveLink();
         updateUserDropdown();
+        updateInboxBadge();
       }
     } catch (error) {
       console.error("Error loading content:", error);
@@ -58,6 +59,20 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 $(document).ready(function () {
+  inbox = getInbox();
+
+  // Check if the category is 'customers' and fill the email field with the stored email
+  const sessionData = JSON.parse(sessionStorage.getItem("currentSession"));
+  if (sessionData && sessionData.session.category === "customers") {
+    const email = sessionData.session.email;
+    console.log(email);
+    if (email) {
+      // Set the email in the input field and make it readonly
+      $("#email").val(email);
+      $("#email").prop("readonly", true); // Make the email field read-only
+    }
+  }
+
   $("#formcontact").on("submit", function (event) {
     event.preventDefault(); // prevent the default not to refresh the page to show the message toast after submit
 
@@ -76,7 +91,7 @@ $(document).ready(function () {
       $("#errorname").addClass("d-none");
     }
 
-    // Validate email address
+    // Validate email address  
     if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]{2,}\.[a-zA-Z]{2,}$/.test(emailinput)) {
       isValid = false;
       $("#erroremail").removeClass("d-none");
@@ -87,18 +102,30 @@ $(document).ready(function () {
     // If all validations pass
     if (isValid) {
       // Save data to local storage
-      localStorage.setItem("Contact Name Data", JSON.stringify(nameinput));
-      localStorage.setItem("Contact Email Data", JSON.stringify(emailinput));
-      localStorage.setItem("Contact Subject Data", JSON.stringify(subjectinput));
-      localStorage.setItem("Contact Message Data", JSON.stringify(messageinput));
+      const contactData = {
+        name: nameinput,
+        email: emailinput,
+        subject: subjectinput,
+        message: messageinput,
+        solved: false,
+      };
+      inbox.push(contactData);
+      console.log(inbox);
+      localStorage.setItem("inbox", JSON.stringify(inbox));
+
+      // clear the form
+      $("#formcontact")[0].reset();
       // show message toast
       $(".toast").toast("show");
-
-      //clear the form
-      $("#formcontact")[0].reset();
     }
   });
 });
+
+
+function getInbox() {
+  const inbox = localStorage.getItem("inbox");
+  return JSON.parse(inbox);
+}
 setActiveLink = function () {
   const pathName = window?.location?.pathname?.toLowerCase();
   if (pathName.includes("home") && pathName) {

@@ -68,7 +68,11 @@ function getProductsData() {
 function updateFavoritesBadge() {
   const currentSession = JSON.parse(sessionStorage.getItem("currentSession"));
 
-  if (currentSession && currentSession.session && currentSession.session.email) {
+  if (
+    currentSession &&
+    currentSession.session &&
+    currentSession.session.email
+  ) {
     const loggedInUserEmail = currentSession.session.email;
 
     // Get the signUpData object from localStorage
@@ -92,6 +96,32 @@ function updateFavoritesBadge() {
   }
 }
 
+// Function to update the inbox badge based on the messages in local inbox local storage
+function updateInboxBadge() {
+  const inbox = JSON.parse(localStorage.getItem("inbox")) || [];
+
+  const inboxItems = inbox.length;
+
+  $("#inboxBadge").text(inboxItems);
+
+  if (inboxItems > 0) {
+    animateBell();
+  }
+}
+
+// Vibrating animation for the bell icon
+function animateBell() {
+  const bell = $("#bellicon");
+
+  // Add a shake class from css keyframes
+  bell.addClass("shake-animation");
+
+  // interval of shaking
+  setTimeout(() => {
+    bell.removeClass("shake-animation");
+  }, 1000); // 1 sec shaking
+}
+
 // Function to update the cart badge based on the items in local storage
 function updateCartBadge() {
   const loggedInUser = getLoggedInUserEmail();
@@ -101,7 +131,8 @@ function updateCartBadge() {
     // Retrieve the cart from local storage and update the cart badge
     let UsersData = getUsersData();
     // console.log(customerCart);
-    let customerCart = UsersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
+    let customerCart =
+      UsersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
     let productsNumber = 0;
     for (product in customerCart) {
       // console.log(customerCart[product]);
@@ -131,7 +162,8 @@ function addToCart(product_id) {
   if (loggedInUser) {
     // Retrieve the cart from local storage and update the cart badge
     let UsersData = getUsersData();
-    let customerCart = UsersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
+    let customerCart =
+      UsersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
     let inStock = getProductsData()[product_id]["stock"];
     // console.log(inStock);
     if (inStock == 0) {
@@ -202,7 +234,9 @@ function addToFavorite(key, buttonfav) {
     if (productIndex === -1) {
       // Add the product to the wishlist
       customer.wishlist.push(key);
-      $(buttonfav.children()[0]).removeClass("fa-regular ").addClass("fa-solid text-danger");
+      $(buttonfav.children()[0])
+        .removeClass("fa-regular ")
+        .addClass("fa-solid text-danger");
       Toast.fire({
         icon: "success",
         title: "Item added to wishlist successfully.",
@@ -210,7 +244,9 @@ function addToFavorite(key, buttonfav) {
     } else {
       // Remove the product from the wishlist
       customer.wishlist.splice(productIndex, 1);
-      $(buttonfav.children()[0]).removeClass("fa-solid text-danger").addClass("fa-regular");
+      $(buttonfav.children()[0])
+        .removeClass("fa-solid text-danger")
+        .addClass("fa-regular");
       Toast.fire({
         icon: "warning",
         title: "Item removed from wishlist successfully.",
@@ -249,7 +285,9 @@ function checkheartbutton() {
       // console.log(`#${productId}`);
       let product = $(`#product_${productId}`);
       favButton = product.find(".add-to-fav");
-      $(favButton.children()[0]).removeClass("fa-regular ").addClass("fa-solid text-danger");
+      $(favButton.children()[0])
+        .removeClass("fa-regular ")
+        .addClass("fa-solid text-danger");
       // console.log(product);
     });
   }
@@ -257,6 +295,60 @@ function checkheartbutton() {
   //   // If no user is logged in, ensure the button has the default style
   //   BookCard.find(".btn-fav").addClass("btn-outline-secondary").removeClass("btn-danger");
   // }
+}
+
+function showInboxPopup() {
+  const inbox = JSON.parse(localStorage.getItem("inbox")) || [];
+  const inboxContainer = $("#inboxMessagesContainer");
+
+  // Clear previous content
+  inboxContainer.empty();
+
+  if (inbox.length > 0) {
+    // Populate messages
+    inbox.forEach((message, index) => {
+      const messageElement = `
+        <div class="card mb-2">
+          <div class="card-body d-flex align-items-center" >
+          <div>
+            <h6 class="card-title fw-bold text-decoration-underline">${message.subject}</h6>
+            <p class="card-text">${message.message}</p>
+            <small class="text-muted">From: ${message.name} (${message.email})</small>
+            </div>
+             <button class="btn btn-primary btn-sm ms-auto mt-auto" onclick="removeMessage(${index})">Remove</button>
+             </div>
+        </div>
+      `;
+      inboxContainer.append(messageElement);
+    });
+  } else {
+    // Show "inbox is empty" message
+    const emptyMessage = `
+      <div class="text-center">
+        <i class="fas fa-envelope-open-text fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Your inbox is empty or has no new messages.</p>
+      </div>
+    `;
+    inboxContainer.append(emptyMessage);
+  }
+
+  // Show the popup
+  $("#inboxPopup").modal("show");
+}
+
+//function remove message from inbox pop up window
+function removeMessage(index) {
+  let inbox = JSON.parse(localStorage.getItem("inbox")) || [];
+
+  // Remove the selected message
+  inbox.splice(index, 1);
+
+  // Update the inbox in local storage
+  localStorage.setItem("inbox", JSON.stringify(inbox));
+
+  // Refresh the popup and badge
+  showInboxPopup();
+  updateInboxBadge();
 }
 
 // Function to highlight the active link in the navbarfunction setActiveLink() {
@@ -279,6 +371,7 @@ window.onload = function () {
   updateUserDropdown();
   setActiveLink();
   updateCartBadge();
+  updateInboxBadge();
 };
 
 setActiveLink = function () {

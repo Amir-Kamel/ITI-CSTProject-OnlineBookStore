@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateFavoritesBadge();
         setActiveLink();
         updateUserDropdown();
+        updateInboxBadge();
       }
     } catch (error) {
       console.error("Error loading content:", error);
