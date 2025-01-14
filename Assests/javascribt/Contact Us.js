@@ -121,7 +121,6 @@ $(document).ready(function () {
   });
 });
 
-
 function getInbox() {
   const inbox = localStorage.getItem("inbox");
   return JSON.parse(inbox);
