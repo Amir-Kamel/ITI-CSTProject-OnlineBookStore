@@ -1,21 +1,60 @@
 document.addEventListener("DOMContentLoaded", function () {
-  function loadContent(url, elementId) {
-    fetch(url)
-      .then((response) => response.text())
-      .then((data) => {
-        document.getElementById(elementId).innerHTML = data;
-        if (elementId === "mainNavigation") {
-          updateCartBadge();
-          updateFavoritesBadge();
-          setActiveLink();
-          updateUserDropdown();
-        }
-      })
-      .catch((error) => console.error("Error loading content:", error));
+  async function loadContent(url, elementId) {
+    try {
+      const response = await fetch(url);
+      const data = await response.text();
+      document.getElementById(elementId).innerHTML = data;
+
+      // Ensure the badge is updated after the navigation is loaded
+      if (elementId === "mainNavigation") {
+        // Call the functions defined in nav.js
+        updateCartBadge();
+        updateFavoritesBadge();
+        setActiveLink();
+        updateUserDropdown();
+      }
+    } catch (error) {
+      console.error("Error loading content:", error);
+    }
   }
 
-  loadContent("nav.html", "mainNavigation");
-  loadContent("footer.html", "footer");
+  // Load navigation and footer, then initialize search functionality
+  (async function () {
+    await loadContent("nav.html", "mainNavigation");
+    await loadContent("footer.html", "footer");
+    // Initialize search functionality after navigation content is loaded
+    $("#global-search").on("keydown", function (e) {
+      // console.log("I am here");
+      if (e.key === "Enter") {
+        let allProducts = getProductsData();
+        const searchTerm = $(this).val().toLowerCase();
+
+        console.log(searchTerm);
+        // console.log(allProducts);
+
+        let filteredProducts = [];
+        for (let productId in allProducts) {
+          // console.log(productId);
+
+          let product = allProducts[productId];
+
+          // console.log(product);
+
+          if (product.title.toLowerCase().includes(searchTerm)) {
+            filteredProducts.push(productId);
+          }
+        }
+
+        console.log(filteredProducts);
+
+        // save filtered products in local storage
+        localStorage.setItem("forSearch", JSON.stringify(filteredProducts));
+
+        // Redirect to the search results page
+        window.location.href = "./LoadMore.html";
+      }
+    });
+  })();
 });
 
 $(document).ready(function () {
@@ -55,7 +94,6 @@ $(document).ready(function () {
 
   const allProducts = getData(); // Get all the products
   const allFavorites = getUserFavorites(); // Get the user's wishlist (favorite products)
-  console.log(allFavorites); //
 
   // Function to display favorites
   function displayFavorites(favorites, allProducts) {
@@ -85,10 +123,10 @@ $(document).ready(function () {
                 <h5 class="card-title">${product.title}</h5>
                 <p class="card-text">${product.description}</p>
                 <p class="card-text price" style="color: green; font-weight: bold;">Price: ${product.price}</p>
-                <button class="btn btn-success btn-sm mb-2 add-to-cart">
+                <button class="btn btn-success btn-sm my-2 me-2 add-to-cart">
                   <i class="fas fa-cart-plus me-2"></i> Add To Cart
                 </button>
-                <button class="btn btn-danger btn-sm remove-fav">
+                <button class="btn btn-danger btn-sm my-2 remove-fav">
                   <i class="fas fa-trash-alt me-2"></i> Remove From Favorites
                 </button>
               </div>
@@ -97,13 +135,24 @@ $(document).ready(function () {
         `);
 
         // Handle the "Remove from Favorites" button click
-        productCard.find(".remove-fav").on("click", function () {
-          console.log("before remove from Favorites", favorites);
-          favorites.splice(productId, 1);
-          console.log("after remove from Favorites", favorites);
+        productCard.find(".remove-fav").on("click", function (e) {
+          e.stopPropagation();
+          let index = favorites.indexOf(productId);
+
+          favorites.splice(index, 1);
           saveUserFavorites(favorites); // Save updated favorites
-          displayFavorites(favorites); // Refresh the display
+          displayFavorites(favorites, allProducts); // Refresh the display
           updateFavoritesBadge();
+        });
+
+        productCard.find(".add-to-cart").on("click", function (e) {
+          e.stopPropagation();
+          addToCart(productId);
+        });
+
+        productCard.on("click", ".overlay", function () {
+          localStorage.setItem("selectedProduct", JSON.stringify(productId));
+          window.location.href = "Product Page.html";
         });
 
         favContainer.append(productCard); // Add the product card to the container
