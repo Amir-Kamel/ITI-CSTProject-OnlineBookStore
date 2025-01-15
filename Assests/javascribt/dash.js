@@ -8,10 +8,10 @@ document.addEventListener("DOMContentLoaded", function () {
       // Ensure the badge is updated after the navigation is loaded
       if (elementId === "mainNavigation") {
         // Call the functions defined in nav.js
-        updateCartBadge();
-        updateFavoritesBadge();
-        setActiveLink();
-        updateUserDropdown();
+        // updateCartBadge();
+        // updateFavoritesBadge();
+        // setActiveLink();
+        // updateUserDropdown();
       }
     } catch (error) {
       console.error("Error loading content:", error);
@@ -72,6 +72,37 @@ $(document).ready(function () {
   // Function to validate title (not null or empty)
   function validateTitle(title) {
     return title && title.trim() !== "";
+  }
+
+  // Function to validate price (must be a positive number)
+  function validatePrice(price) {
+    return !isNaN(price) && parseFloat(price) > 0;
+  }
+
+  // Function to validate stock (must be a positive integer)
+  function validateStock(stock) {
+    return !isNaN(stock) && parseInt(stock) >= 0;
+  }
+
+  // Function to validate category (not null or empty)
+  function validateCategory(category) {
+    return category && category.trim() !== "";
+  }
+
+  // Function to validate description (not null or empty)
+  function validateDescription(description) {
+    return description && description.trim() !== "";
+  }
+
+  // Function to validate seller email (must be a valid email)
+  function validateSellerEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  // Function to validate image (must be uploaded)
+  function validateImage(imageFile) {
+    return imageFile !== undefined;
   }
 
   // Function to get products from local storage
@@ -198,7 +229,7 @@ $(document).ready(function () {
       });
     }
 
-    // Render sellers
+    // Render sellers and customers
     if (users.sellers) {
       $.each(users.sellers, function (email, user) {
         $(".usersTable").append(`
@@ -224,70 +255,193 @@ $(document).ready(function () {
       });
     }
 
+    // Event listener for the Update User button
+    $(document).on("click", ".updateUserBtn", function () {
+      const row = $(this).closest("tr");
+      const oldEmail = row.data("email"); // Get the old email from the row
+      const role = row.data("role"); // Get the user's role from the row
+      const username = row.find(".username-input").val(); // Get the updated username
+      const newEmail = row.find(".email-input").val(); // Get the updated email
+      const accountStatus = row.find(".account-status").val(); // Get the updated account status
+
+      // Validate the new email
+      if (!validateEmail(newEmail)) {
+        Toast.fire({ icon: "error", title: "Invalid email format!" });
+        return;
+      }
+
+      // Get users from local storage
+      const users = getUsers();
+
+      // Check if the new email already exists (except for the current user)
+      if (
+        (users.admin && users.admin[newEmail] && newEmail !== oldEmail) ||
+        (users.customers && users.customers[newEmail] && newEmail !== oldEmail) ||
+        (users.sellers && users.sellers[newEmail] && newEmail !== oldEmail)
+      ) {
+        Toast.fire({ icon: "error", title: "Email already exists!" });
+        return;
+      }
+
+      // Update the user's details based on their role
+      if (role === "admin" && users.admin) {
+        if (newEmail !== oldEmail) {
+          users.admin[newEmail] = users.admin[oldEmail]; // Move to new email key
+          delete users.admin[oldEmail]; // Delete old email key
+        }
+        users.admin[newEmail].username = username;
+        users.admin[newEmail].accountstate = accountStatus;
+      } else if (role === "customer" && users.customers) {
+        if (newEmail !== oldEmail) {
+          users.customers[newEmail] = users.customers[oldEmail]; // Move to new email key
+          delete users.customers[oldEmail]; // Delete old email key
+        }
+        users.customers[newEmail].username = username;
+        users.customers[newEmail].accountstate = accountStatus;
+      } else if (role === "seller" && users.sellers) {
+        if (newEmail !== oldEmail) {
+          users.sellers[newEmail] = users.sellers[oldEmail]; // Move to new email key
+          delete users.sellers[oldEmail]; // Delete old email key
+        }
+        users.sellers[newEmail].username = username;
+        users.sellers[newEmail].accountstate = accountStatus;
+      }
+
+      // Save the updated users object to local storage
+      saveUsers(users);
+
+      // Re-render the users table
+      renderUsersTable();
+
+      // Show success message
+      Toast.fire({
+        icon: "success",
+        title: "User updated successfully!",
+      });
+    });
+    // Event listener for the Delete User button
+    $(document).on("click", ".deleteUserBtn", function () {
+      const row = $(this).closest("tr");
+      const email = row.data("email"); // Get the user's email from the row
+      const role = row.data("role"); // Get the user's role from the row
+
+      // SweetAlert2 confirmation dialog
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#810b0b",
+        cancelButtonColor: "gray",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Get users from local storage
+          const users = getUsers();
+
+          // Delete the user based on their role
+          if (role === "admin" && users.admin) {
+            delete users.admin[email];
+          } else if (role === "customer" && users.customers) {
+            delete users.customers[email];
+          } else if (role === "seller" && users.sellers) {
+            delete users.sellers[email];
+          }
+
+          // Save the updated users object to local storage
+          saveUsers(users);
+
+          // Re-render the users table
+          renderUsersTable();
+
+          // Show success message
+          Swal.fire({
+            title: "Deleted!",
+            text: "The user has been deleted.",
+            icon: "success",
+            confirmButtonColor: "#810b0b",
+          });
+        }
+      });
+    });
     // Update counts after rendering the users table
     updateCounts();
   }
 
-  // Render the products , users and inbox tables on page load
-  renderProductsTable();
-  renderUsersTable();
-  renderInboxTable();
+  // Function to clear the Add Product modal form
+  function clearAddProductForm() {
+    $("#addProductTitleInput").val("");
+    $("#addProductPriceInput").val("");
+    $("#addProductStockInput").val("");
+    $("#addProductCategoryInput").val("");
+    $("#addProductDescInput").val("");
+    $("#addSellerEmailInput").val("");
+    $("#addImageUploadInput").val("");
+  }
+
+  // Function to populate the Edit Product modal form
+  function populateEditProductForm(product) {
+    $("#editProductTitleInput").val(product.title);
+    $("#editProductPriceInput").val(product.price);
+    $("#editProductStockInput").val(product.stock);
+    $("#editProductCategoryInput").val(product.category);
+    $("#editProductDescInput").val(product.description);
+    $("#editSellerEmailInput").val(product.seller_email);
+    // Note: Image upload cannot be pre-populated due to browser security restrictions
+  }
 
   // Add Product Button Click Event
-  $("#addBtn").on("click", function () {
+  $("#addProductBtn").on("click", function () {
     // Get form values
-    const title = $("#producttitleInput").val();
-    const sellerEmail = $("#sellerEmailInput").val();
+    const title = $("#addProductTitleInput").val();
+    const price = $("#addProductPriceInput").val();
+    const stock = $("#addProductStockInput").val();
+    const category = $("#addProductCategoryInput").val();
+    const description = $("#addProductDescInput").val();
+    const sellerEmail = $("#addSellerEmailInput").val();
+    const imageFile = $("#addImageUploadInput").prop("files")[0];
 
-    // Validate title
+    // Validate all fields
     if (!validateTitle(title)) {
-      Toast.fire({
-        icon: "error",
-        title: "Title cannot be empty!",
-      });
+      Toast.fire({ icon: "error", title: "Title cannot be empty!" });
+      return;
+    }
+    if (!validatePrice(price)) {
+      Toast.fire({ icon: "error", title: "Price must be a positive number!" });
+      return;
+    }
+    if (!validateStock(stock)) {
+      Toast.fire({ icon: "error", title: "Stock must be a positive integer!" });
+      return;
+    }
+    if (!validateCategory(category)) {
+      Toast.fire({ icon: "error", title: "Category cannot be empty!" });
+      return;
+    }
+    if (!validateDescription(description)) {
+      Toast.fire({ icon: "error", title: "Description cannot be empty!" });
+      return;
+    }
+    if (!validateSellerEmail(sellerEmail)) {
+      Toast.fire({ icon: "error", title: "Invalid seller email!" });
+      return;
+    }
+    if (!validateImage(imageFile)) {
+      Toast.fire({ icon: "error", title: "Please upload an image!" });
       return;
     }
 
-    // Validate seller email
-    if (!validateEmail(sellerEmail)) {
-      Toast.fire({
-        icon: "error",
-        title: "Invalid seller email!",
-      });
-      return;
-    }
-
-    // Get the image file
-    const imageFile = $("#imageUploadInput").prop("files")[0];
-
-    // Validate required fields
-    if (
-      !$("#producttitleInput").val() ||
-      !$("#productPriceInput").val() ||
-      !$("#productStockInput").val() ||
-      !$("#productCategoryInput").val() ||
-      !$("#productDescInput").val() ||
-      !$("#sellerEmailInput").val() ||
-      !imageFile
-    ) {
-      Toast.fire({
-        icon: "error",
-        title: "Please fill in all required fields and upload an image.",
-      });
-      return;
-    }
-
-    // Convert the image file to a Base64-encoded string
+    // If all validations pass, proceed to add the product
     const reader = new FileReader();
     reader.onload = function (event) {
       const product = {
         id: Date.now(), // Unique ID for the product
-        title: $("#producttitleInput").val(),
-        price: parseFloat($("#productPriceInput").val()), // Convert to number
-        stock: parseInt($("#productStockInput").val()), // Convert to number
-        category: $("#productCategoryInput").val(),
-        description: $("#productDescInput").val(),
-        seller_email: $("#sellerEmailInput").val(),
+        title: title,
+        price: parseFloat(price),
+        stock: parseInt(stock),
+        category: category,
+        description: description,
+        seller_email: sellerEmail,
         img_src: event.target.result, // Base64-encoded image
         sold: 0,
         Availability: true,
@@ -306,19 +460,15 @@ $(document).ready(function () {
       renderProductsTable();
 
       // Clear the form fields and reset the modal
-      resetModal();
+      clearAddProductForm();
 
-      // Close the modal (optional)
+      // Close the modal
       $("#addProductModal").modal("hide");
 
       // Show success message
       Toast.fire({
         icon: "success",
         title: "Product added successfully!",
-        showCloseButton: true,
-      }).then(() => {
-        // Redirect to the dashboard after the success message
-        window.location.href = "dash.html"; // Replace with your dashboard URL
       });
     };
 
@@ -332,64 +482,92 @@ $(document).ready(function () {
     const products = getProducts();
     const product = products[productId];
 
-    // Populate the modal fields with the product data
-    $("#producttitleInput").val(product.title);
-    $("#productPriceInput").val(product.price);
-    $("#productStockInput").val(product.stock);
-    $("#productCategoryInput").val(product.category);
-    $("#productDescInput").val(product.description);
-    $("#sellerEmailInput").val(product.seller_email);
+    // Populate the Edit Product modal form
+    populateEditProductForm(product);
 
-    // Set the product ID in a hidden field or data attribute for reference
-    $("#addProductModal").data("edit-id", productId);
+    // Store the product ID in the modal for reference
+    $("#editProductModal").data("product-id", productId);
 
-    // Change the modal title and button text
-    $("#addProductModalLabel").text("Edit Product");
-    $("#addBtn").hide();
-    $("#updateProductBtn").show();
-
-    // Open the modal
-    $("#addProductModal").modal("show");
+    // Show the Edit Product modal
+    $("#editProductModal").modal("show");
   });
 
   // Update Product Button Click Event
-  $("#updateProductBtn").on("click", function () {
-    const productId = $("#addProductModal").data("edit-id"); // Get the product ID from the modal
+  $(".updateProductBtn").on("click", function () {
+    const productId = $("#editProductModal").data("product-id"); // Get the product ID from the modal
     const products = getProducts();
     const product = products[productId];
 
+    // Get form values
+    const title = $("#editProductTitleInput").val();
+    const price = $("#editProductPriceInput").val();
+    const stock = $("#editProductStockInput").val();
+    const category = $("#editProductCategoryInput").val();
+    const description = $("#editProductDescInput").val();
+    const sellerEmail = $("#editSellerEmailInput").val();
+    const imageFile = $("#editImageUploadInput").prop("files")[0];
+
+    // Validate all fields
+    if (!validateTitle(title)) {
+      Toast.fire({ icon: "error", title: "Title cannot be empty!" });
+      return;
+    }
+    if (!validatePrice(price)) {
+      Toast.fire({ icon: "error", title: "Price must be a positive number!" });
+      return;
+    }
+    if (!validateStock(stock)) {
+      Toast.fire({ icon: "error", title: "Stock must be a positive integer!" });
+      return;
+    }
+    if (!validateCategory(category)) {
+      Toast.fire({ icon: "error", title: "Category cannot be empty!" });
+      return;
+    }
+    if (!validateDescription(description)) {
+      Toast.fire({ icon: "error", title: "Description cannot be empty!" });
+      return;
+    }
+    if (!validateSellerEmail(sellerEmail)) {
+      Toast.fire({ icon: "error", title: "Invalid seller email!" });
+      return;
+    }
+
     // Update the product details
-    product.title = $("#producttitleInput").val();
-    product.price = parseFloat($("#productPriceInput").val());
-    product.stock = parseInt($("#productStockInput").val());
-    product.category = $("#productCategoryInput").val();
-    product.description = $("#productDescInput").val();
-    product.seller_email = $("#sellerEmailInput").val();
+    product.title = title;
+    product.price = parseFloat(price);
+    product.stock = parseInt(stock);
+    product.category = category;
+    product.description = description;
+    product.seller_email = sellerEmail;
 
     // Handle image update if a new image is uploaded
-    const imageFile = $("#imageUploadInput").prop("files")[0];
     if (imageFile) {
       const reader = new FileReader();
       reader.onload = function (event) {
         product.img_src = event.target.result; // Update the image source
         saveProducts(products); // Save the updated products
         renderProductsTable(); // Re-render the table
-        $("#addProductModal").modal("hide"); // Close the modal
-        resetModal(); // Clear the form and reset the modal
+        $("#editProductModal").modal("hide"); // Close the modal
+
+        // Show success message
+        Toast.fire({
+          icon: "success",
+          title: "Product updated successfully!",
+        });
       };
       reader.readAsDataURL(imageFile);
     } else {
       saveProducts(products); // Save the updated products
       renderProductsTable(); // Re-render the table
-      $("#addProductModal").modal("hide"); // Close the modal
-      resetModal(); // Clear the form and reset the modal
-    }
+      $("#editProductModal").modal("hide"); // Close the modal
 
-    // Show success message
-    Toast.fire({
-      icon: "success",
-      title: "Product updated successfully!",
-    });
+      // Show success message
+      Toast.fire({
+        icon: "success",
+        title: "Product updated successfully!",
+      });
+    }
   });
 
   // Delete Product Button Click Event
@@ -397,140 +575,209 @@ $(document).ready(function () {
     const productId = $(this).closest("tr").data("id"); // Get the product ID from the table row
     const products = getProducts();
 
-    // Confirm deletion
-    if (confirm("Are you sure you want to delete this product?")) {
-      delete products[productId]; // Delete the product
-      saveProducts(products); // Save the updated products
-      renderProductsTable(); // Re-render the table
+    // SweetAlert2 confirmation dialog
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#810b0b ",
+      cancelButtonColor: "gray",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        delete products[productId]; // Delete the product
+        saveProducts(products); // Save the updated products
+        renderProductsTable(); // Re-render the table
 
-      // Show success message
-      Toast.fire({
-        icon: "success",
-        title: "Product deleted successfully!",
-      });
-    }
+        // Show success message
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your product has been deleted.",
+          icon: "success",
+          confirmButtonColor: "#810b0b ",
+        });
+      }
+    });
   });
 
-  // Update User Button Click Event
-  $(document).on("click", ".updateUserBtn", function () {
-    const $row = $(this).closest("tr");
-    const username = $row.find(".username-input").val();
-    const email = $row.find(".email-input").val();
+  // Function to render the orders table
+  function renderOrdersTable() {
+    const users = getUsers();
+    const orders = [];
 
-    // Validate username
-    if (!validateUsername(username)) {
-      Toast.fire({
-        icon: "error",
-        title: "Username cannot contain numbers!",
+    // Loop through all customers and extract their orders
+    if (users.customers) {
+      Object.values(users.customers).forEach((customer) => {
+        if (customer.orders_history && customer.orders_history.length > 0) {
+          orders.push(...customer.orders_history);
+        }
       });
-      return;
     }
 
-    // Validate email
-    if (!validateEmail(email)) {
-      Toast.fire({
-        icon: "error",
-        title: "Invalid email!",
-      });
-      return;
+    // Clear the orders table
+    $(".ordersData").html("");
+
+    // Render orders in a table
+    if (orders.length > 0) {
+      const ordersTable = `
+        <table class="table table-striped text-center">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Products</th>
+              <th>Total Amount</th>
+              <th>Status</th>
+              <th>Action</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${orders
+              .map(
+                (order) => `
+              <tr>
+                <td>${order.orderId || "N/A"}</td>
+                <td>${order.date || "N/A"}</td>
+                <td>${order.customerName || "N/A"}</td>
+                <td>
+                  <ul>
+                    ${order.products
+                      .map(
+                        (product) => `
+                      <li>${product.title} (Qty: ${product.quantity})</li>
+                    `,
+                      )
+                      .join("")}
+                  </ul>
+                </td>
+                <td>$${order.totalAmount || "N/A"}</td>
+                <td>
+                  <select class="form-control order-status" data-order-id="${order.orderId}">
+                    <option value="Pending" ${order.status === "Pending" ? "selected" : ""}>Pending</option>
+                    <option value="Shipped" ${order.status === "Shipped" ? "selected" : ""}>Shipped</option>
+                    <option value="Delivered" ${order.status === "Delivered" ? "selected" : ""}>Delivered</option>
+                  </select>
+                </td>
+                <td>
+                  <button class="btn btn-primary updateOrderBtn" data-order-id="${order.orderId}">Update</button>
+                </td>
+                <td>
+                  <button class="btn btn-danger deleteOrderBtn" data-order-id="${order.orderId}">Delete</button>
+                </td>
+              </tr>
+            `,
+              )
+              .join("")}
+          </tbody>
+        </table>
+      `;
+      $(".ordersData").html(ordersTable);
+    } else {
+      $(".ordersData").html(`
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+          <img src="./Assests/images/noOrders.avif" alt="No Orders" style="max-width: 100%; height: auto;">
+          <p style="margin-top: 20px; font-size: 1.2rem; color: #555;">No orders found.</p>
+        </div>
+      `);
     }
 
-    const oldEmail = $row.data("email"); // Get the old email
-    const role = $row.data("role");
+    // Update the orders count
+    $(".ordersCount").text(orders.length);
+  }
+
+  // Function to update order status
+  function updateOrderStatus(orderId, newStatus) {
     const users = getUsers();
 
-    // Get updated values
-    const userRole = role === "admin" ? "admin" : $row.find("td:eq(2) select").val(); // Admin role cannot be changed
-    const accountState = $row.find("td:eq(3) select").val(); // Get the selected account status
-
-    // If the user is being updated to admin, demote the existing admin (if any)
-    if (userRole === "admin" && role !== "admin") {
-      const existingAdminEmail = Object.keys(users.admin)[0];
-      if (existingAdminEmail) {
-        const existingAdmin = users.admin[existingAdminEmail];
-        delete users.admin[existingAdminEmail];
-        existingAdmin.role = "customer"; // Demote to customer
-        users.customers[existingAdminEmail] = existingAdmin;
+    // Loop through all customers to find the order
+    Object.values(users.customers).forEach((customer) => {
+      if (customer.orders_history) {
+        const order = customer.orders_history.find((o) => o.orderId === orderId);
+        if (order) {
+          order.status = newStatus; // Update the order status
+        }
       }
-    }
+    });
 
-    // Update user data
-    if (role === "admin") {
-      const user = users.admin[oldEmail];
-      user.username = username; // Only update the username for admin
-      user.accountstate = accountState; // Update account status
-      users.admin[oldEmail] = user;
-    } else if (role === "customer") {
-      const user = users.customers[oldEmail];
-      delete users.customers[oldEmail]; // Remove the old email entry
-      user.username = username;
-      user.email = email;
-      user.role = userRole;
-      user.accountstate = accountState; // Update account status
-      users[userRole === "admin" ? "admin" : userRole === "customer" ? "customers" : "sellers"][email] = user; // Add the new email entry to the correct role
-    } else if (role === "seller") {
-      const user = users.sellers[oldEmail];
-      delete users.sellers[oldEmail]; // Remove the old email entry
-      user.username = username;
-      user.email = email;
-      user.role = userRole;
-      user.accountstate = accountState; // Update account status
-      users[userRole === "admin" ? "admin" : userRole === "customer" ? "customers" : "sellers"][email] = user; // Add the new email entry to the correct role
-    }
-
-    // Save the updated users object to local storage
+    // Save the updated users data
     saveUsers(users);
 
-    // Update the data-email and data-role attributes of the row
-    $row.attr("data-email", email);
-    $row.attr("data-role", userRole);
-
-    // Re-render the users table
-    renderUsersTable();
+    // Re-render the orders table
+    renderOrdersTable();
 
     // Show success message
     Toast.fire({
       icon: "success",
-      title: "User updated successfully!",
+      title: "Order status updated successfully!",
+    });
+  }
+
+  // Function to delete an order
+  function deleteOrder(orderId) {
+    const users = getUsers();
+
+    // Loop through all customers to find and delete the order
+    Object.values(users.customers).forEach((customer) => {
+      if (customer.orders_history) {
+        customer.orders_history = customer.orders_history.filter((order) => order.orderId !== orderId);
+      }
+    });
+
+    // Save the updated users data
+    saveUsers(users);
+
+    // Re-render the orders table
+    renderOrdersTable();
+
+    // Show success message
+    Toast.fire({
+      icon: "success",
+      title: "Order deleted successfully!",
+    });
+  }
+
+  // Event listener for the Update Order button
+  $(document).on("click", ".updateOrderBtn", function () {
+    const orderId = $(this).data("order-id");
+    const newStatus = $(this).closest("tr").find(".order-status").val();
+    updateOrderStatus(orderId, newStatus);
+  });
+
+  // Event listener for the Order Status dropdown
+  $(document).on("change", ".order-status", function () {
+    const orderId = $(this).data("order-id");
+    const newStatus = $(this).val();
+    updateOrderStatus(orderId, newStatus);
+  });
+
+  // Event listener for the Delete Order button
+  $(document).on("click", ".deleteOrderBtn", function () {
+    const orderId = $(this).data("order-id");
+
+    // Confirm deletion
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#810b0b ",
+      cancelButtonColor: "#gray ",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteOrder(orderId); // Delete the order
+      }
     });
   });
 
-  // Delete User Button Click Event
-  $(document).on("click", ".deleteUserBtn", function () {
-    const email = $(this).closest("tr").data("email");
-    const role = $(this).closest("tr").data("role");
-    const users = getUsers();
-
-    // Prevent deletion of admin
-    if (role === "admin") {
-      Toast.fire({
-        icon: "error",
-        title: "Admin cannot be deleted!",
-      });
-      return;
-    }
-
-    // Confirm deletion for non-admin users
-    if (confirm("Are you sure you want to delete this user?")) {
-      if (role === "customer") {
-        delete users.customers[email];
-      } else if (role === "seller") {
-        delete users.sellers[email];
-      }
-
-      // Save the updated users object to local storage
-      saveUsers(users);
-
-      // Re-render the users table
-      renderUsersTable();
-
-      // Show success message
-      Toast.fire({
-        icon: "success",
-        title: "User deleted successfully!",
-      });
-    }
-  });
+  // Render tables on page load
+  renderProductsTable();
+  renderUsersTable();
+  renderOrdersTable(); // Render orders table
+  renderInboxTable(); // Render inbox tables table
 });
 
 // Function to get inbox

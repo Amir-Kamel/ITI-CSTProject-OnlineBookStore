@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let allProducts = getProductsData();
         const searchTerm = $(this).val().toLowerCase();
 
-        console.log(searchTerm);
+        // console.log(searchTerm);
         // console.log(allProducts);
 
         let filteredProducts = [];
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         }
 
-        console.log(filteredProducts);
+        // console.log(filteredProducts);
 
         // save filtered products in local storage
         localStorage.setItem("forSearch", JSON.stringify(filteredProducts));
@@ -86,11 +86,27 @@ $(function () {
   let searchResults = localStorage.getItem("forSearch");
   searchResults = JSON.parse(searchResults);
   if (searchResults) {
-    console.log("Search results page was loaded");
-    console.log(searchResults);
+    // console.log("Search results page was loaded");
+    // console.log(searchResults);
+
+    // get all products from the search results
+    let allSearchResults = {};
+    searchResults.forEach((productId) => {
+      allSearchResults[productId] = allProducts[productId];
+    });
+    // console.log(allSearchResults);
+
+    // update storeProductCategory
+    storeProductCategory(allSearchResults);
 
     // update the search results page with the search results
     initializePagination(allProducts, searchResults);
+
+    let productsCategories = getProductCategory();
+    // console.log(productsCategories);
+    //display number of products in the categories-container div
+    const container = $("#categories-container");
+    fillBookCategory(container, allSearchResults, productsCategories);
 
     // reset the search term and remove the search results from local storage
     localStorage.removeItem("forSearch");
@@ -310,7 +326,7 @@ function updateDisplayedProducts(products, filteredProducts) {
         filteredProducts.forEach((productId) => {
           displayedProducts.push(productId);
         });
-        console.log(displayedProducts);
+        // console.log(displayedProducts);
         // Resolve the Promise with displayed products
         resolve(displayedProducts);
       } catch (error) {
