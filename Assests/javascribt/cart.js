@@ -384,20 +384,28 @@ $(function () {
       }
       $("#summary-shipping").text(shipping);
       calculatingSubtotal(customerCart, shipping, $("#summary-subtotal"), $("#summary-total"));
+      //function to generate ID for product
+      function generateOrderId() {
+        const timestamp = Date.now();
+        const randomNum = Math.floor(Math.random() * 1000);
+        return `ORD-${timestamp}-${randomNum}`; // Combine timestamp and random number
+      }
 
+      //confirm that the order
       $("#confirm").on("click", function () {
-        order_details = {
-          order_date: {
-            date: formattedDate,
-            time: time,
-          },
-          delivery_date: {
-            date: formattedDeliveryDate,
-          },
+        const orderId = generateOrderId(); // Generate a unique order ID
+        const order_details = {
+          orderId: orderId, // Use the generated order ID
+          date: formattedDate,
+          time: time,
           products: soldProducts,
+          totalAmount: subtotal + shipping,
+          customerName: customerData.username, // Add customer name
         };
-        console.log(order_details);
+
+        // Add the order to the customer's order history
         customerData["orders_history"].push(order_details);
+
         for (productId in customerCart) {
           if (customerCart[productId]["selected"]) delete customerCart[productId];
         }
