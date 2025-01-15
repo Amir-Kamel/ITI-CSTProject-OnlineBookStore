@@ -60,13 +60,14 @@ document.addEventListener("DOMContentLoaded", function () {
 $(function () {
   usersData = getUsersData();
   loggedInUser = getLoggedInUserEmail();
+  emptyCartWrapper = $("#emptyCartWrapper");
+  cartItemsWrapper = $("#cartItemsWrapper");
   if (loggedInUser && loggedInUser.category == "customers") {
     customerCart = usersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
     // console.log(customerCart);
     let cartLength = Object.keys(customerCart).length;
     // console.log(cartLength);
-    emptyCartWrapper = $("#emptyCartWrapper");
-    cartItemsWrapper = $("#cartItemsWrapper");
+
     if (cartLength == 0) {
       emptyCartImage = $("<img />");
       emptyCartImage.prop("src", "./Assests/images/empty-cart.png");
@@ -421,6 +422,28 @@ $(function () {
         });
       });
     });
+  } else {
+    emptyCartImage = $("<img />");
+    emptyCartImage.prop("src", "./Assests/images/empty-cart.png");
+    emptyCartImage.addClass("w-50");
+    emptyCartImage.appendTo(emptyCartWrapper);
+    h5 = $("<h5>");
+    h5.text("Your Online Bookstore Cart is empty");
+    h5.addClass("fw-bold display-6");
+    h5.appendTo(emptyCartWrapper);
+    p = $("<p>");
+    p.html("Looks like you need to log in to access your cart.</br> Please log in and explore top categories.");
+    p.addClass("text-body-tertiary text-center fs-4");
+    p.appendTo(emptyCartWrapper);
+    shopNowButton = $("<button>");
+    shopNowButton.text("Login Now");
+    shopNowButton.addClass("btn btn-primary mt-3 fs-5");
+    shopNowButton.on("click", function () {
+      window.location.href = "./Login&Register.html";
+    });
+    shopNowButton.appendTo(emptyCartWrapper);
+    emptyCartWrapper.removeClass("d-none");
+    cartItemsWrapper.addClass("d-none");
   }
 });
 function getUsersData() {
