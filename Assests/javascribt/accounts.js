@@ -60,6 +60,7 @@ const usersData = {
       password: "7bc7bcbe2f8ed4ea076ba69d077bea1536210e1d9b48b00a68330dcd50af8311",
       userProfileImage: "",
       phone: "01224803257",
+      inbox: [],
       products_id: [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23], //will contain products id
     },
     "mariam@gmail.com": {
@@ -69,6 +70,7 @@ const usersData = {
       password: "6953dba3201811fc16212fd481046d48a19bc93711bfe67006a325f097219cf8",
       userProfileImage: "",
       phone: "01020646624",
+      inbox: [],
       products_id: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24],
     },
   },

@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 $(function () {
   usersData = getUsersData();
   loggedInUser = getLoggedInUserEmail();
-  if (loggedInUser) {
+  if (loggedInUser && loggedInUser.category == "customers") {
     customerCart = usersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
     // console.log(customerCart);
     let cartLength = Object.keys(customerCart).length;

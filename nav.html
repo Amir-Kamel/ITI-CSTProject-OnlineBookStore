@@ -20,41 +20,20 @@
 
     <!-- end bootstrap -->
     <!-- icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- end icons -->
   </head>
 
   <body>
     <!-- Start Navbar -->
     <nav role="navigation">
-      <div
-        class="border-bottom d-flex align-items-center bg-primary justify-content-evenly"
-      >
-        <a href="./HomePage.html" class="navbar-brand main-barnd"
-          ><img
-            style="width: 120px; height: 60px"
-            src="./Assests/images/logo.png"
-            alt="Logo"
-        /></a>
-        <div
-          class="p-1 mx-3 bg-light rounded rounded-pill shadow-sm w-75 d-none d-lg-block d-md-block"
-        >
+      <div class="border-bottom d-flex align-items-center bg-primary justify-content-evenly">
+        <a href="./HomePage.html" class="navbar-brand main-barnd"><img style="width: 120px; height: 60px" src="./Assests/images/logo.png" alt="Logo" /></a>
+        <div class="p-1 mx-3 bg-light rounded rounded-pill shadow-sm w-75 d-none d-lg-block d-md-block">
           <div id="search-container" class="input-group">
-            <input
-              id="global-search"
-              type="search"
-              placeholder="Search for a book"
-              class="form-control border-0 bg-light"
-            />
+            <input id="global-search" type="search" placeholder="Search for a book" class="form-control border-0 bg-light" />
             <div class="input-group-append">
-              <button
-                id="button-addon1"
-                type="submit"
-                class="btn btn-link text-primary"
-              >
+              <button id="button-addon1" type="submit" class="btn btn-link text-primary">
                 <i class="fa fa-search"></i>
               </button>
             </div>
@@ -63,45 +42,21 @@
         <div class="d-flex">
           <!-- User Dropdown -->
           <div class="dropdown">
-            <a
-              href="#"
-              class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle"
-              id="userDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fas fa-user fa-lg"></i>
             </a>
-            <ul
-              class="dropdown-menu"
-              id="userDropdownMenu"
-              aria-labelledby="userDropdown"
-            >
+            <ul class="dropdown-menu" id="userDropdownMenu" aria-labelledby="userDropdown">
               <li id="dashboard-link">
-                <a class="dropdown-item d-none" href="./dashboard.html"
-                  >Dashboard</a
-                >
+                <a class="dropdown-item d-none" href="./dashboard.html">Dashboard</a>
               </li>
             </ul>
           </div>
 
           <!-- Heart Dropdown -->
           <div class="dropdown">
-            <a
-              href="#"
-              class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle"
-              id="heartDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle" id="heartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fas fa-heart fa-lg"></i>
-              <span
-                class="badge bg-danger position-absolute top-0 start-100 translate-middle p-2 rounded-circle"
-                id="heartBadge"
-                >0</span
-              >
+              <span class="badge bg-danger position-absolute top-0 start-100 translate-middle p-2 rounded-circle" id="heartBadge">0</span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="heartDropdown">
               <li>
@@ -112,20 +67,9 @@
           <!-- Shopping Cart Dropdown -->
           <div class="container">
             <div class="dropdown">
-              <a
-                href="#"
-                class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle position-relative"
-                id="cartDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
+              <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle position-relative" id="cartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fas fa-shopping-cart fa-lg"></i>
-                <span
-                  id="cartBadge"
-                  class="badge bg-danger position-absolute top-0 start-100 translate-middle p-2 rounded-circle"
-                  >0</span
-                >
+                <span id="cartBadge" class="badge bg-danger position-absolute top-0 start-100 translate-middle p-2 rounded-circle">0</span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="cartDropdown">
                 <li>
@@ -135,27 +79,14 @@
             </div>
           </div>
           <!-- Bell Dropdown -->
-          <div class="dropdown">
-            <a
-              href="#"
-              class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle"
-              id="bellDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+          <div class="dropdown" id="bell">
+            <a href="#" class="nav-link icons text-secondary-emphasis me-1 dropdown-toggle" id="bellDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fas fa-bell fa-lg" id="bellicon"></i>
-              <span
-                id="inboxBadge"
-                class="badge bg-danger position-absolute top-0 start-100 translate-middle p-2 rounded-circle"
-                >0</span
-              >
+              <span id="inboxBadge" class="badge bg-danger position-absolute top-0 start-100 translate-middle p-2 rounded-circle">0</span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="bellDropdown">
               <li>
-                <a class="dropdown-item" href="#" onclick="showInboxPopup()"
-                  >Notifications</a
-                >
+                <a class="dropdown-item" href="#" onclick="showInboxPopup()">Notifications</a>
               </li>
             </ul>
           </div>
@@ -164,38 +95,19 @@
     </nav>
 
     <!-- Popup Modal -->
-    <div
-      class="modal fade"
-      id="inboxPopup"
-      tabindex="-1"
-      aria-labelledby="inboxPopupLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="inboxPopup" tabindex="-1" aria-labelledby="inboxPopupLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="inboxPopupLabel">
-              Inbox Notifications
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <h5 class="modal-title" id="inboxPopupLabel">Inbox Notifications</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <!-- Messages will be appended here -->
             <div id="inboxMessagesContainer" class="d-flex flex-column"></div>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -216,14 +128,8 @@
           <i class="fas fa-bars"></i>
         </button>
       </div>
-      <div
-        class="text-center mt-3 collapse navbar-collapse"
-        id="navbarNavDropdown"
-      >
-        <ul
-          class="navbar-nav mx-auto col-2 col-md-5 col-lg-5 col-sm-0"
-          id="navbarLinks"
-        >
+      <div class="text-center mt-3 collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav mx-auto col-2 col-md-5 col-lg-5 col-sm-0" id="navbarLinks">
           <li class="nav-item">
             <a class="nav-link" href="./HomePage.html" id="home-link">Home</a>
           </li>
@@ -231,9 +137,7 @@
             <a class="nav-link" href="./About Us.html" id="about-link">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="./Contact Us.html" id="contact-link"
-              >Contact</a
-            >
+            <a class="nav-link" href="./Contact Us.html" id="contact-link">Contact</a>
           </li>
         </ul>
       </div>
