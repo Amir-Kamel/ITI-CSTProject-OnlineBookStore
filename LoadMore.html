@@ -40,13 +40,13 @@
     <!-- End of breadcrumb -->
 
     <!-- Start of no result container -->
-    <div id="noResultWrapper" class="container-fluid mb-5 d-none">
+    <div id="noResultWrapperGlobal" class="container-fluid mb-5 d-none">
       <div class="row flex-column justify-content-center align-items-center">
         <div class="d-flex justify-content-center">
           <img src="./Assests/images/noOrders.avif" alt="No Results found" />
         </div>
         <h1 class="display-4 text-center">No results found</h1>
-        <p class="text-center">Please try a different search or filter options.</p>
+        <p class="text-center">We couldn’t find what you’re looking for. Try adjusting your search or filter options to explore other results!</p>
       </div>
     </div>
 
@@ -119,8 +119,18 @@
             </div>
           </div>
           <!-- End of filter section -->
+          <!-- no result -->
+          <div id="noResultWrapperLocal" class="container mb-5 d-none">
+            <div class="row flex-column justify-content-center align-items-center">
+              <div class="d-flex justify-content-center">
+                <img src="./Assests/images/noOrders.avif" alt="No Results found" />
+              </div>
+              <h1 class="display-4 text-center">No results found</h1>
+              <p class="text-center">We couldn’t find what you’re looking for. Try adjusting your search or filter options to explore other results!</p>
+            </div>
+          </div>
           <!-- Start Main Product -->
-          <div class="row main-product mx-0 w-100">
+          <div id="products-container-wrapper" class="row main-product mx-0 w-100">
             <div id="products-container" class="row justify-content-evenly p-0 m-0"></div>
           </div>
           <!-- End of the main product -->
@@ -128,17 +138,7 @@
           <!-- Pagination -->
           <!-- <div id="paginationWrapper" class="d-flex justify-content-center align-content-center bg-body-secondary w-100"> -->
           <nav aria-label="Page navigation example">
-            <ul id="pagination-controls" class="pagination w-100 pagination-lg mb-0 d-flex justify-content-center align-content-center">
-              <!-- <li class="page-item">
-                <a class="px-md-5 page-link" href="#">1</a>
-              </li>
-              <li class="page-item"><a class="px-md-5 page-link" href="#">2</a></li>
-              <li class="page-item" aria-current="page"><a class="px-md-5 text-white page-link" style="background-color: #be9900" href="#">3</a></li>
-              <li class="page-item">
-                <a class="px-md-5 page-link" href="#">4</a>
-              </li>
-              <li class="page-item"><a class="px-md-5 page-link" href="#">5</a></li> -->
-            </ul>
+            <ul id="pagination-controls" class="pagination w-100 pagination-lg mb-0 d-flex justify-content-center align-content-center"></ul>
           </nav>
           <!-- </div> -->
 

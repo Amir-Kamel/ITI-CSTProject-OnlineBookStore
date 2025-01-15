@@ -396,6 +396,19 @@ function refreshProducts(allProducts, filteredProducts) {
     updateDisplayedProducts(allProducts, filteredProducts)
       .then((displayedProducts) => {
         try {
+          // check if there are any available products to display
+          let noResultWrapperLocal = $("#noResultWrapperLocal");
+          let productsContainerWrapper = $("#products-container-wrapper");
+          // update the displayed products if there are results
+          if (displayedProducts.length > 0) {
+            productsContainerWrapper.removeClass("d-none");
+            noResultWrapperLocal.addClass("d-none");
+          } else {
+            // no results
+            productsContainerWrapper.removeClass("d-none");
+            noResultWrapperLocal.removeClass("d-none");
+          }
+
           // console.log("from refreshProducts", displayedProducts);
           generatePagination(allProducts, filteredProducts);
 
