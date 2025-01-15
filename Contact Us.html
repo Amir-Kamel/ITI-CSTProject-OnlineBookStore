@@ -94,7 +94,7 @@
 
       <!-- message toast -->
       <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="8000">
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="8000" id="successtoast">
           <div class="toast-header bg-success">
             <strong class="me-auto text-light">Form Submission</strong>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -102,6 +102,19 @@
           <div class="toast-body">Your data has been submitted successfully!</div>
         </div>
       </div>
+
+      <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="8000" id="failedtoast">
+          <div class="toast-header bg-danger">
+            <strong class="me-auto text-light">Form Submission Failed</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">You need to log in or sign up first!</div>
+        </div>
+      </div>
+    </div>
+
+
     </div>
 
     <!-- body -->
@@ -110,6 +123,9 @@
     <footer id="footer" class="text-center text-lg-start text-white" style="background-color: #e4cfb6"></footer>
     <!-- Footer -->
     <script src="./Assests/javascribt/jquery-3.7.1.slim.js"></script>
+    <script src="./Assests/javascribt/sweetalert2.all.min.js"></script>
+    <!-- Sweet Aleart Toast -->
+    <script src="./Assests/javascribt/toastSweetalert.js"></script>
     <script src="./Assests/javascribt/Contact Us.js"></script>
     <script src="Assests/javascribt/nav.js"></script>
 
