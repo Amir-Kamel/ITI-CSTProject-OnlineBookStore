@@ -23,13 +23,13 @@ $(document).ready(function () {
   const $signUpButton = $("#signUpButton");
   const $signUpError = $("#signUpError");
   const passwordLengthRegex = /.{8,}/;
-  const passwordStrengthRegex = /^(?=.[A-Za-z])(?=.\d)(?=.[!@#$%^&(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+  const passwordStrengthRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
   const phoneRegex = /^(011|012|010|015)\d{8}$/;
   const emailValue = $emailField.val().trim();
   const emailRegex = /^[a-zA-Z0-9._%+-]+(?<!\.)@gmail\.com$/;
   const invalidCharsRegex = /[!#$%^&*(),?":{}|<>]$/;
   const usernameRegex = /^[a-zA-Z\s_-]+$/; // Allow letters, spaces, dashes, and underscores
-  const invalidStartEndMiddleRegex = /^(?![^\w\s_-]|.[^\w\s_-]$).$/; // Disallow special characters at start, middle, or end
+  const invalidStartEndMiddleRegex = /^(?![^\w\s_-]|.*[^\w\s_-]$).*$/; // Disallow special characters at start, middle, or end
 
   let typingTimer;
   const doneTypingInterval = 300; // Set a typing delay time
@@ -101,7 +101,6 @@ $(document).ready(function () {
     clearTimeout(typingTimer);
     typingTimer = setTimeout(validatePassword, doneTypingInterval);
   });
-
   // validate confirm password
   function validateConfirmPassword() {
     const confirmPasswordValue = $confirmPasswordField.val();
@@ -312,8 +311,6 @@ $(document).ready(function () {
 
     // Compare entered password with the stored password
     if (foundUser.password !== hashPassword(password)) {
-      console.log(foundUser.password);
-      console.log(hashPassword(password));
       Toast.fire({
         icon: "error",
         title: "Email or Password is incorrect. Please try again.",
@@ -321,7 +318,6 @@ $(document).ready(function () {
       return;
     }
 
-    // Store session data with loginObject using sessionStorage
     const loginObject = {
       session: {
         email: email,
@@ -330,12 +326,10 @@ $(document).ready(function () {
     };
     sessionStorage.setItem("currentSession", JSON.stringify(loginObject));
 
-    // Redirect based on role
     if (role === "admin") {
       window.location.href = "dash.html";
     } else if (role === "customer") {
       window.location = "HomePage.html";
-      // window.location =
     } else if (role === "seller") {
       window.location.href = "SellerDashboard.html";
     } else {
@@ -343,25 +337,22 @@ $(document).ready(function () {
       signInError.css("display", "block");
     }
 
-    // Clear form inputs
     signinEmailField.val("");
     signinPasswordField.val("");
   });
 
   $("#signUpToggleBtn").click(function () {
-    // Apply sliding out animation to hide login form
-
     $("#loginForm").fadeOut(700, function () {
-      // $(this).removeClass("active");
-      $("#signUpForm").fadeIn(1000);
+      $(this).removeClass("active");
+      $("#signUpForm").fadeIn(1000).addClass("active");
       $("#signUpForm").css("display", "flex");
     });
   });
 
   $("#signInToggleBtn").click(function () {
-    // Apply sliding out animation to hide login form
     $("#signUpForm").fadeOut(700, function () {
-      $("#loginForm").fadeIn(1000);
+      $(this).removeClass("active");
+      $("#loginForm").fadeIn(1000).addClass("active");
     });
   });
 });

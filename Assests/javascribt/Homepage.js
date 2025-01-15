@@ -82,6 +82,8 @@ $(document).ready(function () {
     $("#banner > div>img ").prop("src", randomProducts.img_src); // updating image
     $("#banner-title").text(`Book of the Month : ${randomProducts.title}`); // updating title
     $("#banner-description").text(`${randomProducts.description}`);
+    // saved random product
+    randomProducts["product_id"] = product_id;
     localStorage.setItem("bannerProduct", JSON.stringify(randomProducts));
   }
   $("#banner-btn").on("click", function () {
@@ -145,10 +147,12 @@ function getRandomProducts(products) {
   // select 4 random products
   while (randomProducts.length < 4) {
     const randomIndex = Math.floor(Math.random() * productKeys.length) + 1;
-
+    let randomProductId = productKeys[randomIndex];
     // check if the product had been added before
-    if (!randomProducts.includes(randomIndex)) {
-      randomProducts.push(randomIndex);
+    if (products[randomProductId]) {
+      if (!randomProducts.includes(randomProductId)) {
+        randomProducts.push(randomProductId);
+      }
     }
   }
   return randomProducts;

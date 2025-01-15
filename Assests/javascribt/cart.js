@@ -59,42 +59,43 @@ document.addEventListener("DOMContentLoaded", function () {
 $(function () {
   usersData = getUsersData();
   loggedInUser = getLoggedInUserEmail();
-  customerCart = usersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
-  // console.log(customerCart);
-  let cartLength = Object.keys(customerCart).length;
-  // console.log(cartLength);
-  emptyCartWrapper = $("#emptyCartWrapper");
-  cartItemsWrapper = $("#cartItemsWrapper");
-  if (cartLength == 0) {
-    emptyCartImage = $("<img />");
-    emptyCartImage.prop("src", "./Assests/images/empty-cart.png");
-    emptyCartImage.addClass("w-50");
-    emptyCartImage.appendTo(emptyCartWrapper);
-    h5 = $("<h5>");
-    h5.text("Your Online Bookstore Cart is empty");
-    h5.addClass("fw-bold display-6");
-    h5.appendTo(emptyCartWrapper);
-    p = $("<p>");
-    p.html("Looks like you have not added anything to your cart.</br> Go ahead & explore top categories");
-    p.addClass("text-body-tertiary text-center fs-4");
-    p.appendTo(emptyCartWrapper);
-    shopNowButton = $("<button>");
-    shopNowButton.text("Shop Now");
-    shopNowButton.addClass("btn btn-primary mt-3 fs-5");
-    shopNowButton.on("click", function () {
-      window.location.href = "./HomePage.html";
-    });
-    shopNowButton.appendTo(emptyCartWrapper);
-    emptyCartWrapper.removeClass("d-none");
-    cartItemsWrapper.addClass("d-none");
-  } else {
-    subtotal = 0;
-    shipping = 10;
-    for (productId in customerCart) {
-      let product = getProductsData()[productId];
-      // console.log(product);
-      subtotal += product.price * customerCart[productId]["quantity"];
-      cartItem = $(`
+  if (loggedInUser) {
+    customerCart = usersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
+    // console.log(customerCart);
+    let cartLength = Object.keys(customerCart).length;
+    // console.log(cartLength);
+    emptyCartWrapper = $("#emptyCartWrapper");
+    cartItemsWrapper = $("#cartItemsWrapper");
+    if (cartLength == 0) {
+      emptyCartImage = $("<img />");
+      emptyCartImage.prop("src", "./Assests/images/empty-cart.png");
+      emptyCartImage.addClass("w-50");
+      emptyCartImage.appendTo(emptyCartWrapper);
+      h5 = $("<h5>");
+      h5.text("Your Online Bookstore Cart is empty");
+      h5.addClass("fw-bold display-6");
+      h5.appendTo(emptyCartWrapper);
+      p = $("<p>");
+      p.html("Looks like you have not added anything to your cart.</br> Go ahead & explore top categories");
+      p.addClass("text-body-tertiary text-center fs-4");
+      p.appendTo(emptyCartWrapper);
+      shopNowButton = $("<button>");
+      shopNowButton.text("Shop Now");
+      shopNowButton.addClass("btn btn-primary mt-3 fs-5");
+      shopNowButton.on("click", function () {
+        window.location.href = "./HomePage.html";
+      });
+      shopNowButton.appendTo(emptyCartWrapper);
+      emptyCartWrapper.removeClass("d-none");
+      cartItemsWrapper.addClass("d-none");
+    } else {
+      subtotal = 0;
+      shipping = 10;
+      for (productId in customerCart) {
+        let product = getProductsData()[productId];
+        // console.log(product);
+        subtotal += product.price * customerCart[productId]["quantity"];
+        cartItem = $(`
               <div class="row" id="${productId}">
                 <div class="col-sm-12">
                   <div class="row border-bottom pb-3 pt-5">
@@ -141,110 +142,110 @@ $(function () {
               </div>
         `);
 
-      if (customerCart[productId]["quantity"] == 1) {
-        $(cartItem.find(".minus").children()[0]).addClass("d-none");
-        $(cartItem.find(".minus").children()[1]).removeClass("d-none");
-      }
-      if (!customerCart[productId]["selected"]) {
-        cartItem.find(".form-check-input").prop("checked", false);
-      }
-      //select event
-      cartItem.find(".form-check-input").click(function (e) {
-        e.stopPropagation(); // Prevent event bubbling
-        let product_id = $(this).data("id");
-        if (customerCart[product_id]["selected"]) {
-          customerCart[product_id]["selected"] = false;
-          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
-        } else {
-          customerCart[product_id]["selected"] = true;
-          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+        if (customerCart[productId]["quantity"] == 1) {
+          $(cartItem.find(".minus").children()[0]).addClass("d-none");
+          $(cartItem.find(".minus").children()[1]).removeClass("d-none");
         }
-        setUsersData(usersData);
+        if (!customerCart[productId]["selected"]) {
+          cartItem.find(".form-check-input").prop("checked", false);
+        }
+        //select event
+        cartItem.find(".form-check-input").click(function (e) {
+          e.stopPropagation(); // Prevent event bubbling
+          let product_id = $(this).data("id");
+          if (customerCart[product_id]["selected"]) {
+            customerCart[product_id]["selected"] = false;
+            calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+          } else {
+            customerCart[product_id]["selected"] = true;
+            calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+          }
+          setUsersData(usersData);
 
-        // setUsersData(usersData);
-        // console.log(product_id);
-        // console.log("select event");
-      });
-      // decrease product event
-      cartItem.find(".minus").click(function (e) {
-        e.stopPropagation(); // Prevent event bubbling
-        let product_id = $(this).data("id");
-        let cart = $("#" + product_id + "");
-        if (customerCart[product_id]["quantity"] == 1) {
-          cart.addClass("d-none");
+          // setUsersData(usersData);
           // console.log(product_id);
-          delete customerCart[product_id];
+          // console.log("select event");
+        });
+        // decrease product event
+        cartItem.find(".minus").click(function (e) {
+          e.stopPropagation(); // Prevent event bubbling
+          let product_id = $(this).data("id");
+          let cart = $("#" + product_id + "");
+          if (customerCart[product_id]["quantity"] == 1) {
+            cart.addClass("d-none");
+            // console.log(product_id);
+            delete customerCart[product_id];
 
+            calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+            if (Object.keys(customerCart).length == 0) {
+              emptyCartWrapper.removeClass("d-none");
+              cartItemsWrapper.addClass("d-none");
+              window.location.reload();
+            }
+          } else {
+            // console.log("inside else");
+            // console.log(customerCart[product_id]["quantity"]);
+            customerCart[product_id]["quantity"]--;
+            calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+            // console.log(customerCart[product_id]["quantity"]);
+            if (customerCart[product_id]["quantity"] == 1) {
+              console.log("inside if which is inside else");
+              $(cart.find(".minus").children()[0]).addClass("d-none");
+              $(cart.find(".minus").children()[1]).removeClass("d-none");
+            }
+            cart.find("#quantity").text(customerCart[product_id]["quantity"]);
+          }
+          setUsersData(usersData)
+            .then(() => updateCartBadge())
+            .catch((error) => console.log(error));
+          // console.log("minus event");
+        });
+        //encrease product event
+        cartItem.find(".plus").click(function (e) {
+          e.stopPropagation(); // Prevent event bubbling
+          let product_id = $(this).data("id");
+          let cart = $("#" + product_id + "");
+          let inStock = getProductsData()[product_id]["stock"];
+          if (customerCart[product_id]["quantity"] == inStock) {
+            outOfStockMessage();
+          } else {
+            if (customerCart[product_id]["quantity"] == 1) {
+              // console.log("inside if which is inside else");
+              $(cart.find(".minus").children()[1]).addClass("d-none");
+              $(cart.find(".minus").children()[0]).removeClass("d-none");
+            }
+            customerCart[product_id]["quantity"]++;
+            calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+            // console.log(customerCart[product_id]["quantity"]);
+            cart.find("#quantity").text(customerCart[product_id]["quantity"]);
+          }
+          setUsersData(usersData)
+            .then(() => updateCartBadge())
+            .catch((error) => console.log(error));
+
+          // console.log("plus event");
+        });
+        //delete product event
+        cartItem.find(".delete").click(function (e) {
+          e.stopPropagation(); // Prevent event bubbling
+
+          let product_id = $(this).data("id");
+          $("#" + product_id + "").addClass("d-none");
+          delete customerCart[product_id];
+          setUsersData(usersData)
+            .then(() => updateCartBadge())
+            .catch((error) => console.log(error));
           calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
           if (Object.keys(customerCart).length == 0) {
             emptyCartWrapper.removeClass("d-none");
             cartItemsWrapper.addClass("d-none");
             window.location.reload();
           }
-        } else {
-          // console.log("inside else");
-          // console.log(customerCart[product_id]["quantity"]);
-          customerCart[product_id]["quantity"]--;
-          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
-          // console.log(customerCart[product_id]["quantity"]);
-          if (customerCart[product_id]["quantity"] == 1) {
-            console.log("inside if which is inside else");
-            $(cart.find(".minus").children()[0]).addClass("d-none");
-            $(cart.find(".minus").children()[1]).removeClass("d-none");
-          }
-          cart.find("#quantity").text(customerCart[product_id]["quantity"]);
-        }
-        setUsersData(usersData)
-          .then(() => updateCartBadge())
-          .catch((error) => console.log(error));
-        // console.log("minus event");
-      });
-      //encrease product event
-      cartItem.find(".plus").click(function (e) {
-        e.stopPropagation(); // Prevent event bubbling
-        let product_id = $(this).data("id");
-        let cart = $("#" + product_id + "");
-        let inStock = getProductsData()[product_id]["stock"];
-        if (customerCart[product_id]["quantity"] == inStock) {
-          outOfStockMessage();
-        } else {
-          if (customerCart[product_id]["quantity"] == 1) {
-            // console.log("inside if which is inside else");
-            $(cart.find(".minus").children()[1]).addClass("d-none");
-            $(cart.find(".minus").children()[0]).removeClass("d-none");
-          }
-          customerCart[product_id]["quantity"]++;
-          calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
-          // console.log(customerCart[product_id]["quantity"]);
-          cart.find("#quantity").text(customerCart[product_id]["quantity"]);
-        }
-        setUsersData(usersData)
-          .then(() => updateCartBadge())
-          .catch((error) => console.log(error));
-
-        // console.log("plus event");
-      });
-      //delete product event
-      cartItem.find(".delete").click(function (e) {
-        e.stopPropagation(); // Prevent event bubbling
-
-        let product_id = $(this).data("id");
-        $("#" + product_id + "").addClass("d-none");
-        delete customerCart[product_id];
-        setUsersData(usersData)
-          .then(() => updateCartBadge())
-          .catch((error) => console.log(error));
-        calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
-        if (Object.keys(customerCart).length == 0) {
-          emptyCartWrapper.removeClass("d-none");
-          cartItemsWrapper.addClass("d-none");
-          window.location.reload();
-        }
-        // console.log("delete event");
-      });
-      cartItemsWrapper.append(cartItem);
-    }
-    let checkout = $(`
+          // console.log("delete event");
+        });
+        cartItemsWrapper.append(cartItem);
+      }
+      let checkout = $(`
         <div id="checkout-container" class="container-fluid mt-4">
           <div class="row justify-content-md-end">
             <div class="col-lg-4 col-md-6 col-sm-12">
@@ -272,144 +273,146 @@ $(function () {
           </div>
         </div>
         `);
-    cartItemsWrapper.append(checkout);
-    calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
-    if (cartItemsWrapper.hasClass("d-none")) {
-      cartItemsWrapper.removeClass("d-none");
-      emptyCartWrapper.addClass("d-none");
-    }
-  }
-  $(".payment").on("click", function () {
-    let checkbox = $($(this).children()[1]);
-    if (!checkbox.prop("checked")) {
-      let checboxes = $(".payment");
-      for (let i = 0; i < checboxes.length; i++) {
-        let checboxesItem = $($(checboxes[i]).children()[1]);
-        if (checboxesItem.prop("checked")) {
-          checboxesItem.prop("checked", false);
-        }
+      cartItemsWrapper.append(checkout);
+      calculatingSubtotal(customerCart, shipping, $("#subtotal"), $("#total"));
+      if (cartItemsWrapper.hasClass("d-none")) {
+        cartItemsWrapper.removeClass("d-none");
+        emptyCartWrapper.addClass("d-none");
       }
-      checkbox.prop("checked", true);
-    } else {
-      checkbox.prop("checked", false);
     }
-  });
-  $("#Paypal-payment").on("click", function () {
-    $("#paypal-email").toggleClass("d-none");
-  });
-  $("#Cach-payment").on("click", function () {
-    if (!$("#paypal-email").hasClass("d-none")) {
-      $("#paypal-email").addClass("d-none");
-    }
-  });
-  $("#check-out-button").on("click", function () {
-    let customerData = usersData[loggedInUser["category"]][loggedInUser["email"]];
-    // console.log(customerData);
-    $("#user-name").val(customerData["username"]);
-    $("#user-email").val(customerData["email"]);
-    $("#user-address").val(customerData["address"]);
-    $("#user-phone").val(customerData["phone"]);
-  });
-  $("#go-to-payment").on("click", function () {
-    let customerData = usersData[loggedInUser["category"]][loggedInUser["email"]];
-    customerData["address"] = $("#user-address").val();
-    setUsersData(usersData);
-    //order summary
-    const today = new Date();
-    // Array of month names
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    $(".payment").on("click", function () {
+      let checkbox = $($(this).children()[1]);
+      if (!checkbox.prop("checked")) {
+        let checboxes = $(".payment");
+        for (let i = 0; i < checboxes.length; i++) {
+          let checboxesItem = $($(checboxes[i]).children()[1]);
+          if (checboxesItem.prop("checked")) {
+            checboxesItem.prop("checked", false);
+          }
+        }
+        checkbox.prop("checked", true);
+      } else {
+        checkbox.prop("checked", false);
+      }
+    });
+    $("#Paypal-payment").on("click", function () {
+      $("#paypal-email").toggleClass("d-none");
+    });
+    $("#Cach-payment").on("click", function () {
+      if (!$("#paypal-email").hasClass("d-none")) {
+        $("#paypal-email").addClass("d-none");
+      }
+    });
+    $("#check-out-button").on("click", function () {
+      let customerData = usersData[loggedInUser["category"]][loggedInUser["email"]];
+      // console.log(customerData);
+      $("#user-name").val(customerData["username"]);
+      $("#user-email").val(customerData["email"]);
+      $("#user-address").val(customerData["address"]);
+      $("#user-phone").val(customerData["phone"]);
+    });
+    $("#go-to-payment").on("click", function () {
+      let customerData = usersData[loggedInUser["category"]][loggedInUser["email"]];
+      customerData["address"] = $("#user-address").val();
+      setUsersData(usersData);
+      //order summary
+      const today = new Date();
+      // Array of month names
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-    // Extract components
-    const year = today.getFullYear();
-    const month = months[today.getMonth()]; // Get the month name using the array
-    const day = today.getDate();
-    const formattedDate = `${day} ${month} ${year}`;
-    // console.log(formattedDate);
-    $($("#date").children()[1]).text(formattedDate);
-    // Get hours and minutes
-    let hours = today.getHours();
-    const minutes = today.getMinutes();
+      // Extract components
+      const year = today.getFullYear();
+      const month = months[today.getMonth()]; // Get the month name using the array
+      const day = today.getDate();
+      const formattedDate = `${day} ${month} ${year}`;
+      // console.log(formattedDate);
+      $($("#date").children()[1]).text(formattedDate);
+      // Get hours and minutes
+      let hours = today.getHours();
+      const minutes = today.getMinutes();
 
-    // Determine AM or PM
-    const amOrPm = hours >= 12 ? "PM" : "AM";
+      // Determine AM or PM
+      const amOrPm = hours >= 12 ? "PM" : "AM";
 
-    // Convert 24-hour format to 12-hour format
-    hours = hours % 12 || 12; // Convert "0" to "12" for midnight
+      // Convert 24-hour format to 12-hour format
+      hours = hours % 12 || 12; // Convert "0" to "12" for midnight
 
-    // Format minutes to always be two digits
-    const formattedMinutes = minutes.toString().padStart(2, "0");
+      // Format minutes to always be two digits
+      const formattedMinutes = minutes.toString().padStart(2, "0");
 
-    // Combine into desired format
-    const time = `${hours}:${formattedMinutes} ${amOrPm}`;
+      // Combine into desired format
+      const time = `${hours}:${formattedMinutes} ${amOrPm}`;
 
-    // console.log(time); // e.g., "5:05 PM"
-    $($("#time").children()[1]).text(time);
+      // console.log(time); // e.g., "5:05 PM"
+      $($("#time").children()[1]).text(time);
 
-    // Calculate delivery day
-    const deliveryDate = new Date(today);
-    deliveryDate.setDate(today.getDate() + 2); // Add 2 days to today
-    const deliveryDay = deliveryDate.getDate();
-    const deliveryMonth = months[deliveryDate.getMonth()];
-    const deliveryYear = deliveryDate.getFullYear();
-    const formattedDeliveryDate = `${deliveryDay} ${deliveryMonth} ${deliveryYear}`;
+      // Calculate delivery day
+      const deliveryDate = new Date(today);
+      deliveryDate.setDate(today.getDate() + 2); // Add 2 days to today
+      const deliveryDay = deliveryDate.getDate();
+      const deliveryMonth = months[deliveryDate.getMonth()];
+      const deliveryYear = deliveryDate.getFullYear();
+      const formattedDeliveryDate = `${deliveryDay} ${deliveryMonth} ${deliveryYear}`;
 
-    // products & quantities
-    let products = getProductsData();
-    let productsSummaryWrapper = $("#products-summary-wrapper");
-    productsSummaryWrapper.empty();
-    let soldProducts = [];
-    for (let productId in customerCart) {
-      product = products[productId];
-      // console.log(customerCart);
-      if (customerCart[productId]["selected"]) {
-        productDetails = {
-          productId: productId,
-          category: product.category,
-          title: product.title,
-          price: product.price,
-          quantity: customerCart[productId]["quantity"],
-          description: product.description,
-          img_src: product.img_src,
-        };
-        soldProducts.push(productDetails);
-        let productSummary = $(`
+      // products & quantities
+      let products = getProductsData();
+      let productsSummaryWrapper = $("#products-summary-wrapper");
+      productsSummaryWrapper.empty();
+      let soldProducts = [];
+      for (let productId in customerCart) {
+        product = products[productId];
+        // console.log(customerCart);
+        if (customerCart[productId]["selected"]) {
+          productDetails = {
+            productId: productId,
+            category: product.category,
+            title: product.title,
+            price: product.price,
+            quantity: customerCart[productId]["quantity"],
+            description: product.description,
+            img_src: product.img_src,
+          };
+          soldProducts.push(productDetails);
+          let productSummary = $(`
                             <ul class="list-unstyled text-body-tertiary d-flex justify-content-between">
                               <li>${product.title}</li>
                               <li>${customerCart[productId]["quantity"]}</li>
                             </ul>
           `);
-        productsSummaryWrapper.append(productSummary);
+          productsSummaryWrapper.append(productSummary);
+        }
       }
-    }
-    $("#summary-shipping").text(shipping);
-    calculatingSubtotal(customerCart, shipping, $("#summary-subtotal"), $("#summary-total"));
-    $("#confirm").on("click", function () {
-      order_details = {
-        order_date: {
-          date: formattedDate,
-          time: time,
-        },
-        delivery_date: {
-          date: formattedDeliveryDate,
-        },
-        products: soldProducts,
-      };
-      console.log(order_details);
-      customerData["orders_history"].push(order_details);
-      for (productId in customerCart) {
-        if (customerCart[productId]["selected"]) delete customerCart[productId];
-      }
-      setUsersData(usersData);
-      updateProducts(soldProducts);
-      Swal.fire({
-        title: "Great!",
-        text: "Thank you for your payment! Your products will be with you soon. We hope you enjoy your purchase!",
-        icon: "success",
-      }).then(() => {
-        window.location.reload(); // Reload the window after the dialog is closed
+      $("#summary-shipping").text(shipping);
+      calculatingSubtotal(customerCart, shipping, $("#summary-subtotal"), $("#summary-total"));
+
+      $("#confirm").on("click", function () {
+        order_details = {
+          order_date: {
+            date: formattedDate,
+            time: time,
+          },
+          delivery_date: {
+            date: formattedDeliveryDate,
+          },
+          products: soldProducts,
+        };
+        console.log(order_details);
+        customerData["orders_history"].push(order_details);
+        for (productId in customerCart) {
+          if (customerCart[productId]["selected"]) delete customerCart[productId];
+        }
+        setUsersData(usersData);
+        updateProducts(soldProducts);
+        Swal.fire({
+          title: "Great!",
+          text: "Thank you for your payment! Your products will be with you soon. We hope you enjoy your purchase!",
+          icon: "success",
+        }).then(() => {
+          window.location.reload(); // Reload the window after the dialog is closed
+        });
       });
     });
-  });
+  }
 });
 function getUsersData() {
   const storedData = localStorage.getItem("signUpData");

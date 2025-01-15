@@ -38,7 +38,20 @@
       </nav>
     </div> -->
     <!-- End of breadcrumb -->
-    <div class="container-fluid mb-5">
+
+    <!-- Start of no result container -->
+    <div id="noResultWrapper" class="container-fluid mb-5 d-none">
+      <div class="row flex-column justify-content-center align-items-center">
+        <div class="d-flex justify-content-center">
+          <img src="./Assests/images/noOrders.avif" alt="No Results found" />
+        </div>
+        <h1 class="display-4 text-center">No results found</h1>
+        <p class="text-center">Please try a different search or filter options.</p>
+      </div>
+    </div>
+
+    <!-- Start of books container -->
+    <div id="booksWrapper" class="container-fluid mb-5">
       <div class="row">
         <!-- Start of filter panel -->
         <div class="container pt-5 col-md-4 col-lg-3 col-sm-12 d-md-inline-block d-none">

@@ -5,15 +5,30 @@ function updateUserDropdown() {
     if (userDropdownMenu) {
       clearInterval(checkUserDropdown); // Stop checking once it's found
 
-      const userSession = sessionStorage.getItem("currentSession"); // Check session dynamically
+      let userSession = sessionStorage.getItem("currentSession"); // Check session dynamically
+      userSession = JSON.parse(userSession);
       userDropdownMenu.innerHTML = ""; // Clear the current menu
 
       if (userSession) {
         // User is logged in
-        userDropdownMenu.innerHTML = `
+        if (userSession.session.category == "admin") {
+          userDropdownMenu.innerHTML = `
+          <li><a class="dropdown-item" href="./dash.html">Your Panel</a></li>
+          <li><a class="dropdown-item" id="logoutBtn" href="#">Logout</a></li>
+        `;
+        } else if (userSession.session.category == "sellers") {
+          userDropdownMenu.innerHTML = `
+          <li><a class="dropdown-item" href="./SellerDashboard.html">Dashboard</a></li>
+          <li><a class="dropdown-item" id="logoutBtn" href="#">Logout</a></li>
+          <li><a class="dropdown-item" href="./profile.html">Your Account</a></li>
+
+        `;
+        } else {
+          userDropdownMenu.innerHTML = `
           <li><a class="dropdown-item" href="./profile.html">Your Account</a></li>
           <li><a class="dropdown-item" id="logoutBtn" href="#">Logout</a></li>
         `;
+        }
 
         // Add logout functionality
         const logoutBtn = document.getElementById("logoutBtn");
@@ -287,9 +302,10 @@ setActiveLink = function () {
     document.getElementById("home-link")?.classList?.add("active");
   } else if (pathName.includes("about") && pathName) {
     document.getElementById("about-link")?.classList?.add("active");
-  } else if (pathName.includes("contact") && pathName) {
-    document.getElementById("contact-link")?.classList?.add("active");
   } else {
-    document.getElementById("home-link").classList?.add("active");
+    document.getElementById("contact-link")?.classList?.add("active");
   }
+  // else {
+  //   document.getElementById("home-link").classList?.add("active");
+  // }
 };

@@ -69,6 +69,7 @@ $(function () {
   //banner
   let randomProducts = localStorage.getItem("bannerProduct");
   randomProducts = JSON.parse(randomProducts);
+  let productId = randomProducts["product_id"];
   // console.log(randomProducts);
 
   //updating banner photo,title and description
@@ -78,38 +79,59 @@ $(function () {
     $("#banner-description").text(`${randomProducts.description}`);
   }
   $("#banner-btn").on("click", function () {
-    localStorage.setItem("selectedProduct", JSON.stringify(randomProducts));
+    localStorage.setItem("selectedProduct", JSON.stringify(productId));
     window.location.href = "./Product Page.html";
   });
 
   //check if this page was loaded for search results or not
   let searchResults = localStorage.getItem("forSearch");
   searchResults = JSON.parse(searchResults);
+
+  let noResultWrapper = $("#noResultWrapper");
+  let booksWrapper = $("#booksWrapper");
+
   if (searchResults) {
-    // console.log("Search results page was loaded");
-    // console.log(searchResults);
+    if (searchResults.length > 0) {
+      if (!noResultWrapper.hasClass("d-none")) {
+        noResultWrapper.addClass("d-none");
+        booksWrapper.removeClass("d-none");
+      } else {
+        booksWrapper.removeClass("d-none");
+      }
 
-    // get all products from the search results
-    let allSearchResults = {};
-    searchResults.forEach((productId) => {
-      allSearchResults[productId] = allProducts[productId];
-    });
-    // console.log(allSearchResults);
+      // console.log("Search results page was loaded");
+      // console.log(searchResults);
 
-    // update storeProductCategory
-    storeProductCategory(allSearchResults);
+      // get all products from the search results
+      let allSearchResults = {};
+      searchResults.forEach((productId) => {
+        allSearchResults[productId] = allProducts[productId];
+      });
+      // console.log(allSearchResults);
 
-    // update the search results page with the search results
-    initializePagination(allProducts, searchResults);
+      // update storeProductCategory
+      storeProductCategory(allSearchResults);
 
-    let productsCategories = getProductCategory();
-    // console.log(productsCategories);
-    //display number of products in the categories-container div
-    const container = $("#categories-container");
-    fillBookCategory(container, allSearchResults, productsCategories);
+      // update the search results page with the search results
+      initializePagination(allProducts, searchResults);
 
-    // reset the search term and remove the search results from local storage
-    localStorage.removeItem("forSearch");
+      let productsCategories = getProductCategory();
+      // console.log(productsCategories);
+      //display number of products in the categories-container div
+      const container = $("#categories-container");
+      fillBookCategory(container, allSearchResults, productsCategories);
+
+      // reset the search term and remove the search results from local storage
+      localStorage.removeItem("forSearch");
+    } else {
+      // length of search results is greater than zero
+      if (!noResultWrapper.hasClass("d-none")) {
+        booksWrapper.addClass("d-none");
+      } else {
+        booksWrapper.addClass("d-none");
+        noResultWrapper.removeClass("d-none");
+      }
+    }
   } else {
     // array that contains keys of all products
     filteredProducts = Object.keys(allProducts);
