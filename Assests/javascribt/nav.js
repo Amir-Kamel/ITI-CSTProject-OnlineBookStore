@@ -207,17 +207,23 @@ function addToCart(product_id) {
       icon: "success",
       title: "Item added to cart successfully.",
     });
-  } else if (loggedInUser.category == "admin" || loggedInUser.category == "sellers") {
-    Toast.fire({
-      icon: "info",
-      title: "You need to login with a customer account  to add products to cart.",
-    });
+    if  (loggedInUser.category == "admin" || loggedInUser.category == "sellers"){
+      Toast.fire({
+        icon: "info",
+        title: "You need to login with a customer account  to add products to cart.",
+      });
+    }
   } else {
     Toast.fire({
       icon: "info",
       title: "You need to login to be able to add products to cart.",
-    });
-  }
+    });}
+  //  else {
+  //   Toast.fire({
+  //     icon: "info",
+  //     title: "You need to login to be able to add products to cart.",
+  //   });
+  // }
 }
 
 // Sign-in function
@@ -405,12 +411,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Call the updateUserDropdown function once the page loads
-window.onload = function () {
-  updateUserDropdown();
-  setActiveLink();
-  updateCartBadge();
-  updateInboxBadge();
-};
+
 
 setActiveLink = function () {
   const pathName = window?.location?.pathname?.toLowerCase();
@@ -418,10 +419,10 @@ setActiveLink = function () {
     document.getElementById("home-link")?.classList?.add("active");
   } else if (pathName.includes("about") && pathName) {
     document.getElementById("about-link")?.classList?.add("active");
-  } else {
+  } else if (pathName.includes("contact") && pathName) {
     document.getElementById("contact-link")?.classList?.add("active");
   }
-  // else {
-  //   document.getElementById("home-link").classList?.add("active");
-  // }
+  else {
+      document.getElementById("home-link").classList?.add("active");
+  }
 };
