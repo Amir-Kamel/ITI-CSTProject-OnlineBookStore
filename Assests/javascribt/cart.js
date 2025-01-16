@@ -297,14 +297,20 @@ $(function () {
         checkbox.prop("checked", false);
       }
     });
+
     $("#Paypal-payment").on("click", function () {
-      $("#paypal-email").toggleClass("d-none");
+      if ($("#paypal-email").hasClass("d-none")) {
+        $("#paypal-email").removeClass("d-none");
+      } else {
+        $("#paypal-email").addClass("d-none");
+      }
     });
     $("#Cach-payment").on("click", function () {
       if (!$("#paypal-email").hasClass("d-none")) {
         $("#paypal-email").addClass("d-none");
       }
     });
+
     $("#check-out-button").on("click", function () {
       let customerData = usersData[loggedInUser["category"]][loggedInUser["email"]];
       // console.log(customerData);
@@ -313,18 +319,70 @@ $(function () {
       $("#user-address").val(customerData["address"]);
       $("#user-phone").val(customerData["phone"]);
     });
-    $("#go-to-payment").on("click", function () {
+
+    $("#check-out-button").on("click", function () {
       let customerData = usersData[loggedInUser["category"]][loggedInUser["email"]];
-      customerData["address"] = $("#user-address").val();
+      $("#user-name").val(customerData["username"]);
+      $("#user-email").val(customerData["email"]);
+      $("#user-address").val(customerData["address"]);
+      $("#user-phone").val(customerData["phone"]);
+    });
+
+    $("#go-to-payment").on("click", function (event) {
+      let address = $("#user-address").val().trim();
+      let phone = $("#user-phone").val().trim();
+      let paypalEmail = $("#paypal-email").val().trim();
+      let isPaypalChecked = $("#paypal").prop("checked");
+      let isonCashChecked = $("#cach").prop("checked");
+      let errors = [];
+
+      // Phone validation
+      if (!/^(011|012|010|015)\d{8}$/.test(phone)) {
+        errors.push("- Please enter a valid phone number.");
+      }
+
+      // Address validation
+      if (address === "") {
+        errors.push("- Delivery address cannot be empty.");
+      }
+
+      // PayPal email validation (if PayPal is selected)
+      if (isPaypalChecked && !/^[a-zA-Z0-9._%+-]+(?<!\.)@gmail\.com$/.test(paypalEmail)) {
+        errors.push("- Please enter a valid PayPal email address.");
+      }
+
+      if (!isPaypalChecked && !isonCashChecked) {
+        {
+          errors.push("- You have to check the way of payment");
+        }
+      }
+      // data-bs-toggle="modal" data-bs-target="#summaryAndConfirm"
+
+      if (errors.length > 0) {
+        Toast.fire({
+          icon: "error",
+          title: "Validation Errors",
+          html: errors.join("<br>"),
+          confirmButtonText: "Okay",
+        });
+      } else {
+        // Reopen the modal after closing the error message
+        $("#go-to-payment").attr("data-bs-toggle", "modal");
+        $("#go-to-payment").attr("data-bs-target", "#summaryAndConfirm");
+
+        $("#customer-info-modal").modal("show"); // Replace with the actual modal ID
+      }
+
+      let customerData = usersData[loggedInUser["category"]][loggedInUser["email"]];
+      customerData["address"] = address;
       setUsersData(usersData);
-      //order summary
+
+      // Order summary
       const today = new Date();
-      // Array of month names
       const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-      // Extract components
       const year = today.getFullYear();
-      const month = months[today.getMonth()]; // Get the month name using the array
+      const month = months[today.getMonth()];
       const day = today.getDate();
       const formattedDate = `${day} ${month} ${year}`;
       // console.log(formattedDate);
@@ -354,7 +412,6 @@ $(function () {
       const deliveryDay = deliveryDate.getDate();
       const deliveryMonth = months[deliveryDate.getMonth()];
       const deliveryYear = deliveryDate.getFullYear();
-      const formattedDeliveryDate = `${deliveryDay} ${deliveryMonth} ${deliveryYear}`;
 
       // products & quantities
       let products = getProductsData();
@@ -419,6 +476,12 @@ $(function () {
           icon: "success",
         }).then(() => {
           window.location.reload(); // Reload the window after the dialog is closed
+        });
+        Swal.fire({
+          icon: "success",
+          title: "Order Confirmed",
+          text: "Thank you for your order. We will process it shortly!",
+          confirmButtonText: "Okay",
         });
       });
     });
