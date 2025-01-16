@@ -1,7 +1,7 @@
 const products = {
   1: {
     title: "The Epic of Gilgamesh",
-
+    seller_email: "ahmed@gmail.com",
     price: 11,
     stock: 5,
     description: "An ancient heroic adventure about friendship and immortality.",
@@ -12,7 +12,7 @@ const products = {
   },
   2: {
     title: "Nostromo",
-
+    seller_email: "mariam@gmail.com",
     price: 8,
     stock: 7,
     description: "A gripping tale of greed, colonialism, and revolution.",
@@ -23,7 +23,7 @@ const products = {
   },
   3: {
     title: "Things Fall Apart",
-
+    seller_email: "ahmed@gmail.com",
     price: 10,
     stock: 3,
     description: "A powerful story of tradition and change in a Nigerian village.",
@@ -34,7 +34,7 @@ const products = {
   },
   4: {
     title: "Pride and Prejudice",
-
+    seller_email: "mariam@gmail.com",
     price: 9,
     stock: 4,
     description: "A witty and romantic tale of love and societal expectations.",
@@ -45,6 +45,7 @@ const products = {
   },
   5: {
     title: "Crime and Punishment",
+    seller_email: "ahmed@gmail.com",
 
     price: 14,
     stock: 6,
@@ -56,6 +57,7 @@ const products = {
   },
   6: {
     title: "Invisible Man",
+    seller_email: "mariam@gmail.com",
 
     price: 13,
     stock: 3,
@@ -67,6 +69,7 @@ const products = {
   },
   7: {
     title: "Gypsy Ballads",
+    seller_email: "ahmed@gmail.com",
 
     price: 6,
     stock: 8,
@@ -78,6 +81,7 @@ const products = {
   },
   8: {
     title: "Medea",
+    seller_email: "mariam@gmail.com",
 
     price: 12,
     stock: 2,
@@ -89,6 +93,7 @@ const products = {
   },
   9: {
     title: "One Thousand and One Nights",
+    seller_email: "ahmed@gmail.com",
 
     price: 7,
     stock: 5,
@@ -100,6 +105,7 @@ const products = {
   },
   10: {
     title: "Fairy Tales",
+    seller_email: "mariam@gmail.com",
 
     price: 10,
     stock: 9,
@@ -111,6 +117,7 @@ const products = {
   },
   11: {
     title: "Njál's Saga",
+    seller_email: "ahmed@gmail.com",
 
     price: 8,
     stock: 4,
@@ -122,6 +129,7 @@ const products = {
   },
   12: {
     title: "The Iliad",
+    seller_email: "mariam@gmail.com",
 
     price: 12,
     stock: 6,
@@ -133,6 +141,7 @@ const products = {
   },
   13: {
     title: "Madame Bovary",
+    seller_email: "ahmed@gmail.com",
 
     price: 9,
     stock: 7,
@@ -144,6 +153,7 @@ const products = {
   },
   14: {
     title: "Absalom, Absalom!",
+    seller_email: "mariam@gmail.com",
 
     price: 11,
     stock: 3,
@@ -156,6 +166,7 @@ const products = {
 
   15: {
     title: "The Divine Comedy",
+    seller_email: "ahmed@gmail.com",
 
     price: 14,
     stock: 2,
@@ -167,6 +178,7 @@ const products = {
   },
   16: {
     title: "Fairy Tales",
+    seller_email: "mariam@gmail.com",
 
     price: 7,
     stock: 5,
@@ -178,6 +190,7 @@ const products = {
   },
   17: {
     title: "The Sound and the Fury",
+    seller_email: "ahmed@gmail.com",
 
     price: 13,
     stock: 4,
@@ -189,6 +202,7 @@ const products = {
   },
   18: {
     title: "Great Expectations",
+    seller_email: "mariam@gmail.com",
 
     price: 9,
     stock: 3,
@@ -200,6 +214,7 @@ const products = {
   },
   19: {
     title: "The Brothers Karamazov",
+    seller_email: "ahmed@gmail.com",
 
     price: 14,
     stock: 6,
@@ -211,6 +226,7 @@ const products = {
   },
   20: {
     title: "The devil to pay",
+    seller_email: "mariam@gmail.com",
 
     price: 11,
     stock: 8,
@@ -222,6 +238,7 @@ const products = {
   },
   21: {
     title: "Don Quijote De La Mancha",
+    seller_email: "ahmed@gmail.com",
 
     price: 10,
     stock: 4,
@@ -233,6 +250,7 @@ const products = {
   },
   22: {
     title: "Jacques the Fatalist",
+    seller_email: "mariam@gmail.com",
 
     price: 7,
     stock: 5,
@@ -244,6 +262,7 @@ const products = {
   },
   23: {
     title: "The Canterbury Tales",
+    seller_email: "ahmed@gmail.com",
 
     price: 13,
     stock: 3,

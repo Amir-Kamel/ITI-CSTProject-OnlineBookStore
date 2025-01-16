@@ -88,17 +88,13 @@ $(function () {
   let searchResults = localStorage.getItem("forSearch");
   searchResults = JSON.parse(searchResults);
 
-  let noResultWrapperGlobal = $("#noResultWrapperGlobal+");
+  let noResultWrapperGlobal = $("#noResultWrapperGlobal");
   let booksWrapper = $("#booksWrapper");
 
   if (searchResults) {
     if (searchResults.length > 0) {
-      if (!noResultWrapperGlobal.hasClass("d-none")) {
-        noResultWrapperGlobal.addClass("d-none");
-        booksWrapper.removeClass("d-none");
-      } else {
-        booksWrapper.removeClass("d-none");
-      }
+      noResultWrapperGlobal.addClass("d-none");
+      booksWrapper.removeClass("d-none");
 
       // console.log("Search results page was loaded");
       // console.log(searchResults);
@@ -123,12 +119,9 @@ $(function () {
       fillBookCategory(container, allSearchResults, productsCategories);
     } else {
       // length of search results is greater than zero
-      if (!noResultWrapperGlobal.hasClass("d-none")) {
-        booksWrapper.addClass("d-none");
-      } else {
-        booksWrapper.addClass("d-none");
-        noResultWrapperGlobal.removeClass("d-none");
-      }
+
+      booksWrapper.addClass("d-none");
+      noResultWrapperGlobal.removeClass("d-none");
     }
     // reset the search term and remove the search results from local storage
     localStorage.removeItem("forSearch");

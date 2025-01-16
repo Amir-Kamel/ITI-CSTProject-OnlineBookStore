@@ -826,7 +826,7 @@ function renderInboxTable() {
     //show the unsolved message only
 
     // name
-    let nameColumn = $("<td>");
+    let nameColumn = $("<td valign='middle'>");
     let nameInput = $("<input type='text' disabled >");
     nameInput.addClass("form-control text-center");
     nameInput.val(message.name);
@@ -834,7 +834,7 @@ function renderInboxTable() {
     // nameColumn.addClass("d-flex justify-content-center");
 
     // mail
-    let mailColumn = $("<td>");
+    let mailColumn = $("<td valign='middle'>");
     let mailInput = $("<input type='email' disabled >");
     mailInput.addClass("form-control text-center");
     mailInput.val(message.email);
@@ -842,7 +842,7 @@ function renderInboxTable() {
     // nameColumn.addClass("d-flex justify-content-center");
 
     // subject
-    let subjectColumn = $("<td>");
+    let subjectColumn = $("<td valign='middle'>");
     let subjectInput = $("<input type='text' disabled >");
     subjectInput.addClass("form-control text-center");
     subjectInput.val(message.subject);

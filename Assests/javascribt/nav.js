@@ -114,8 +114,8 @@ function updateInboxBadge() {
   const usersData = getUsersData();
   if (loggedInUser) {
     let category = loggedInUser.category;
-    const customer = usersData[category][loggedInUser.email];
-    let inbox = customer.inbox;
+    const user = usersData[category][loggedInUser.email];
+    let inbox = user.inbox;
     inboxItems = inbox.length;
     $("#inboxBadge").text(inboxItems);
 
@@ -176,7 +176,7 @@ function outOfStockMessage() {
 // Function to add product to cart and save in local storage
 function addToCart(product_id) {
   const loggedInUser = getLoggedInUserEmail();
-  if (loggedInUser) {
+  if (loggedInUser && loggedInUser.category == "customers") {
     // Retrieve the cart from local storage and update the cart badge
     let UsersData = getUsersData();
     let customerCart = UsersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
@@ -207,10 +207,15 @@ function addToCart(product_id) {
       icon: "success",
       title: "Item added to cart successfully.",
     });
+  } else if (loggedInUser.category == "admin" || loggedInUser.category == "sellers") {
+    Toast.fire({
+      icon: "info",
+      title: "You need to login with a customer account  to add products to cart.",
+    });
   } else {
     Toast.fire({
       icon: "info",
-      title: "You need to be logged in to add products to cart.",
+      title: "You need to login to be able to add products to cart.",
     });
   }
 }
@@ -237,37 +242,43 @@ function addToFavorite(key, buttonfav) {
   const loggedInUser = getLoggedInUserEmail();
 
   if (loggedInUser) {
-    // const loggedInUserEmail = currentSession.session.email;
-    const usersData = getUsersData();
-    // console.log(usersData);
-    // console.log(usersData.customers[loggedInUser.email]);
-    const customer = usersData.customers[loggedInUser.email];
-    // console.log(customer);
-    const wishlist = customer.wishlist; // Fetch the wishlist from the customer data
+    if (loggedInUser.category == "customers") {
+      // const loggedInUserEmail = currentSession.session.email;
+      const usersData = getUsersData();
+      // console.log(usersData);
+      // console.log(usersData.customers[loggedInUser.email]);
+      const customer = usersData.customers[loggedInUser.email];
+      // console.log(customer);
+      const wishlist = customer.wishlist; // Fetch the wishlist from the customer data
 
-    const productIndex = wishlist.findIndex((id) => id === key);
+      const productIndex = wishlist.findIndex((id) => id === key);
 
-    if (productIndex === -1) {
-      // Add the product to the wishlist
-      customer.wishlist.push(key);
-      $(buttonfav.children()[0]).removeClass("fa-regular ").addClass("fa-solid text-danger");
+      if (productIndex === -1) {
+        // Add the product to the wishlist
+        customer.wishlist.push(key);
+        $(buttonfav.children()[0]).removeClass("fa-regular ").addClass("fa-solid text-danger");
+        Toast.fire({
+          icon: "success",
+          title: "Item added to wishlist successfully.",
+        });
+      } else {
+        // Remove the product from the wishlist
+        customer.wishlist.splice(productIndex, 1);
+        $(buttonfav.children()[0]).removeClass("fa-solid text-danger").addClass("fa-regular");
+        Toast.fire({
+          icon: "warning",
+          title: "Item removed from wishlist successfully.",
+        });
+      }
+      // Save updated data to localStorage
+      localStorage.setItem("signUpData", JSON.stringify(usersData));
+      updateFavoritesBadge();
+    } else if (loggedInUser.category == "admin" || loggedInUser.category == "sellers") {
       Toast.fire({
-        icon: "success",
-        title: "Item added to wishlist successfully.",
-      });
-    } else {
-      // Remove the product from the wishlist
-      customer.wishlist.splice(productIndex, 1);
-      $(buttonfav.children()[0]).removeClass("fa-solid text-danger").addClass("fa-regular");
-      Toast.fire({
-        icon: "warning",
-        title: "Item removed from wishlist successfully.",
+        icon: "info",
+        title: "You need to log in with a customer account to add products to wishlist.",
       });
     }
-
-    // Save updated data to localStorage
-    localStorage.setItem("signUpData", JSON.stringify(usersData));
-    updateFavoritesBadge();
   } else {
     Toast.fire({
       icon: "info",
