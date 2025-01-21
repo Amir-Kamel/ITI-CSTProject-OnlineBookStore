@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (e.key === "Enter") {
         let allProducts = getProductsData();
         const searchTerm = $(this).val().toLowerCase();
-
+        t;
         console.log(searchTerm);
         // console.log(allProducts);
 
