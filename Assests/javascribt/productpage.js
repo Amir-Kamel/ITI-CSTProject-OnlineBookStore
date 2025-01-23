@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateFavoritesBadge();
         setActiveLink();
         updateUserDropdown();
+        updateInboxBadge();
       }
     } catch (error) {
       console.error("Error loading content:", error);
@@ -92,36 +93,48 @@ $(document).ready(function () {
 
   $(document).on("click", ".addtofav", function () {
     const loggedInUser = getLoggedInUserEmail();
+
     if (loggedInUser) {
-      // const loggedInUserEmail = currentSession.session.email;
-      const usersData = getUsersData();
-      // console.log(usersData);
-      // console.log(usersData.customers[loggedInUser.email]);
-      const customer = usersData.customers[loggedInUser.email];
-      // console.log(customer);
-      const wishlist = customer.wishlist; // Fetch the wishlist from the customer data
+      if (loggedInUser.category == "customers") {
+        // const loggedInUserEmail = currentSession.session.email;
+        const usersData = getUsersData();
+        // console.log(usersData);
+        // console.log(usersData.customers[loggedInUser.email]);
+        const customer = usersData.customers[loggedInUser.email];
+        // console.log(customer);
+        const wishlist = customer.wishlist; // Fetch the wishlist from the customer data
 
-      const productIndex = wishlist.findIndex((id) => id === productId);
+        const productIndex = wishlist.findIndex((id) => id === productId);
 
-      if (productIndex === -1) {
-        // Add the product to the wishlist
-        customer.wishlist.push(productId);
+        if (productIndex === -1) {
+          // Add the product to the wishlist
+          customer.wishlist.push(productId);
+          Toast.fire({
+            icon: "success",
+            title: "Item added to wishlist successfully.",
+          });
+        } else {
+          // Remove the product from the wishlist
+          customer.wishlist.splice(productIndex, 1);
+          Toast.fire({
+            icon: "warning",
+            title: "Item removed from wishlist successfully.",
+          });
+        }
+        // Save updated data to localStorage
+        localStorage.setItem("signUpData", JSON.stringify(usersData));
+        updateFavoritesBadge();
+      } else if (loggedInUser.category == "admin" || loggedInUser.category == "sellers") {
         Toast.fire({
-          icon: "success",
-          title: "Item added to wishlist successfully.",
-        });
-      } else {
-        // Remove the product from the wishlist
-        customer.wishlist.splice(productIndex, 1);
-        Toast.fire({
-          icon: "warning",
-          title: "Item removed from wishlist successfully.",
+          icon: "info",
+          title: "You need to log in with a customer account to add products to wishlist.",
         });
       }
-
-      // Save updated data to localStorage
-      localStorage.setItem("signUpData", JSON.stringify(usersData));
-      updateFavoritesBadge();
+    } else {
+      Toast.fire({
+        icon: "info",
+        title: "You need to log in to add products to wishlist.",
+      });
     }
   });
 });

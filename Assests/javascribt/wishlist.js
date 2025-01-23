@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateFavoritesBadge();
         setActiveLink();
         updateUserDropdown();
+        updateInboxBadge();
       }
     } catch (error) {
       console.error("Error loading content:", error);
@@ -104,10 +105,16 @@ $(document).ready(function () {
       favContainer.empty(); // Clear the container
 
       if (favorites.length === 0) {
-        favContainer.html("<h3 class='text-center text-muted my-5'>Oops! Seems that your favorites list is empty.<br> Why not head back to the store and discover some amazing products to add?</h3>");
+        favContainer.html(`
+            <h3 class="text-center text-muted my-5">
+                <i class="fas fa-box-open mb-3 fa-10x"></i><br>
+                Oops! Seems that your favorites list is empty.<br>
+                Why not head back to the store and discover some amazing products to add?
+            </h3>
+        `);
         favContainer.fadeIn(300);
         return;
-      }
+    }
 
       // Display the product cards
       favorites.forEach((productId) => {
@@ -123,10 +130,10 @@ $(document).ready(function () {
                 <h5 class="card-title">${product.title}</h5>
                 <p class="card-text">${product.description}</p>
                 <p class="card-text price" style="color: green; font-weight: bold;">Price: ${product.price}</p>
-                <button class="btn btn-success btn-sm my-2 me-2 add-to-cart">
+                <button class="btn btn-secondary btn-sm my-2 me-2 add-to-cart">
                   <i class="fas fa-cart-plus me-2"></i> Add To Cart
                 </button>
-                <button class="btn btn-danger btn-sm my-2 remove-fav">
+                <button class="btn btn-primary btn-sm my-2 remove-fav">
                   <i class="fas fa-trash-alt me-2"></i> Remove From Favorites
                 </button>
               </div>

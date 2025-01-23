@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateFavoritesBadge();
         setActiveLink();
         updateUserDropdown();
+        updateInboxBadge();
       }
     } catch (error) {
       console.error("Error loading content:", error);
@@ -87,17 +88,13 @@ $(function () {
   let searchResults = localStorage.getItem("forSearch");
   searchResults = JSON.parse(searchResults);
 
-  let noResultWrapper = $("#noResultWrapper");
+  let noResultWrapperGlobal = $("#noResultWrapperGlobal");
   let booksWrapper = $("#booksWrapper");
 
   if (searchResults) {
     if (searchResults.length > 0) {
-      if (!noResultWrapper.hasClass("d-none")) {
-        noResultWrapper.addClass("d-none");
-        booksWrapper.removeClass("d-none");
-      } else {
-        booksWrapper.removeClass("d-none");
-      }
+      noResultWrapperGlobal.addClass("d-none");
+      booksWrapper.removeClass("d-none");
 
       // console.log("Search results page was loaded");
       // console.log(searchResults);
@@ -120,18 +117,14 @@ $(function () {
       //display number of products in the categories-container div
       const container = $("#categories-container");
       fillBookCategory(container, allSearchResults, productsCategories);
-
-      // reset the search term and remove the search results from local storage
-      localStorage.removeItem("forSearch");
     } else {
       // length of search results is greater than zero
-      if (!noResultWrapper.hasClass("d-none")) {
-        booksWrapper.addClass("d-none");
-      } else {
-        booksWrapper.addClass("d-none");
-        noResultWrapper.removeClass("d-none");
-      }
+
+      booksWrapper.addClass("d-none");
+      noResultWrapperGlobal.removeClass("d-none");
     }
+    // reset the search term and remove the search results from local storage
+    localStorage.removeItem("forSearch");
   } else {
     // array that contains keys of all products
     filteredProducts = Object.keys(allProducts);
@@ -395,6 +388,19 @@ function refreshProducts(allProducts, filteredProducts) {
     updateDisplayedProducts(allProducts, filteredProducts)
       .then((displayedProducts) => {
         try {
+          // check if there are any available products to display
+          let noResultWrapperLocal = $("#noResultWrapperLocal");
+          let productsContainerWrapper = $("#products-container-wrapper");
+          // update the displayed products if there are results
+          if (displayedProducts.length > 0) {
+            productsContainerWrapper.removeClass("d-none");
+            noResultWrapperLocal.addClass("d-none");
+          } else {
+            // no results
+            productsContainerWrapper.removeClass("d-none");
+            noResultWrapperLocal.removeClass("d-none");
+          }
+
           // console.log("from refreshProducts", displayedProducts);
           generatePagination(allProducts, filteredProducts);
 

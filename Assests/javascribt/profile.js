@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateFavoritesBadge();
         setActiveLink();
         updateUserDropdown();
+        updateInboxBadge();
       }
     } catch (error) {
       console.error("Error loading content:", error);
@@ -329,7 +330,7 @@ document.addEventListener("DOMContentLoaded", function () {
       userData = signUpData.sellers[currentEmail];
     }
 
-    const savedImageSrc = userData.imgsrc || avatarURL;
+    const savedImageSrc = userData.userProfileImage || avatarURL;
     profilePicture.src = savedImageSrc;
   } else {
     profilePicture.src = avatarURL;
@@ -361,9 +362,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (signUpData && (signUpData.customers || signUpData.sellers)) {
           if (signUpData.customers && signUpData.customers[currentEmail]) {
-            signUpData.customers[currentEmail].imgsrc = base64Image;
+            signUpData.customers[currentEmail].userProfileImage = base64Image;
           } else if (signUpData.sellers && signUpData.sellers[currentEmail]) {
-            signUpData.sellers[currentEmail].imgsrc = base64Image;
+            signUpData.sellers[currentEmail].userProfileImage = base64Image;
           }
 
           localStorage.setItem("signUpData", JSON.stringify(signUpData));
@@ -380,9 +381,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (signUpData && (signUpData.customers || signUpData.sellers)) {
       if (signUpData.customers && signUpData.customers[currentEmail]) {
-        signUpData.customers[currentEmail].imgsrc = "";
+        signUpData.customers[currentEmail].userProfileImage = "";
       } else if (signUpData.sellers && signUpData.sellers[currentEmail]) {
-        signUpData.sellers[currentEmail].imgsrc = "";
+        signUpData.sellers[currentEmail].userProfileImage = "";
       }
 
       localStorage.setItem("signUpData", JSON.stringify(signUpData));

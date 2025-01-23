@@ -13,21 +13,21 @@ function updateUserDropdown() {
         // User is logged in
         if (userSession.session.category == "admin") {
           userDropdownMenu.innerHTML = `
-          <li><a class="dropdown-item" href="./dash.html">Your Panel</a></li>
-          <li><a class="dropdown-item" id="logoutBtn" href="#">Logout</a></li>
-        `;
+            <li><a class="dropdown-item" href="./dash.html">Your Panel</a></li>
+            <li><a class="dropdown-item" id="logoutBtn" href="#">Logout</a></li>
+          `;
         } else if (userSession.session.category == "sellers") {
           userDropdownMenu.innerHTML = `
-          <li><a class="dropdown-item" href="./SellerDashboard.html">Dashboard</a></li>
-          <li><a class="dropdown-item" id="logoutBtn" href="#">Logout</a></li>
-          <li><a class="dropdown-item" href="./profile.html">Your Account</a></li>
-
-        `;
+            <li><a class="dropdown-item" href="./SellerDashboard.html">Dashboard</a></li>
+            <li><a class="dropdown-item" id="logoutBtn" href="#">Logout</a></li>
+            <li><a class="dropdown-item" href="./profile.html">Your Account</a></li>
+  
+          `;
         } else {
           userDropdownMenu.innerHTML = `
-          <li><a class="dropdown-item" href="./profile.html">Your Account</a></li>
-          <li><a class="dropdown-item" id="logoutBtn" href="#">Logout</a></li>
-        `;
+            <li><a class="dropdown-item" href="./profile.html">Your Account</a></li>
+            <li><a class="dropdown-item" id="logoutBtn" href="#">Logout</a></li>
+          `;
         }
 
         // Add logout functionality
@@ -45,8 +45,8 @@ function updateUserDropdown() {
       } else {
         // User is not logged in
         userDropdownMenu.innerHTML = `
-          <li><a class="dropdown-item" href="./Login&Register.html">Sign in | SignUp</a></li>
-        `;
+            <li><a class="dropdown-item" href="./Login&Register.html">Sign in | SignUp</a></li>
+          `;
       }
     }
   }, 100); // Check every 100ms
@@ -108,24 +108,6 @@ function updateFavoritesBadge() {
 }
 
 // Function to update the inbox badge based on the messages in local inbox local storage
-function updateInboxBadge() {
-  const sessionData = JSON.parse(sessionStorage.getItem("currentSession"));
-  const loggedInUser = getLoggedInUserEmail();
-  const usersData = getUsersData();
-  if (loggedInUser) {
-    let category = loggedInUser.category;
-    const user = usersData[category][loggedInUser.email];
-    let inbox = user.inbox;
-    inboxItems = inbox.length;
-    $("#inboxBadge").text(inboxItems);
-
-    if (inboxItems > 0 && sessionData) {
-      animateBell();
-    } else {
-      $("#inboxBadge").text(0);
-    }
-  }
-}
 
 // Vibrating animation for the bell icon
 function animateBell() {
@@ -176,7 +158,7 @@ function outOfStockMessage() {
 // Function to add product to cart and save in local storage
 function addToCart(product_id) {
   const loggedInUser = getLoggedInUserEmail();
-  if (loggedInUser && loggedInUser.category == "customers") {
+  if (loggedInUser) {
     // Retrieve the cart from local storage and update the cart badge
     let UsersData = getUsersData();
     let customerCart = UsersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
@@ -207,23 +189,12 @@ function addToCart(product_id) {
       icon: "success",
       title: "Item added to cart successfully.",
     });
-    if  (loggedInUser.category == "admin" || loggedInUser.category == "sellers"){
-      Toast.fire({
-        icon: "info",
-        title: "You need to login with a customer account  to add products to cart.",
-      });
-    }
   } else {
     Toast.fire({
       icon: "info",
-      title: "You need to login to be able to add products to cart.",
-    });}
-  //  else {
-  //   Toast.fire({
-  //     icon: "info",
-  //     title: "You need to login to be able to add products to cart.",
-  //   });
-  // }
+      title: "You need to be logged in to add products to cart.",
+    });
+  }
 }
 
 // Sign-in function
@@ -248,43 +219,37 @@ function addToFavorite(key, buttonfav) {
   const loggedInUser = getLoggedInUserEmail();
 
   if (loggedInUser) {
-    if (loggedInUser.category == "customers") {
-      // const loggedInUserEmail = currentSession.session.email;
-      const usersData = getUsersData();
-      // console.log(usersData);
-      // console.log(usersData.customers[loggedInUser.email]);
-      const customer = usersData.customers[loggedInUser.email];
-      // console.log(customer);
-      const wishlist = customer.wishlist; // Fetch the wishlist from the customer data
+    // const loggedInUserEmail = currentSession.session.email;
+    const usersData = getUsersData();
+    // console.log(usersData);
+    // console.log(usersData.customers[loggedInUser.email]);
+    const customer = usersData.customers[loggedInUser.email];
+    // console.log(customer);
+    const wishlist = customer.wishlist; // Fetch the wishlist from the customer data
 
-      const productIndex = wishlist.findIndex((id) => id === key);
+    const productIndex = wishlist.findIndex((id) => id === key);
 
-      if (productIndex === -1) {
-        // Add the product to the wishlist
-        customer.wishlist.push(key);
-        $(buttonfav.children()[0]).removeClass("fa-regular ").addClass("fa-solid text-danger");
-        Toast.fire({
-          icon: "success",
-          title: "Item added to wishlist successfully.",
-        });
-      } else {
-        // Remove the product from the wishlist
-        customer.wishlist.splice(productIndex, 1);
-        $(buttonfav.children()[0]).removeClass("fa-solid text-danger").addClass("fa-regular");
-        Toast.fire({
-          icon: "warning",
-          title: "Item removed from wishlist successfully.",
-        });
-      }
-      // Save updated data to localStorage
-      localStorage.setItem("signUpData", JSON.stringify(usersData));
-      updateFavoritesBadge();
-    } else if (loggedInUser.category == "admin" || loggedInUser.category == "sellers") {
+    if (productIndex === -1) {
+      // Add the product to the wishlist
+      customer.wishlist.push(key);
+      $(buttonfav.children()[0]).removeClass("fa-regular ").addClass("fa-solid text-danger");
       Toast.fire({
-        icon: "info",
-        title: "You need to log in with a customer account to add products to wishlist.",
+        icon: "success",
+        title: "Item added to wishlist successfully.",
+      });
+    } else {
+      // Remove the product from the wishlist
+      customer.wishlist.splice(productIndex, 1);
+      $(buttonfav.children()[0]).removeClass("fa-solid text-danger").addClass("fa-regular");
+      Toast.fire({
+        icon: "warning",
+        title: "Item removed from wishlist successfully.",
       });
     }
+
+    // Save updated data to localStorage
+    localStorage.setItem("signUpData", JSON.stringify(usersData));
+    updateFavoritesBadge();
   } else {
     Toast.fire({
       icon: "info",
@@ -349,26 +314,26 @@ function showInboxPopup() {
       for (let i = 0; i < inbox.length; i++) {
         message = inbox[i];
         const messageElement = `
-        <div class="card mb-2">
-          <div class="card-body d-flex align-items-center" >
-          <div>
-            <h6 class="card-title fw-bold text-decoration-underline">${message.subject}</h6>
-            <p class="card-text">${message.message}</p>
-            </div>
-             <button class="btn btn-primary btn-sm ms-auto mt-auto" onclick="removeMessage(${i})">Remove</button>
-             </div>
-        </div>
-      `;
+          <div class="card mb-2">
+            <div class="card-body d-flex align-items-center" >
+            <div>
+              <h6 class="card-title fw-bold text-decoration-underline">${message.subject}</h6>
+              <p class="card-text">${message.message}</p>
+              </div>
+               <button class="btn btn-primary btn-sm ms-auto mt-auto" onclick="removeMessage(${i})">Remove</button>
+               </div>
+          </div>
+        `;
         inboxContainer.append(messageElement);
       }
     } else {
       // Show "inbox is empty" message
       const emptyMessage = `
-      <div class="text-center">
-        <i class="fas fa-envelope-open-text fa-3x text-muted mb-3"></i>
-        <p class="text-muted">Your inbox is empty or has no new messages.</p>
-      </div>
-    `;
+        <div class="text-center">
+          <i class="fas fa-envelope-open-text fa-3x text-muted mb-3"></i>
+          <p class="text-muted">Your inbox is empty or has no new messages.</p>
+        </div>
+      `;
       inboxContainer.append(emptyMessage);
     }
   }
@@ -392,37 +357,10 @@ function removeMessage(index) {
 
   // Refresh the popup and badge
   showInboxPopup();
-  updateInboxBadge();
 }
 
-// Function to highlight the active link in the navbarfunction setActiveLink() {
-document.addEventListener("DOMContentLoaded", function () {
-  const currentUrl = window.location.pathname; // Get the current page URL
-  const navLinks = document.querySelectorAll(".nav-link"); // Select all links
-
-  navLinks.forEach((link) => {
-    // Check if the link's href matches the current URL
-    if (link.getAttribute("href") === currentUrl) {
-      link.classList.add("active"); // Add the 'active' class to the matching link
-    } else {
-      link.classList.remove("active"); // Remove 'active' from others
-    }
-  });
-});
-
 // Call the updateUserDropdown function once the page loads
-
-
-setActiveLink = function () {
-  const pathName = window?.location?.pathname?.toLowerCase();
-  if (pathName.includes("home") && pathName) {
-    document.getElementById("home-link")?.classList?.add("active");
-  } else if (pathName.includes("about") && pathName) {
-    document.getElementById("about-link")?.classList?.add("active");
-  } else if (pathName.includes("contact") && pathName) {
-    document.getElementById("contact-link")?.classList?.add("active");
-  }
-  else {
-      document.getElementById("home-link").classList?.add("active");
-  }
+window.onload = function () {
+  updateUserDropdown();
+  updateCartBadge();
 };

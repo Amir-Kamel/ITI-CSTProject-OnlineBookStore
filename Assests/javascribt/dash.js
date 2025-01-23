@@ -23,37 +23,37 @@ document.addEventListener("DOMContentLoaded", function () {
     await loadContent("nav.html", "mainNavigation");
     await loadContent("footer.html", "footer");
     // Initialize search functionality after navigation content is loaded
-    $("#global-search").on("keydown", function (e) {
-      // console.log("I am here");
-      if (e.key === "Enter") {
-        let allProducts = getProductsData();
-        const searchTerm = $(this).val().toLowerCase();
+    // $("#global-search").on("keydown", function (e) {
+    //   // console.log("I am here");
+    //   if (e.key === "Enter") {
+    //     let allProducts = getProductsData();
+    //     const searchTerm = $(this).val().toLowerCase();
 
-        console.log(searchTerm);
-        // console.log(allProducts);
+    //     console.log(searchTerm);
+    //     // console.log(allProducts);
 
-        let filteredProducts = [];
-        for (let productId in allProducts) {
-          // console.log(productId);
+    //     let filteredProducts = [];
+    //     for (let productId in allProducts) {
+    //       // console.log(productId);
 
-          let product = allProducts[productId];
+    //       let product = allProducts[productId];
 
-          // console.log(product);
+    //       // console.log(product);
 
-          if (product.title.toLowerCase().includes(searchTerm)) {
-            filteredProducts.push(productId);
-          }
-        }
+    //       if (product.title.toLowerCase().includes(searchTerm)) {
+    //         filteredProducts.push(productId);
+    //       }
+    //     }
 
-        console.log(filteredProducts);
+    //     console.log(filteredProducts);
 
-        // save filtered products in local storage
-        localStorage.setItem("forSearch", JSON.stringify(filteredProducts));
+    //     // save filtered products in local storage
+    //     localStorage.setItem("forSearch", JSON.stringify(filteredProducts));
 
-        // Redirect to the search results page
-        window.location.href = "./LoadMore.html";
-      }
-    });
+    //     // Redirect to the search results page
+    //     window.location.href = "./LoadMore.html";
+    //   }
+    // });
   })();
 });
 $(document).ready(function () {
@@ -591,9 +591,8 @@ $(document).ready(function () {
         renderProductsTable(); // Re-render the table
 
         // Show success message
-        Swal.fire({
+        Toast.fire({
           title: "Deleted!",
-          text: "Your product has been deleted.",
           icon: "success",
           confirmButtonColor: "#810b0b ",
         });
@@ -742,6 +741,7 @@ $(document).ready(function () {
   // Event listener for the Update Order button
   $(document).on("click", ".updateOrderBtn", function () {
     const orderId = $(this).data("order-id");
+    console.log($(this).data("order-id"));
     const newStatus = $(this).closest("tr").find(".order-status").val();
     updateOrderStatus(orderId, newStatus);
   });
@@ -760,11 +760,11 @@ $(document).ready(function () {
     // Confirm deletion
     Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      text: "You will delete this order",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#810b0b ",
-      cancelButtonColor: "#gray ",
+      cancelButtonColor: "gray",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -826,7 +826,7 @@ function renderInboxTable() {
     //show the unsolved message only
 
     // name
-    let nameColumn = $("<td>");
+    let nameColumn = $("<td valign='middle'>");
     let nameInput = $("<input type='text' disabled >");
     nameInput.addClass("form-control text-center");
     nameInput.val(message.name);
@@ -834,7 +834,7 @@ function renderInboxTable() {
     // nameColumn.addClass("d-flex justify-content-center");
 
     // mail
-    let mailColumn = $("<td>");
+    let mailColumn = $("<td valign='middle'>");
     let mailInput = $("<input type='email' disabled >");
     mailInput.addClass("form-control text-center");
     mailInput.val(message.email);
@@ -842,7 +842,7 @@ function renderInboxTable() {
     // nameColumn.addClass("d-flex justify-content-center");
 
     // subject
-    let subjectColumn = $("<td>");
+    let subjectColumn = $("<td valign='middle'>");
     let subjectInput = $("<input type='text' disabled >");
     subjectInput.addClass("form-control text-center");
     subjectInput.val(message.subject);

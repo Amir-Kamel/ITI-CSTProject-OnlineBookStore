@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateFavoritesBadge();
         setActiveLink();
         updateUserDropdown();
+        updateInboxBadge();
       }
     } catch (error) {
       console.error("Error loading content:", error);
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (e.key === "Enter") {
         let allProducts = getProductsData();
         const searchTerm = $(this).val().toLowerCase();
-
+        t;
         console.log(searchTerm);
         // console.log(allProducts);
 
@@ -59,13 +60,14 @@ document.addEventListener("DOMContentLoaded", function () {
 $(function () {
   usersData = getUsersData();
   loggedInUser = getLoggedInUserEmail();
-  if (loggedInUser) {
+  emptyCartWrapper = $("#emptyCartWrapper");
+  cartItemsWrapper = $("#cartItemsWrapper");
+  if (loggedInUser && loggedInUser.category == "customers") {
     customerCart = usersData[loggedInUser["category"]][loggedInUser["email"]]["cart"];
     // console.log(customerCart);
     let cartLength = Object.keys(customerCart).length;
     // console.log(cartLength);
-    emptyCartWrapper = $("#emptyCartWrapper");
-    cartItemsWrapper = $("#cartItemsWrapper");
+
     if (cartLength == 0) {
       emptyCartImage = $("<img />");
       emptyCartImage.prop("src", "./Assests/images/empty-cart.png");
@@ -295,14 +297,20 @@ $(function () {
         checkbox.prop("checked", false);
       }
     });
+
     $("#Paypal-payment").on("click", function () {
-      $("#paypal-email").toggleClass("d-none");
+      if ($("#paypal-email").hasClass("d-none")) {
+        $("#paypal-email").removeClass("d-none");
+      } else {
+        $("#paypal-email").addClass("d-none");
+      }
     });
     $("#Cach-payment").on("click", function () {
       if (!$("#paypal-email").hasClass("d-none")) {
         $("#paypal-email").addClass("d-none");
       }
     });
+
     $("#check-out-button").on("click", function () {
       let customerData = usersData[loggedInUser["category"]][loggedInUser["email"]];
       // console.log(customerData);
@@ -311,18 +319,70 @@ $(function () {
       $("#user-address").val(customerData["address"]);
       $("#user-phone").val(customerData["phone"]);
     });
-    $("#go-to-payment").on("click", function () {
+
+    $("#check-out-button").on("click", function () {
       let customerData = usersData[loggedInUser["category"]][loggedInUser["email"]];
-      customerData["address"] = $("#user-address").val();
+      $("#user-name").val(customerData["username"]);
+      $("#user-email").val(customerData["email"]);
+      $("#user-address").val(customerData["address"]);
+      $("#user-phone").val(customerData["phone"]);
+    });
+
+    $("#go-to-payment").on("click", function (event) {
+      let address = $("#user-address").val().trim();
+      let phone = $("#user-phone").val().trim();
+      let paypalEmail = $("#paypal-email").val().trim();
+      let isPaypalChecked = $("#paypal").prop("checked");
+      let isonCashChecked = $("#cach").prop("checked");
+      let errors = [];
+
+      // Phone validation
+      if (!/^(011|012|010|015)\d{8}$/.test(phone)) {
+        errors.push("- Please enter a valid phone number.");
+      }
+
+      // Address validation
+      if (address === "") {
+        errors.push("- Delivery address cannot be empty.");
+      }
+
+      // PayPal email validation (if PayPal is selected)
+      if (isPaypalChecked && !/^[a-zA-Z0-9._%+-]+(?<!\.)@gmail\.com$/.test(paypalEmail)) {
+        errors.push("- Please enter a valid PayPal email address.");
+      }
+
+      if (!isPaypalChecked && !isonCashChecked) {
+        {
+          errors.push("- You have to check the way of payment");
+        }
+      }
+      // data-bs-toggle="modal" data-bs-target="#summaryAndConfirm"
+
+      if (errors.length > 0) {
+        Toast.fire({
+          icon: "error",
+          title: "Validation Errors",
+          html: errors.join("<br>"),
+          confirmButtonText: "Okay",
+        });
+      } else {
+        // Reopen the modal after closing the error message
+        $("#go-to-payment").attr("data-bs-toggle", "modal");
+        $("#go-to-payment").attr("data-bs-target", "#summaryAndConfirm");
+
+        $("#customer-info-modal").modal("show"); // Replace with the actual modal ID
+      }
+
+      let customerData = usersData[loggedInUser["category"]][loggedInUser["email"]];
+      customerData["address"] = address;
       setUsersData(usersData);
-      //order summary
+
+      // Order summary
       const today = new Date();
-      // Array of month names
       const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-      // Extract components
       const year = today.getFullYear();
-      const month = months[today.getMonth()]; // Get the month name using the array
+      const month = months[today.getMonth()];
       const day = today.getDate();
       const formattedDate = `${day} ${month} ${year}`;
       // console.log(formattedDate);
@@ -352,7 +412,6 @@ $(function () {
       const deliveryDay = deliveryDate.getDate();
       const deliveryMonth = months[deliveryDate.getMonth()];
       const deliveryYear = deliveryDate.getFullYear();
-      const formattedDeliveryDate = `${deliveryDay} ${deliveryMonth} ${deliveryYear}`;
 
       // products & quantities
       let products = getProductsData();
@@ -384,20 +443,28 @@ $(function () {
       }
       $("#summary-shipping").text(shipping);
       calculatingSubtotal(customerCart, shipping, $("#summary-subtotal"), $("#summary-total"));
+      //function to generate ID for product
+      function generateOrderId() {
+        const timestamp = Date.now();
+        const randomNum = Math.floor(Math.random() * 1000);
+        return `ORD-${timestamp}-${randomNum}`; // Combine timestamp and random number
+      }
 
+      //confirm that the order
       $("#confirm").on("click", function () {
-        order_details = {
-          order_date: {
-            date: formattedDate,
-            time: time,
-          },
-          delivery_date: {
-            date: formattedDeliveryDate,
-          },
+        const orderId = generateOrderId(); // Generate a unique order ID
+        const order_details = {
+          orderId: orderId, // Use the generated order ID
+          date: formattedDate,
+          time: time,
           products: soldProducts,
+          totalAmount: subtotal + shipping,
+          customerName: customerData.username, // Add customer name
         };
-        console.log(order_details);
+
+        // Add the order to the customer's order history
         customerData["orders_history"].push(order_details);
+
         for (productId in customerCart) {
           if (customerCart[productId]["selected"]) delete customerCart[productId];
         }
@@ -410,8 +477,36 @@ $(function () {
         }).then(() => {
           window.location.reload(); // Reload the window after the dialog is closed
         });
+        Swal.fire({
+          icon: "success",
+          title: "Order Confirmed",
+          text: "Thank you for your order. We will process it shortly!",
+          confirmButtonText: "Okay",
+        });
       });
     });
+  } else {
+    emptyCartImage = $("<img />");
+    emptyCartImage.prop("src", "./Assests/images/empty-cart.png");
+    emptyCartImage.addClass("w-50");
+    emptyCartImage.appendTo(emptyCartWrapper);
+    h5 = $("<h5>");
+    h5.text("Your Online Bookstore Cart is empty");
+    h5.addClass("fw-bold display-6");
+    h5.appendTo(emptyCartWrapper);
+    p = $("<p>");
+    p.html("Looks like you need to log in to access your cart.</br> Please log in and explore top categories.");
+    p.addClass("text-body-tertiary text-center fs-4");
+    p.appendTo(emptyCartWrapper);
+    shopNowButton = $("<button>");
+    shopNowButton.text("Login Now");
+    shopNowButton.addClass("btn btn-primary mt-3 fs-5");
+    shopNowButton.on("click", function () {
+      window.location.href = "./Login&Register.html";
+    });
+    shopNowButton.appendTo(emptyCartWrapper);
+    emptyCartWrapper.removeClass("d-none");
+    cartItemsWrapper.addClass("d-none");
   }
 });
 function getUsersData() {
