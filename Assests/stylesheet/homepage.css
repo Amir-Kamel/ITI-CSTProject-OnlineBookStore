@@ -104,18 +104,65 @@ body {
   overflow: hidden;
   /* font-size: 20px; */
 }
+/* Default Styles for Desktop */
 .main-product .card {
-  /* shadow */
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
-  /* width: 21rem; */
-  margin: 10px auto;
-  border-radius: 10px;
-  background-color: #fff;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Shadow effect */
+  transition: 0.3s; /* Smooth transition for hover effects */
+  margin: 10px auto; /* Center the card with margin */
+  border-radius: 10px; /* Rounded corners */
+  background-color: #fff; /* White background */
+  width: 21rem; /* Fixed width for desktop */
 }
+
+/* Media Query for iPad Pro (1024px - 1366px) */
+@media (max-width: 1366px) {
+  .main-product .card {
+    width: 18rem; /* Slightly smaller width for iPad Pro */
+  }
+}
+
+/* Media Query for iPad Air (768px - 1024px) */
+@media (max-width: 1024px) {
+  .main-product .card {
+    width: 16rem; /* Adjusted width for iPad Air */
+  }
+}
+
+/* Media Query for iPad Mini (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .main-product .card {
+    width: 15rem; /* Adjusted width for iPad Mini */
+  }
+}
+
+/* Media Query for Tablets and Smaller Desktops (768px - 1024px) */
+@media (max-width: 1024px) {
+  .main-product .card {
+    width: 16rem; /* Adjusted width for tablets */
+  }
+}
+
+/* Media Query for Mobile Devices (425px - 768px) */
 @media (max-width: 768px) {
-  .cardcont {
-    margin: 15px;
+  .main-product .card {
+    width: 100%; /* Full width for mobile */
+    margin: 15px; /* Adjusted margin for mobile */
+  }
+}
+
+/* Media Query for Small Mobile Devices (375px - 425px) */
+@media (max-width: 425px) {
+  .main-product .card {
+    width: 100%; /* Full width for small mobile */
+    margin: 10px; /* Adjusted margin for small mobile */
+  }
+}
+
+/* Media Query for iPhone SE (320px - 375px) */
+@media (max-width: 376px) {
+  .main-product .card {
+    width: 100%; /* Full width for iPhone SE */
+    margin: 5px; /* Minimal margin for iPhone SE */
   }
 }
 
@@ -141,14 +188,19 @@ body {
   max-width: 300px;
 }
 
-@media (max-width: 1366px) {
-  .img-container img {
-    margin: 0;
-  }
-}
 @media (max-width: 768px) {
   .img-container img {
     margin: 10%;
+  }
+}
+@media (max-width: 1024px) and (min-width: 768px) {
+  .img-container img {
+    margin: 5%;
+  }
+}
+@media (max-width: 1366px) and (min-width: 1024px) {
+  .img-container img {
+    margin: 0;
   }
 }
 @media (max-width: 376px) {
