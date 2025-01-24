@@ -138,11 +138,22 @@ body {
   border: 2px solid #ccc;
   transform: rotate(0deg);
   margin: 5%;
-  width: 300px;
+  max-width: 300px;
+}
+
+@media (max-width: 1366px) {
+  .img-container img {
+    margin: 0;
+  }
 }
 @media (max-width: 768px) {
   .img-container img {
     margin: 10%;
+  }
+}
+@media (max-width: 376px) {
+  .img-container img {
+    margin: 3%;
   }
 }
 .img-container:hover img {
